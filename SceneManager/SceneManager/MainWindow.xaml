@@ -1,0 +1,15 @@
+﻿<Window x:Name="StartupWindow" x:Class="SceneManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SceneManager"
+        mc:Ignorable="d"
+        Title="BOEING Scene Manager" Height="750" Width="650" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Image x:Name="StartupGraphic" HorizontalAlignment="Left" Height="485" Margin="35,40,0,0" VerticalAlignment="Top" Width="570" Source="Assets/BOEING Placeholder Graphic.JPG"/>
+        <Button x:Name="StartupStart" Content="Start Scene Manager" HorizontalAlignment="Left" Margin="35,600,0,0" VerticalAlignment="Top" Width="140" Height="45"/>
+        <Button x:Name="StartupStart_Copy" Content="Start Upload Manager" HorizontalAlignment="Left" Margin="465,600,0,0" VerticalAlignment="Top" Width="140" Height="45"/>
+
+    </Grid>
+</Window>
