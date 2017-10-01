@@ -10,25 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace BoeingSceneBuilder
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SceneBuilder.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SceneBuilder : Window
     {
-        public MainWindow()
+        public SceneBuilder()
         {
             InitializeComponent();
-        }
-
-        private void StartupSceneManager_Click(object sender, RoutedEventArgs e)
-        {
-            SceneManager actionWindow = new SceneManager();
-            actionWindow.Show();
         }
     }
 }
