@@ -13,6 +13,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -77,6 +77,14 @@
     <Compile Include="SceneManager.xaml.cs">
       <DependentUpon>SceneManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UploadedModulesDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadedModulesDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="UploadManager.xaml.cs">
+      <DependentUpon>UploadManager.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -90,6 +98,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SceneManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UploadManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -127,17 +139,36 @@
     <None Include="SceneBuilderDataSet.xss">
       <DependentUpon>SceneBuilderDataSet.xsd</DependentUpon>
     </None>
+    <None Include="UploadedModulesDataSet.xsc">
+      <DependentUpon>UploadedModulesDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="UploadedModulesDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>UploadedModulesDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="UploadedModulesDataSet.xss">
+      <DependentUpon>UploadedModulesDataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Drop Files Here.png" />
     <Content Include="SceneBuilder.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SceneBuilder_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>SceneBuilder.mdf</DependentUpon>
+    </Content>
+    <Content Include="UploadedModules.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="UploadedModules_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>UploadedModules.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
