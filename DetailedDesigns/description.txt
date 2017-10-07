@@ -1,0 +1,9 @@
+The Virtual Work Bench is here the user will pick the next assembly in line when assembling, and where they will place the next assembly when disassembling their units.
+
+The garnet cubes are used to represent the assemblies, since we don't have any assemblies that we can show.  Ideally, they will all look somewhat different, but even though they may be different sizes when you are holding them, they will scale to the identical sizes when on the table.  They will also gently rotate in VR while on the table.
+
+The blue triangular prisms are called markers and are used to assign an order the assemblies.  The first one will be labeled with a "One" and the next ones will continue in ascending order.  The last marker will not have an object behind it, because when you place an object there, a new marker will pop up to the right.  This procedure of having n objects and n+1 markers will ensure there is infinite room for growth while maintaining minimal working space.
+
+The final details are the room and table themselves.  They are pretty standard on their own, but they do expand everytime a new marker is made.  The room will also be scaled in relation to the total of all of the assemblies room sizes, as their table size may be a scaled down version.
+
+We also made sure to use BOEING's color scheme (Yellow table and Blue Walls) along with some USC highlighting (Garnet template cubes).
