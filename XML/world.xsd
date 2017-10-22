@@ -87,28 +87,28 @@
 </xsd:element>
 
 <xsd:element name="scene"> <!-- This represents metadata about an entire scene in Unity. -->
-<xsd:complexType
-		<xsd:sequence>
-		    <xsd:element ref="name"/>
-			<xsd:element ref="id"/>
+    <xsd:complexType
+        <xsd:sequence>
+            <xsd:element ref="name"/>
+            <xsd:element ref="id"/>
             <xsd:element ref="ref"/>
-			<xsd:element ref="group" maxOccurs="unbounded"/>
+            <xsd:element ref="group" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-	</xsd:complexType>
+        </xsd:sequence>
+    </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="world"> <!-- A world is an entire set of scenes, in the event that a particular application might need more than one scene. There can only be one world. -->
-	<xsd:complexType>
-		<xsd:sequence>
-		    <xsd:element ref="name"/>
-			<xsd:element ref="id"/>
-			<xsd:element ref="scene" maxOccurs="unbounded"/>
+    <xsd:complexType>
+        <xsd:sequence>
+            <xsd:element ref="name"/>
+            <xsd:element ref="id"/>
+            <xsd:element ref="scene" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-	</xsd:complexType>
+        </xsd:sequence>
+    </xsd:complexType>
 </xsd:element>
 
 </xsd:schema>
