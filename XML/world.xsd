@@ -40,7 +40,7 @@
             <xsd:element ref="pagenumber"/> <!-- This is the page number in the PDF of the starting page of the relevant section of documentation -->
             <xsd:element ref="asset" maxOccurs="unbounded"/> <!-- This needs to hold textures converted from pages in the PDF by XMLBuilder. -->
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 </xsd:element>
@@ -54,7 +54,7 @@
             <xsd:element ref="asset"/> <!-- This will be the part's model in Unity, might not be necessary if the assembly includes it. -->
             <xsd:element ref="pdfcitation" maxOccurs="unbounded"/> <!-- It's possible that more than one citation might be required. -->
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 </xsd:element>
@@ -68,7 +68,7 @@
             <xsd:element ref="asset"/>
             <xsd:element ref="part" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 </xsd:element>
@@ -81,7 +81,7 @@
             <xsd:element ref="ref"/>
             <xsd:element ref="assembly" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 </xsd:element>
@@ -92,9 +92,9 @@
 			<xsd:element ref="name"/>
 			<xsd:element ref="id"/>
             <xsd:element ref="ref"/>
-			<xsd:element ref="assembly" maxOccurs="unbounded"/>
+			<xsd:element ref="group" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:element>
@@ -106,7 +106,7 @@
 			<xsd:element ref="id"/>
 			<xsd:element ref="scene" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
-            <xsd:element ref="kvtags" maxOccurs="unbounded"/>
+            <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:element>
