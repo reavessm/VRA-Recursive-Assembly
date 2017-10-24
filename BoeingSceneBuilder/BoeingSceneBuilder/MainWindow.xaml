@@ -8,8 +8,8 @@
         Title="Scene Builder Welcome" Height="600" Width="525">
     <Grid>
         <Image x:Name="StartupGraphics" HorizontalAlignment="Left" Height="300" Margin="10,50,0,0" VerticalAlignment="Top" Width="497" Source="Assets/Boeing Start Image.png"/>
-        <Button x:Name="StartupSceneManager" Content="Start Scene Manager" HorizontalAlignment="Left" Margin="35,435,0,0" VerticalAlignment="Top" Width="150" Height="75"/>
-        <Button x:Name="StartupUploadManager" Content="Start Upload Manager" HorizontalAlignment="Left" Margin="320,435,0,0" VerticalAlignment="Top" Width="150" Height="75"/>
+        <Button x:Name="StartupSceneManager" Content="Start Scene Manager" HorizontalAlignment="Left" Margin="10,484,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="StartupSceneManager_Click"/>
+        <Button x:Name="StartupUploadManager" Content="Start Upload Manager" HorizontalAlignment="Left" Margin="357,484,0,0" VerticalAlignment="Top" Width="150" Height="75" Click="StartupUploadManager_Click"/>
 
     </Grid>
 </Window>
