@@ -24,5 +24,17 @@ namespace BoeingSceneBuilder
         {
             InitializeComponent();
         }
+
+        private void StartupSceneManager_Click(object sender, RoutedEventArgs e)
+        {
+            SceneManager actionWindow = new SceneManager();
+            actionWindow.Show();
+        }
+
+        private void StartupUploadManager_Click(object sender, RoutedEventArgs e)
+        {
+            UploadManager actionWindow = new UploadManager();
+            actionWindow.Show();
+        }
     }
 }
