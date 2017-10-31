@@ -1,0 +1,16 @@
+.exr
+.fbx
+.idx
+.info
+.obj
+.png
+.prefab
+.psd
+.pack
+.resS
+.tif
+.tiff
+.ttf
+.xcf
+/library/metadata/*
+/library/unityAssembly/*
