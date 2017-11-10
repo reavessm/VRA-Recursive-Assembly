@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/camera test.unity
+- path: Assets/_Scenes/WorkBench.unity
   isLoaded: 1
   isActive: 1
