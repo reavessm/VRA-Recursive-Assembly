@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace XMLBuilder
 {
-    class worldModel : INotifyPropertyChanged
+    class sceneModel : INotifyPropertyChanged
     {
         string _name;
         string _id;
-        SortedDictionary<string, sceneModel> _scenes;
+        string _ref;
+        SortedDictionary<string, groupModel> _groups;
         SortedDictionary<int, string> _flattags;
         SortedDictionary<string, string> _kvtags;
 
@@ -35,13 +36,13 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, sceneModel> Scenes
+        public SortedDictionary<string, groupModel> Groups
         {
-            get { return _scenes; }
+            get { return _groups; }
             set
             {
-                _scenes = value;
-                RaisePropertyChanged("Scenes");
+                _groups = value;
+                RaisePropertyChanged("Groups");
             }
         }
 
@@ -61,17 +62,21 @@ namespace XMLBuilder
             set
             {
                 _kvtags = value;
-                RaisePropertyChanged("KVTags");
+                RaisePropertChanged("KVTags");
             }
         }
 
-        protected void RaisePropertyChanged(string propertyName)
+        protected void RaisePropertChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
 
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+            else
+            {
+                throw new ArgumentNullException("RaiseProperty Handler is null: sceneModel");
             }
         }
 
