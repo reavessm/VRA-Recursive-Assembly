@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace XMLBuilder
 {
-    class sceneModel : INotifyPropertyChanged
+    class assemblyModel : INotifyPropertyChanged
     {
         string _name;
         string _id;
         string _ref;
-        SortedDictionary<string, groupModel> _groups;
+        SortedDictionary<string, partModel> _parts;
         SortedDictionary<int, string> _flattags;
         SortedDictionary<string, string> _kvtags;
 
@@ -36,13 +36,13 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, groupModel> Groups
+        public SortedDictionary<string, partModel> Parts
         {
-            get { return _groups; }
+            get { return _parts; }
             set
             {
-                _groups = value;
-                RaisePropertyChanged("Groups");
+                _parts = value;
+                RaisePropertyChanged("Parts");
             }
         }
 
@@ -76,7 +76,7 @@ namespace XMLBuilder
             }
             else
             {
-                throw new ArgumentNullException("RaiseProperty Handler is null: groupModel");
+                throw new ArgumentNullException("RaiseProperty Handler is null: assemblyModel");
             }
         }
 

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace XMLBuilder
 {
-    class sceneModel : INotifyPropertyChanged
+    class groupModel : INotifyPropertyChanged
     {
         string _name;
         string _id;
         string _ref;
-        SortedDictionary<string, groupModel> _groups;
+        SortedDictionary<string, assemblyModel> _assemblies;
         SortedDictionary<int, string> _flattags;
         SortedDictionary<string, string> _kvtags;
 
@@ -36,13 +36,13 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, groupModel> Groups
+        public SortedDictionary<string, assemblyModel> Assemblies
         {
-            get { return _groups; }
+            get { return _assemblies; }
             set
             {
-                _groups = value;
-                RaisePropertyChanged("Groups");
+                _assemblies = value;
+                RaisePropertyChanged("Assemblies");
             }
         }
 
