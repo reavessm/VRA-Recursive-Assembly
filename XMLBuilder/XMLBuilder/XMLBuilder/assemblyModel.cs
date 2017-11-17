@@ -62,11 +62,11 @@ namespace XMLBuilder
             set
             {
                 _kvtags = value;
-                RaisePropertChanged("KVTags");
+                RaisePropertyChanged("KVTags");
             }
         }
 
-        protected void RaisePropertChanged(string propertyName)
+        protected void RaisePropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
 
