@@ -31,23 +31,23 @@ namespace XMLBuilder
             set
             {
                 _id = value;
-                RaisePropertyChanged("ID")
+                RaisePropertyChanged("ID");
             }
         }
 
         public SortedDictionary<string, sceneModel> Scenes
         {
-            get { return _scenes }
+            get { return _scenes; }
             set
             {
                 _scenes = value;
-                RaisePropertyChanged("Scenes")
+                RaisePropertyChanged("Scenes");
             }
         }
 
         public SortedDictionary<int, string> FlatTags
         {
-            get { return _flattags }
+            get { return _flattags; }
             set
             {
                 _flattags = value;
@@ -72,6 +72,10 @@ namespace XMLBuilder
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+            else
+            {
+                throw new ArgumentNullException("RaiseProperty Handler Is Null in worldModel.");
             }
         }
 
