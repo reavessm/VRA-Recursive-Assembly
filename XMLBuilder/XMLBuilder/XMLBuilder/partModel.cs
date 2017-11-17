@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace XMLBuilder
 {
-    class assemblyModel : INotifyPropertyChanged
+    class partModel : INotifyPropertyChanged
     {
         string _name;
         string _id;
         string _ref;
         string _asset;
+        SortedDictionary<string, pdfcitationModel> _pdfcitations;
         SortedDictionary<string, partModel> _parts;
         SortedDictionary<int, string> _flattags;
         SortedDictionary<string, string> _kvtags;
@@ -54,6 +55,16 @@ namespace XMLBuilder
             {
                 _asset = value;
                 RaisePropertyChanged("Asset");
+            }
+        }
+
+        public SortedDictionary<string, partModel> PdfCitations
+        {
+            get { return _parts; }
+            set
+            {
+                _parts = value;
+                RaisePropertyChanged("PdfCitations");
             }
         }
 
