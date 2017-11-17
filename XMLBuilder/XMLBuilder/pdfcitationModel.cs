@@ -7,25 +7,14 @@ using System.Threading.Tasks;
 
 namespace XMLBuilder
 {
-    class assemblyModel : INotifyPropertyChanged
+    class pdfcitationModel
     {
-        string _name;
         string _id;
-        string _ref;
-        string _asset;
-        SortedDictionary<string, partModel> _parts;
+        string _url;
+        string _pagenumber;
+        SortedDictionary<string, string> _asset;
         SortedDictionary<int, string> _flattags;
         SortedDictionary<string, string> _kvtags;
-
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                RaisePropertyChanged("Name");
-            }
-        }
 
         public string ID
         {
@@ -37,33 +26,13 @@ namespace XMLBuilder
             }
         }
 
-        public string Ref
+        public SortedDictionary<string, string> Asset
         {
-            get { return _ref; }
-            set
-            {
-                _ref = value;
-                RaisePropertyChanged("Ref");
-            }
-        }
-
-        public string Asset
-        {
-            get { return _asset;  }
+            get { return _asset; }
             set
             {
                 _asset = value;
                 RaisePropertyChanged("Asset");
-            }
-        }
-
-        public SortedDictionary<string, partModel> Parts
-        {
-            get { return _parts; }
-            set
-            {
-                _parts = value;
-                RaisePropertyChanged("Parts");
             }
         }
 

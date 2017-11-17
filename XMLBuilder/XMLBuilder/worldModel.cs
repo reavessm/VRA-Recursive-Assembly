@@ -27,7 +27,7 @@ namespace XMLBuilder
 
         public string ID
         {
-            get { return _name; }
+            get { return _id; }
             set
             {
                 _id = value;
