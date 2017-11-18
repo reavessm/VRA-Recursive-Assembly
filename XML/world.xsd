@@ -5,7 +5,7 @@
 <!-- Version Numbering in Year.Month.Revision form -->
 
 <!-- Simple Attributes -->
-<xsd:attribute name="worldversion" type="xsd:string" use="required"/> <!-- This defines the minimum world interpreter version for the xml file. -->
+<xsd:attribute name="worldversion" type="xsd:string"/> <!-- This defines the minimum world interpreter version for the xml file. -->
 
 <!-- Simple Elements -->
 <xsd:element name="name" type="xsd:string"/> <!-- This holds a human-readable name -->
@@ -14,12 +14,12 @@
 <xsd:element name="value" type="xsd:string"/> <!-- value of key:value pair -->
 
 <!-- Optional Elements -->
-<xsd:element name="ref" type="xsd:string" minOccurs="0"/> <!-- This is a handle for referencing an object in Unity. Optional if the object name matches the corresponding object in Unity. -->
-<xsd:element name="serialnumber" type="xsd:string" minOccurs="0"/> <!-- This is an object's serial number. This is not guaranteed unique, so it can't be used as a key. -->
-<xsd:element name="url" type="xsd:string" minOccurs="0"/> <!-- This is for holding a URL -->
-<xsd:element name="pagenumber" type="xsd:string" minOccurs="0"> <!-- This holds a page number for PDF auto-citation -->
-<xsd:element name="flattags" type="xsd:string" minOccurs="0"> <!-- This is for generic user-defined tags. Tag property is true if the tag exists. -->
-<xsd:element name="asset" type="xsd:string" minOccurs="0"/> <!-- This is a URI pointing to an asset file if applicable. -->
+<xsd:element name="ref" type="xsd:string"/> <!-- This is a handle for referencing an object in Unity. Optional if the object name matches the corresponding object in Unity. -->
+<xsd:element name="serialnumber" type="xsd:string"/> <!-- This is an object's serial number. This is not guaranteed unique, so it can't be used as a key. -->
+<xsd:element name="url" type="xsd:string"/> <!-- This is for holding a URL -->
+<xsd:element name="pagenumber" type="xsd:string"/> <!-- This holds a page number for PDF auto-citation -->
+<xsd:element name="flattags" type="xsd:string"/> <!-- This is for generic user-defined tags. Tag property is true if the tag exists. -->
+<xsd:element name="asset" type="xsd:string"/> <!-- This is a URI pointing to an asset file if applicable. -->
 
 <!-- Complex Elements -->
 
@@ -87,7 +87,7 @@
 </xsd:element>
 
 <xsd:element name="scene"> <!-- This represents metadata about an entire scene in Unity. -->
-    <xsd:complexType
+    <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="name"/>
             <xsd:element ref="id"/>

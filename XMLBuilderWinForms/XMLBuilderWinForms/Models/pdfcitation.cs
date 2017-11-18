@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XMLBuilder.Models;
 
-namespace XMLBuilder
+namespace XMLBuilder.Models
 {
-    class assemblyModel : INotifyPropertyChanged
+    [Serializable()]
+    class Pdfcitation : INotifyPropertyChanged
     {
-        string _name;
         string _id;
-        string _ref;
-        string _asset;
-        SortedDictionary<string, partModel> _parts;
-        SortedDictionary<int, string> _flattags;
-        SortedDictionary<string, string> _kvtags;
+        string _url;
+        string _pagenumber;
+        ObservableCollection<string> _assets;
+        ObservableCollection<Flattag> _flattags;
+        ObservableCollection<Kvtag> _kvtags;
 
-        public string Name
+        public Pdfcitation()
         {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                RaisePropertyChanged("Name");
-            }
+            _id = "";
+            _url = "";
+            _pagenumber = "";
         }
 
         public string ID
@@ -37,37 +36,37 @@ namespace XMLBuilder
             }
         }
 
-        public string Ref
+        public string URL
         {
-            get { return _ref; }
+            get { return _url; }
             set
             {
-                _ref = value;
-                RaisePropertyChanged("Ref");
+                _url = value;
+                RaisePropertyChanged("URL");
             }
         }
 
-        public string Asset
+        public string PageNumber
         {
-            get { return _asset;  }
+            get { return _pagenumber; }
             set
             {
-                _asset = value;
+                _pagenumber = value;
+                RaisePropertyChanged("PageNumber");
+            }
+        }
+
+        public ObservableCollection<string> Assets
+        {
+            get { return _assets; }
+            set
+            {
+                _assets = value;
                 RaisePropertyChanged("Asset");
             }
         }
 
-        public SortedDictionary<string, partModel> Parts
-        {
-            get { return _parts; }
-            set
-            {
-                _parts = value;
-                RaisePropertyChanged("Parts");
-            }
-        }
-
-        public SortedDictionary<int, string> FlatTags
+        public ObservableCollection<Flattag> FlatTags
         {
             get { return _flattags; }
             set
@@ -77,7 +76,7 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, string> KVTags
+        public ObservableCollection<Kvtag> KVTags
         {
             get { return _kvtags; }
             set
@@ -97,7 +96,7 @@ namespace XMLBuilder
             }
             else
             {
-                throw new ArgumentNullException("RaiseProperty Handler is null: assemblyModel");
+                throw new ArgumentNullException("RaiseProperty Handler is null: pdfcitationModel");
             }
         }
 

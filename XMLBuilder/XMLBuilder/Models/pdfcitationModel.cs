@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XMLBuilder
+namespace XMLBuilder.Models
 {
-    class pdfcitationModel
+    [Serializable()]
+    class pdfcitationModel :INotifyPropertyChanged
     {
         string _id;
         string _url;
@@ -66,7 +67,7 @@ namespace XMLBuilder
             }
             else
             {
-                throw new ArgumentNullException("RaiseProperty Handler is null: assemblyModel");
+                throw new ArgumentNullException("RaiseProperty Handler is null: pdfcitationModel");
             }
         }
 

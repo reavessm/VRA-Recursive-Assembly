@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XMLBuilder.Models;
 
-namespace XMLBuilder
+namespace XMLBuilder.Models
 {
-    class groupModel : INotifyPropertyChanged
+    [Serializable()]
+    class Group : INotifyPropertyChanged
     {
         string _name;
         string _id;
         string _ref;
-        SortedDictionary<string, assemblyModel> _assemblies;
-        SortedDictionary<int, string> _flattags;
-        SortedDictionary<string, string> _kvtags;
+        bool asset_enabled;
+        ObservableCollection<Assembly> _assemblies;
+        ObservableCollection<Flattag> _flattags;
+        ObservableCollection<Kvtag> _kvtags;
+
+        public Group()
+        {
+            asset_enabled = false;
+            _name = "";
+            _id = "";
+            _ref = "";
+        }
 
         public string Name
         {
@@ -36,7 +48,17 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, assemblyModel> Assemblies
+        public string Ref
+        {
+            get { return _ref;  }
+            set
+            {
+                _ref = value;
+                RaisePropertyChanged("Ref");
+            }
+        }
+
+        public ObservableCollection<Assembly> Assemblies
         {
             get { return _assemblies; }
             set
@@ -46,7 +68,7 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<int, string> FlatTags
+        public ObservableCollection<Flattag> FlatTags
         {
             get { return _flattags; }
             set
@@ -56,7 +78,7 @@ namespace XMLBuilder
             }
         }
 
-        public SortedDictionary<string, string> KVTags
+        public ObservableCollection<Kvtag> KVTags
         {
             get { return _kvtags; }
             set
