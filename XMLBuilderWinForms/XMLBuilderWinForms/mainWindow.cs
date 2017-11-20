@@ -15,6 +15,8 @@ namespace XMLBuilderWinForms
 {
     public partial class MainWindow : Form
     {
+        private XDocument xmlDOM = new XDocument();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,33 +27,16 @@ namespace XMLBuilderWinForms
             KVTagBox.Text = Application.StartupPath + "\\sample.xml";
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void openCommand_Click(object sender, EventArgs e)
         {
             try
             {
-                documentHandler dh = new documentHandler("sample.xml");
-                IEnumerable<IEnumerable<XElement>> groups = dh.getAllGroups("string");
-                string output = "";
-
-                foreach (IEnumerable<XElement> it in groups) {
-                    MessageBox.Show("Number of Scenes");
-                    foreach (XElement el in it)
-                    {
-                        MessageBox.Show(el.ToString());
-                    }
-                }
-
-                //XMLTreeViewer.Nodes.Add(new TreeNode(dom.DocumentElement.Name));
-                //TreeNode tNode = new TreeNode();
-                //tNode = XMLTreeViewer.Nodes[0];
-
-                //AddNode(dom.DocumentElement, tNode);
-                //XMLTreeViewer.ExpandAll();
+                OpenFileDialog ofd1 = new OpenFileDialog();
+                ofd1.InitialDirectory = Application.StartupPath;
+                ofd1.Title = "Open an Existing XML File";
+                ofd1.DefaultExt = "xml";
+                ofd1.ShowDialog();
+                xmlDOM = XDocument.Load(ofd1.FileName);
             }
             catch (XmlException xmlEx)
             {
@@ -61,6 +46,7 @@ namespace XMLBuilderWinForms
             {
                 MessageBox.Show(ex.Message);
             }
+            MessageBox.Show(xmlDOM.ToString());
         }
     }
 }
