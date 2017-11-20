@@ -37,13 +37,6 @@ namespace XMLBuilderWinForms
             return xmlDOM.ToString();
         }
 
-        public TreeNodeCollection getDOMTreeNodes()
-        {
-            TreeNodeCollection tn = new TreeNodeCollection();
-
-            return tn;
-        }
-
         public IEnumerable<XElement> getAllScenes()
         {
             IEnumerable<XElement> subelements = xmlDOM.Root.Elements("scene");
@@ -57,8 +50,6 @@ namespace XMLBuilderWinForms
                                  select scn.Elements("group");
             return queryAllGroups;
         }
-
-        public 
 
         //private void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
         //{

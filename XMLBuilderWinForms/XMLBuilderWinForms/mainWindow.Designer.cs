@@ -141,7 +141,6 @@
             this.flattaglabel.Size = new System.Drawing.Size(51, 13);
             this.flattaglabel.TabIndex = 4;
             this.flattaglabel.Text = "Flat Tags";
-            this.flattaglabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // kvtaglabel
             // 
