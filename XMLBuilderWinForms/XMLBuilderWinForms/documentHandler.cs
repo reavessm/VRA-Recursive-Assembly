@@ -58,8 +58,6 @@ namespace XMLBuilderWinForms
             return queryAllGroups;
         }
 
-        public 
-
         //private void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
         //{
         //    XmlNode xNode;

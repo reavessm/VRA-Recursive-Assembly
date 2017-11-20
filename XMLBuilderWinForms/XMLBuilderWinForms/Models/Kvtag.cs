@@ -48,7 +48,7 @@ namespace XMLBuilder.Models
             }
             else
             {
-                throw new ArgumentNullException("RaiseProperty Handler is null: pdfcitationModel");
+                throw new ArgumentNullException("RaiseProperty Handler is null: kvtagModel");
             }
         }
 
