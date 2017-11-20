@@ -35,16 +35,17 @@ namespace XMLBuilderWinForms
             try
             {
                 documentHandler dh = new documentHandler("sample.xml");
-                IEnumerable<XElement> parents = dh.getAllSubelements();
+                IEnumerable<IEnumerable<XElement>> groups = dh.getAllGroups("string");
                 string output = "";
 
-                foreach(XElement parent in parents)
-                {
-                    output += parent.ToString();
+                foreach (IEnumerable<XElement> it in groups) {
+                    MessageBox.Show("Number of Scenes");
+                    foreach (XElement el in it)
+                    {
+                        MessageBox.Show(el.ToString());
+                    }
                 }
 
-
-                MessageBox.Show(output);
                 //XMLTreeViewer.Nodes.Add(new TreeNode(dom.DocumentElement.Name));
                 //TreeNode tNode = new TreeNode();
                 //tNode = XMLTreeViewer.Nodes[0];

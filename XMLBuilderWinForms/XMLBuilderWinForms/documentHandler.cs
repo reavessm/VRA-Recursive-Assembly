@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using XMLBuilder.Models;
 
@@ -27,7 +28,7 @@ namespace XMLBuilderWinForms
             }
             catch (Exception e)
             {
-                throw new ArgumentException("Specified file cannot be read.", "fileName");
+                throw new ArgumentException("Error Message: " + e.ToString(), "fileName");
             }
         }
 
@@ -36,11 +37,28 @@ namespace XMLBuilderWinForms
             return xmlDOM.ToString();
         }
 
-        public IEnumerable<XElement> getAllSubelements()
+        public TreeNodeCollection getDOMTreeNodes()
         {
-            IEnumerable<XElement> subelements = xmlDOM.Root.Elements("parent").Elements("parent");
+            TreeNodeCollection tn = new TreeNodeCollection();
+
+            return tn;
+        }
+
+        public IEnumerable<XElement> getAllScenes()
+        {
+            IEnumerable<XElement> subelements = xmlDOM.Root.Elements("scene");
             return subelements;
         }
+
+        public IEnumerable<IEnumerable<XElement>> getAllGroups(string scene_id)
+        {
+            var queryAllGroups = from scn in xmlDOM.Root.Elements("scene")
+                                 where scn.Element("id").Value == scene_id
+                                 select scn.Elements("group");
+            return queryAllGroups;
+        }
+
+        public 
 
         //private void AddNode(XmlNode inXmlNode, TreeNode inTreeNode)
         //{
