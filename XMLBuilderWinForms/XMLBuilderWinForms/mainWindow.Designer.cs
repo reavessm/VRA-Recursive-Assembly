@@ -95,42 +95,42 @@
             // newCommand
             // 
             this.newCommand.Name = "newCommand";
-            this.newCommand.Size = new System.Drawing.Size(152, 22);
+            this.newCommand.Size = new System.Drawing.Size(114, 22);
             this.newCommand.Text = "New";
             // 
             // openCommand
             // 
             this.openCommand.Name = "openCommand";
-            this.openCommand.Size = new System.Drawing.Size(152, 22);
+            this.openCommand.Size = new System.Drawing.Size(114, 22);
             this.openCommand.Text = "Open";
             this.openCommand.Click += new System.EventHandler(this.openCommand_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // saveCommand
             // 
             this.saveCommand.Name = "saveCommand";
-            this.saveCommand.Size = new System.Drawing.Size(152, 22);
+            this.saveCommand.Size = new System.Drawing.Size(114, 22);
             this.saveCommand.Text = "Save";
             // 
             // saveAsCommand
             // 
             this.saveAsCommand.Name = "saveAsCommand";
-            this.saveAsCommand.Size = new System.Drawing.Size(152, 22);
+            this.saveAsCommand.Size = new System.Drawing.Size(114, 22);
             this.saveAsCommand.Text = "Save As";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
             // 
             // quitCommand
             // 
             this.quitCommand.Name = "quitCommand";
-            this.quitCommand.Size = new System.Drawing.Size(152, 22);
+            this.quitCommand.Size = new System.Drawing.Size(114, 22);
             this.quitCommand.Text = "Quit";
             // 
             // flattaglabel

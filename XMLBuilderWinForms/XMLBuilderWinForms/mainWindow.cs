@@ -16,6 +16,7 @@ namespace XMLBuilderWinForms
     public partial class MainWindow : Form
     {
         private XDocument xmlDOM = new XDocument();
+        private string filepath = "";
 
         public MainWindow()
         {
@@ -37,6 +38,7 @@ namespace XMLBuilderWinForms
                 ofd1.DefaultExt = "xml";
                 ofd1.ShowDialog();
                 xmlDOM = XDocument.Load(ofd1.FileName);
+                filepath = ofd1.FileName;
             }
             catch (XmlException xmlEx)
             {
@@ -47,6 +49,37 @@ namespace XMLBuilderWinForms
                 MessageBox.Show(ex.Message);
             }
             MessageBox.Show(xmlDOM.ToString());
+            updateXMLTreeViewer();
+        }
+
+        private void updateXMLTreeViewer()
+        {
+            XElement root = xmlDOM.Root;
+            TreeNode rootNode = new TreeNode(root.Name.LocalName);
+            XMLTreeViewer.Nodes.Clear();
+            XMLTreeViewer.Nodes.Add(rootNode);
+            foreach (XElement el in root.Elements())
+            {
+                addElements(el, 0);
+            }
+        }
+
+        private void addElements(XElement el, TreeNode tNode)
+        {
+            foreach (XElement sub in el.Elements())
+            {
+                try
+                {
+                    TreeNode elNode = new TreeNode(sub.Attribute("name").Value);
+                    XMLTreeViewer.Nodes.Add(elNode);
+
+                    addElements(sub);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
         }
     }
 }

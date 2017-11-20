@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-<!-- World Definition. Version 2017.10.0 -->
+<!-- World Definition. Version 2017.11.0 -->
 <!-- Version Numbering in Year.Month.Revision form -->
 
 <!-- Simple Attributes -->
 <xsd:attribute name="worldversion" type="xsd:string"/> <!-- This defines the minimum world interpreter version for the xml file. -->
 
 <!-- Simple Elements -->
-<xsd:element name="name" type="xsd:string"/> <!-- This holds a human-readable name -->
-<xsd:element name="id" type="xsd:string"/> <!-- This holds a GUID -->
+<xsd:attribute name="name" type="xsd:string"/> <!-- This holds a human-readable name -->
+<xsd:attribute name="id" type="xsd:string"/> <!-- This holds a GUID -->
 <xsd:element name="key" type="xsd:string"/> <!-- key of key:value pair -->
 <xsd:element name="value" type="xsd:string"/> <!-- value of key:value pair -->
 
 <!-- Optional Elements -->
-<xsd:element name="ref" type="xsd:string"/> <!-- This is a handle for referencing an object in Unity. Optional if the object name matches the corresponding object in Unity. -->
+<xsd:attribute name="ref" type="xsd:string"/> <!-- This is a handle for referencing an object in Unity. Optional if the object name matches the corresponding object in Unity. -->
 <xsd:element name="serialnumber" type="xsd:string"/> <!-- This is an object's serial number. This is not guaranteed unique, so it can't be used as a key. -->
-<xsd:element name="url" type="xsd:string"/> <!-- This is for holding a URL -->
-<xsd:element name="pagenumber" type="xsd:string"/> <!-- This holds a page number for PDF auto-citation -->
+<xsd:attribute name="url" type="xsd:string"/> <!-- This is for holding a URL -->
+<xsd:attribute name="pagenumber" type="xsd:string"/> <!-- This holds a page number for PDF auto-citation -->
 <xsd:element name="flattags" type="xsd:string"/> <!-- This is for generic user-defined tags. Tag property is true if the tag exists. -->
-<xsd:element name="asset" type="xsd:string"/> <!-- This is a URI pointing to an asset file if applicable. -->
+<xsd:attribute name="asset" type="xsd:string"/> <!-- This is a URI pointing to an asset file if applicable. -->
 
 <!-- Complex Elements -->
 
@@ -29,85 +29,89 @@
             <xsd:element ref="key"/>
             <xsd:element ref="value"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="pdfcitation"> <!-- It would be useful to be able to present pages from PDf manuals in the application. This is the data type for PDF auto-citation -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="id"/>
-            <xsd:element ref="url"/> <!-- This should be an accessable URL to the PDF of the document -->
-            <xsd:element ref="pagenumber"/> <!-- This is the page number in the PDF of the starting page of the relevant section of documentation -->
-            <xsd:element ref="asset" maxOccurs="unbounded"/> <!-- This needs to hold textures converted from pages in the PDF by XMLBuilder. -->
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="url"/> <!-- This should be an accessable URL to the PDF of the document -->
+      <xsd:attribute ref="pagenumber"/> <!-- This is the page number in the PDF of the relevant section of documentation -->
+      <xsd:attribute ref="asset"/> <!-- This needs to hold textures converted from pages in the PDF by XMLBuilder. -->
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="part"> <!-- Parts are the lowest level individual sub-components of an assembly. For example, a cushion, or a support leg, or a drink holder -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="name"/>
-            <xsd:element ref="id"/>
-            <xsd:element ref="ref"/>
-            <xsd:element ref="asset"/> <!-- This will be the part's model in Unity, might not be necessary if the assembly includes it. -->
             <xsd:element ref="pdfcitation" maxOccurs="unbounded"/> <!-- It's possible that more than one citation might be required. -->
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="ref"/>
+      <xsd:attribute ref="asset"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="assembly"> <!-- Assemblies are real-world assembled units that have multiple parts. For example, an individual chair, or an individual ottoman, or an individual cargo storage unit. -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="name"/>
-            <xsd:element ref="id"/>
-            <xsd:element ref="ref"/>
-            <xsd:element ref="asset"/>
             <xsd:element ref="part" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="ref"/>
+      <xsd:attribute ref="asset"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="group"> <!-- Groups are a logical sub-unit of a scene that hold multiple assemblies. For example, a row of chairs, or a galley station, or a cockpit. A scene can have one or many groups that may have individual properties. -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="name"/>
-            <xsd:element ref="id"/>
-            <xsd:element ref="ref"/>
             <xsd:element ref="assembly" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="scene"> <!-- This represents metadata about an entire scene in Unity. -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="name"/>
-            <xsd:element ref="id"/>
-            <xsd:element ref="ref"/>
             <xsd:element ref="group" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="world"> <!-- A world is an entire set of scenes, in the event that a particular application might need more than one scene. There can only be one world. -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="name"/>
-            <xsd:element ref="id"/>
             <xsd:element ref="scene" maxOccurs="unbounded"/>
             <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+      <xsd:attribute ref="id"/>
+      <xsd:attribute ref="name"/>
+      <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
 
