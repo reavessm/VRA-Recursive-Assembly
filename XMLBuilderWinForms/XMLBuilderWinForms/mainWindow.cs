@@ -55,11 +55,12 @@ namespace XMLBuilderWinForms
         private void updateXMLTreeViewer()
         {
             XMLTreeViewer.Nodes.Clear();
-            TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.FirstAttribute.Value);
-            LoadXmlElements(xmlDOM.Root, treeNode);
+            TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.Attribute("id").Value);
+            loadXmlElements(xmlDOM.Root, treeNode);
+            XMLTreeViewer.ExpandAll();
         }
 
-        private void LoadXmlElements(XElement xElem, TreeNode treeNode)
+        private void loadXmlElements(XElement xElem, TreeNode treeNode)
         {
             foreach (XElement element in xElem.Elements())
             {
@@ -67,15 +68,35 @@ namespace XMLBuilderWinForms
                 {
                     if (element.FirstAttribute != null)
                     {
-                        TreeNode tempNode = treeNode.Nodes.Add(element.FirstAttribute.Value);
-                        LoadXmlElements(element, tempNode);
+                        TreeNode tempNode = treeNode.Nodes.Add(element.Attribute("id").Value);
+                        tempNode.Tag = element;
+                        loadXmlElements(element, tempNode);
                     }
                     else
-                        LoadXmlElements(element, treeNode);
+                        loadXmlElements(element, treeNode);
                 }
                 else
-                    treeNode.Nodes.Add(element.FirstAttribute.Value);
+                    treeNode.Nodes.Add(element.Attribute("id").Value);
+
             }
+        }
+
+        private IEnumerable<XElement> getXElement(string id)
+        {
+            var query = from elt in xmlDOM.Descendants()
+                        where elt.Attribute("id").Value == id
+                        select elt;
+            return query;
+        }
+
+        private XElement getOneXElement(string id)
+        {
+            return (getXElement(id)).First();
+        }
+
+        private string getXElementType(XElement el)
+        {
+            
         }
     }
 }
