@@ -60,6 +60,7 @@
             this.XMLTreeViewer.Name = "XMLTreeViewer";
             this.XMLTreeViewer.Size = new System.Drawing.Size(294, 496);
             this.XMLTreeViewer.TabIndex = 0;
+            this.XMLTreeViewer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.XMLTreeViewer_AfterSelect);
             // 
             // menuStrip1
             // 

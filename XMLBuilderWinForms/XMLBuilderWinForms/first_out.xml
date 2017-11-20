@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<world name="world" id="world1" ref="world1">
+  <scene name="scene" id="scene1" ref="scene1">
+    <group name="group" id="group1" ref="group1">
+      <assembly name="assembly" id="assembly1" ref="assembly1">
+        <part name="part" id="part1" ref="part1">
+          <kvtag name="kvtaga" id="kvtag1" ref="kvtag1" />
+          <kvtag name="kvtagb" id="kvtag2" ref="kvtag2" />
+          <pdfcitation name="pdf" id="p1" url="u1" pagenumber="pn1" asset="a3">
+            <kvtag name="kvtagc" id="kvtag3" ref="kvtag3" />
+          </pdfcitation>
+        </part>
+      </assembly>
+    </group>
+  </scene>
+</world>

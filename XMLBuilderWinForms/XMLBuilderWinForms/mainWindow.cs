@@ -17,6 +17,7 @@ namespace XMLBuilderWinForms
     public partial class MainWindow : Form
     {
         private XDocument xmlDOM = new XDocument();
+        private XElement currentSelection = null;
         private string filepath = "";
 
         public MainWindow()
@@ -26,7 +27,6 @@ namespace XMLBuilderWinForms
 
         private void XMLTreeViewer_Load(object sender, EventArgs e)
         {
-            KVTagBox.Text = Application.StartupPath + "\\sample.xml";
         }
 
         private void openCommand_Click(object sender, EventArgs e)
@@ -49,7 +49,6 @@ namespace XMLBuilderWinForms
             {
                 MessageBox.Show(ex.Message);
             }
-            MessageBox.Show(xmlDOM.ToString());
             updateXMLTreeViewer();
         }
         
@@ -111,15 +110,29 @@ namespace XMLBuilderWinForms
         }
         private IEnumerable<XElement> getXElement(string id)
         {
-            var query = from elt in xmlDOM.Descendants()
-                        where elt.Attribute("id").Value == id
-                        select elt;
-            return query;
+            try
+            {
+                var query = from elt in xmlDOM.Descendants()
+                            where (string)elt.Attribute("id") == id
+                            select elt;
+                return query;
+            }
+            catch (XmlException xe)
+            {
+                throw new Exception("Can't Find Element!");
+            }
         }
 
         private XElement getOneXElement(string id)
         {
-            return (getXElement(id)).First();
+            try
+            {
+                return (getXElement(id)).First();
+            }
+            catch (XmlException xe)
+            {
+                throw new Exception("Can't Find Element!");
+            }
         }
 
         private string getXElementType(XElement el)
@@ -132,5 +145,23 @@ namespace XMLBuilderWinForms
             return getXElementType(getOneXElement(id));
         }
 
+        private void XMLTreeViewer_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            try
+            {
+                currentSelection = getOneXElement(XMLTreeViewer.SelectedNode.Text);
+                nameTextBox.Text = (string) currentSelection.Attribute("name");
+                idTextBox.Text = (string) currentSelection.Attribute("id");
+                unityRefTextBox.Text = (string) currentSelection.Attribute("ref");
+                assetTextBox.Text = (string) currentSelection.Attribute("asset");
+                pdfTextBox.Text = (string) currentSelection.Attribute("pagenumber");
+                KVTagBox.Text = "Placeholder Text";
+
+            }
+            catch (XmlException xe)
+            {
+
+            }
+        }
     }
 }
