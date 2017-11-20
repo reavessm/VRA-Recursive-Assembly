@@ -132,5 +132,13 @@ namespace XMLBuilderWinForms
             return getXElementType(getOneXElement(id));
         }
 
+        private void addElementButton_Click(object sender, EventArgs e)
+        {
+            this.IsMdiContainer = true;
+            AddNewElement newElement = new AddNewElement();
+            newElement.Show();
+            //add new node to treeViewer based off of inputs
+            newElement.dispose();
+        }
     }
 }
