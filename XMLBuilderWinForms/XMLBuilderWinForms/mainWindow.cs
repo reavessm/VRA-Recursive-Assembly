@@ -47,38 +47,34 @@ namespace XMLBuilderWinForms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-            }
-            MessageBox.Show(xmlDOM.ToString());
+            }      
             updateXMLTreeViewer();
+            //MessageBox.Show(xmlDOM.ToString());
         }
 
         private void updateXMLTreeViewer()
         {
-            XElement root = xmlDOM.Root;
-            TreeNode rootNode = new TreeNode(root.Name.LocalName);
             XMLTreeViewer.Nodes.Clear();
-            XMLTreeViewer.Nodes.Add(rootNode);
-            foreach (XElement el in root.Elements())
-            {
-                addElements(el, 0);
-            }
+            TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.FirstAttribute.Value);
+            LoadXmlElements(xmlDOM.Root, treeNode);
         }
 
-        private void addElements(XElement el, TreeNode tNode)
+        private void LoadXmlElements(XElement xElem, TreeNode treeNode)
         {
-            foreach (XElement sub in el.Elements())
+            foreach (XElement element in xElem.Elements())
             {
-                try
+                if (element.HasElements)
                 {
-                    TreeNode elNode = new TreeNode(sub.Attribute("name").Value);
-                    XMLTreeViewer.Nodes.Add(elNode);
-
-                    addElements(sub);
+                    if (element.FirstAttribute != null)
+                    {
+                        TreeNode tempNode = treeNode.Nodes.Add(element.FirstAttribute.Value);
+                        LoadXmlElements(element, tempNode);
+                    }
+                    else
+                        LoadXmlElements(element, treeNode);
                 }
-                catch (Exception e)
-                {
-
-                }
+                else
+                    treeNode.Nodes.Add(element.FirstAttribute.Value);
             }
         }
     }

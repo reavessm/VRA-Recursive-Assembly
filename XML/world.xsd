@@ -10,8 +10,8 @@
 <!-- Simple Elements -->
 <xsd:attribute name="name" type="xsd:string"/> <!-- This holds a human-readable name -->
 <xsd:attribute name="id" type="xsd:string"/> <!-- This holds a GUID -->
-<xsd:element name="key" type="xsd:string"/> <!-- key of key:value pair -->
-<xsd:element name="value" type="xsd:string"/> <!-- value of key:value pair -->
+<xsd:attribute name="key" type="xsd:string"/> <!-- key of key:value pair -->
+<xsd:attribute name="value" type="xsd:string"/> <!-- value of key:value pair -->
 
 <!-- Optional Elements -->
 <xsd:attribute name="ref" type="xsd:string"/> <!-- This is a handle for referencing an object in Unity. Optional if the object name matches the corresponding object in Unity. -->
@@ -25,19 +25,16 @@
 
 <xsd:element name="kvtags"> <!-- This is for user-defined key:value style tags. These are different from flattags, which are in Exists=True style. -->
     <xsd:complexType>
-        <xsd:sequence>
-            <xsd:element ref="key"/>
-            <xsd:element ref="value"/>
-        </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="key"/>
+      <xsd:attribute ref="value"/>
+      <xsd:attribute ref="id"/>
     </xsd:complexType>
 </xsd:element>
 
 <xsd:element name="pdfcitation"> <!-- It would be useful to be able to present pages from PDf manuals in the application. This is the data type for PDF auto-citation -->
     <xsd:complexType>
         <xsd:sequence>
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
       <xsd:attribute ref="name"/>
@@ -52,11 +49,10 @@
     <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="pdfcitation" maxOccurs="unbounded"/> <!-- It's possible that more than one citation might be required. -->
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
       <xsd:attribute ref="ref"/>
       <xsd:attribute ref="asset"/>
     </xsd:complexType>
@@ -66,11 +62,10 @@
     <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="part" maxOccurs="unbounded"/>
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
       <xsd:attribute ref="ref"/>
       <xsd:attribute ref="asset"/>
     </xsd:complexType>
@@ -80,11 +75,10 @@
     <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="assembly" maxOccurs="unbounded"/>
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
       <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
@@ -93,11 +87,10 @@
     <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="group" maxOccurs="unbounded"/>
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
       <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
@@ -106,11 +99,10 @@
     <xsd:complexType>
         <xsd:sequence>
             <xsd:element ref="scene" maxOccurs="unbounded"/>
-            <xsd:element ref="flattags" maxOccurs="unbounded"/> <!-- Tags might be required -->
             <xsd:element ref="kvtags" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-      <xsd:attribute ref="id"/>
       <xsd:attribute ref="name"/>
+      <xsd:attribute ref="id"/>
       <xsd:attribute ref="ref"/>
     </xsd:complexType>
 </xsd:element>
