@@ -50,39 +50,38 @@ namespace XMLBuilderWinForms
                 MessageBox.Show(ex.Message);
             }
             MessageBox.Show(xmlDOM.ToString());
-            //updateXMLTreeViewer();
+            updateXMLTreeViewer();
         }
-        /*
+        
         private void updateXMLTreeViewer()
         {
-            XElement root = xmlDOM.Root;
-            TreeNode rootNode = new TreeNode(root.Name.LocalName);
             XMLTreeViewer.Nodes.Clear();
-            XMLTreeViewer.Nodes.Add(rootNode);
-            foreach (XElement el in root.Elements())
-            {
-                addElements(el, 0);
-            }
+            TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.Attribute("id").Value);
+            loadXmlElements(xmlDOM.Root, treeNode);
+            XMLTreeViewer.ExpandAll();
         }
 
-        private void addElements(XElement el, TreeNode tNode)
+        private void loadXmlElements(XElement xElem, TreeNode treeNode)
         {
-            foreach (XElement sub in el.Elements())
+            foreach (XElement element in xElem.Elements())
             {
-                try
+                if (element.HasElements)
                 {
-                    TreeNode elNode = new TreeNode(sub.Attribute("name").Value);
-                    XMLTreeViewer.Nodes.Add(elNode);
-
-                    addElements(sub);
+                    if (element.FirstAttribute != null)
+                    {
+                        TreeNode tempNode = treeNode.Nodes.Add(element.Attribute("id").Value);
+                        tempNode.Tag = element;
+                        loadXmlElements(element, tempNode);
+                    }
+                    else
+                        loadXmlElements(element, treeNode);
                 }
-                catch (Exception e)
-                {
+                else
+                    treeNode.Nodes.Add(element.Attribute("id").Value);
 
-                }
             }
         }
-        */
+
         private void saveCommand_Click(object sender, EventArgs e)
         {
             if(filepath != "") //might need to add functionality to check that file exists
@@ -110,6 +109,23 @@ namespace XMLBuilderWinForms
         private void quitCommand_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+        private IEnumerable<XElement> getXElement(string id)
+        {
+            var query = from elt in xmlDOM.Descendants()
+                        where elt.Attribute("id").Value == id
+                        select elt;
+            return query;
+        }
+
+        private XElement getOneXElement(string id)
+        {
+            return (getXElement(id)).First();
+        }
+
+        private string getXElementType(XElement el)
+        {
+            
         }
     }
 }
