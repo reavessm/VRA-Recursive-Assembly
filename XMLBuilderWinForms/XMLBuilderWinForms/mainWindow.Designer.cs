@@ -42,6 +42,7 @@
             this.quitCommand = new System.Windows.Forms.ToolStripMenuItem();
             this.flattaglabel = new System.Windows.Forms.Label();
             this.kvtaglabel = new System.Windows.Forms.Label();
+            this.addElementButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +50,7 @@
             // 
             this.XMLTreeViewer.Location = new System.Drawing.Point(12, 27);
             this.XMLTreeViewer.Name = "XMLTreeViewer";
-            this.XMLTreeViewer.Size = new System.Drawing.Size(294, 547);
+            this.XMLTreeViewer.Size = new System.Drawing.Size(294, 496);
             this.XMLTreeViewer.TabIndex = 0;
             // 
             // FlatTagBox
@@ -95,44 +96,44 @@
             // newCommand
             // 
             this.newCommand.Name = "newCommand";
-            this.newCommand.Size = new System.Drawing.Size(152, 22);
+            this.newCommand.Size = new System.Drawing.Size(114, 22);
             this.newCommand.Text = "New";
             // 
             // openCommand
             // 
             this.openCommand.Name = "openCommand";
-            this.openCommand.Size = new System.Drawing.Size(152, 22);
+            this.openCommand.Size = new System.Drawing.Size(114, 22);
             this.openCommand.Text = "Open";
             this.openCommand.Click += new System.EventHandler(this.openCommand_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
             // 
             // saveCommand
             // 
             this.saveCommand.Name = "saveCommand";
-            this.saveCommand.Size = new System.Drawing.Size(152, 22);
+            this.saveCommand.Size = new System.Drawing.Size(114, 22);
             this.saveCommand.Text = "Save";
             this.saveCommand.Click += new System.EventHandler(this.saveCommand_Click);
             // 
             // saveAsCommand
             // 
             this.saveAsCommand.Name = "saveAsCommand";
-            this.saveAsCommand.Size = new System.Drawing.Size(152, 22);
+            this.saveAsCommand.Size = new System.Drawing.Size(114, 22);
             this.saveAsCommand.Text = "Save As";
             this.saveAsCommand.Click += new System.EventHandler(this.saveAsCommand_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
             // 
             // quitCommand
             // 
             this.quitCommand.Name = "quitCommand";
-            this.quitCommand.Size = new System.Drawing.Size(152, 22);
+            this.quitCommand.Size = new System.Drawing.Size(114, 22);
             this.quitCommand.Text = "Quit";
             this.quitCommand.Click += new System.EventHandler(this.quitCommand_Click);
             // 
@@ -154,11 +155,21 @@
             this.kvtaglabel.TabIndex = 5;
             this.kvtaglabel.Text = "Key-Value Tags";
             // 
+            // addElementButton
+            // 
+            this.addElementButton.Location = new System.Drawing.Point(13, 530);
+            this.addElementButton.Name = "addElementButton";
+            this.addElementButton.Size = new System.Drawing.Size(293, 44);
+            this.addElementButton.TabIndex = 6;
+            this.addElementButton.Text = "Add New Element";
+            this.addElementButton.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 586);
+            this.Controls.Add(this.addElementButton);
             this.Controls.Add(this.kvtaglabel);
             this.Controls.Add(this.flattaglabel);
             this.Controls.Add(this.KVTagBox);
@@ -194,6 +205,7 @@
         private System.Windows.Forms.ToolStripMenuItem quitCommand;
         private System.Windows.Forms.Label flattaglabel;
         private System.Windows.Forms.Label kvtaglabel;
+        private System.Windows.Forms.Button addElementButton;
     }
 }
 
