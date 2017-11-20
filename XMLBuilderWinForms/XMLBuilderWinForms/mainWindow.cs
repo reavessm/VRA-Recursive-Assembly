@@ -69,7 +69,6 @@ namespace XMLBuilderWinForms
                     if (element.FirstAttribute != null)
                     {
                         TreeNode tempNode = treeNode.Nodes.Add(element.Attribute("id").Value);
-                        tempNode.Tag = element;
                         loadXmlElements(element, tempNode);
                     }
                     else
@@ -96,7 +95,12 @@ namespace XMLBuilderWinForms
 
         private string getXElementType(XElement el)
         {
-            
+            return el.Name.LocalName;
+        }
+
+        private string getXElementType(string id)
+        {
+            return getXElementType(getOneXElement(id));
         }
     }
 }
