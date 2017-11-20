@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using XMLBuilder;
+using System.IO;
 
 namespace XMLBuilderWinForms
 {
@@ -49,9 +50,9 @@ namespace XMLBuilderWinForms
                 MessageBox.Show(ex.Message);
             }
             MessageBox.Show(xmlDOM.ToString());
-            updateXMLTreeViewer();
+            //updateXMLTreeViewer();
         }
-
+        /*
         private void updateXMLTreeViewer()
         {
             XElement root = xmlDOM.Root;
@@ -80,6 +81,35 @@ namespace XMLBuilderWinForms
 
                 }
             }
+        }
+        */
+        private void saveCommand_Click(object sender, EventArgs e)
+        {
+            if(filepath != "") //might need to add functionality to check that file exists
+            {
+                xmlDOM.Save(filepath);
+            }
+            else
+            {
+                saveAsCommand_Click(sender, e);
+            }
+        }
+
+        private void saveAsCommand_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "XML Doc|*.xml";
+            saveFile.Title = "Save an XML File";
+            saveFile.ShowDialog();
+            if(saveFile.Title != "")
+            {
+                xmlDOM.Save(saveFile.FileName);
+            }
+        }
+
+        private void quitCommand_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
