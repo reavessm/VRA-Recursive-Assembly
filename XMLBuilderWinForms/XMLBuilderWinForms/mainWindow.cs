@@ -131,5 +131,6 @@ namespace XMLBuilderWinForms
         {
             return getXElementType(getOneXElement(id));
         }
+
     }
 }
