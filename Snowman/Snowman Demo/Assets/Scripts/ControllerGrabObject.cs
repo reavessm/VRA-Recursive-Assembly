@@ -24,10 +24,12 @@ using UnityEngine;
 
 public class ControllerGrabObject : MonoBehaviour
 {
+    
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
     private GameObject objectInHand;
+    private Rigidbody objectRigidbody;
 
     private SteamVR_Controller.Device Controller
     {
@@ -92,8 +94,11 @@ public class ControllerGrabObject : MonoBehaviour
     private void GrabObject()
     {
         objectInHand = collidingObject;
+        objectRigidbody = objectInHand.GetComponent<Rigidbody>();
         collidingObject = null;
         var joint = AddFixedJoint();
+        objectRigidbody.isKinematic = false;
+        //objectRigidbody.constraints = RigidbodyConstraints.None;            
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
     }
@@ -112,9 +117,13 @@ public class ControllerGrabObject : MonoBehaviour
         {
             GetComponent<FixedJoint>().connectedBody = null;
             Destroy(GetComponent<FixedJoint>());
-            objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
-            objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
-            objectInHand.GetComponent<Rigidbody>().useGravity = true;
+
+            objectRigidbody = objectInHand.GetComponent<Rigidbody>();
+            objectRigidbody.isKinematic = true;
+            //objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            //objectRigidbody.velocity = Controller.velocity;
+            //objectRigidbody.angularVelocity = Controller.angularVelocity;
+            //objectInHand.GetComponent<Rigidbody>().useGravity = true;
         }
 
         objectInHand = null;

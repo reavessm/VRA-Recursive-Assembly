@@ -72,14 +72,18 @@ public class LaserPointer : MonoBehaviour
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, teleportMask))
             {
                 hitPoint = hit.point;
-
                 ShowLaser(hit);
 
                 //Show teleport reticle
-                reticle.SetActive(true);
-                teleportReticleTransform.position = hitPoint + teleportReticleOffset;
+                //if (hitPoint.x > 10 || hitPoint.x < -10 || hitPoint.z > 10 || hitPoint.z < -10) {
+                    reticle.SetActive(true);
+                    teleportReticleTransform.position = hitPoint + teleportReticleOffset; shouldTeleport = true;
+                    shouldTeleport = true;
+                /*} else {
+                    reticle.SetActive(false);
+                    shouldTeleport = false;
+                }*/
 
-                shouldTeleport = true;
             }
         }
         else // Touchpad not held down, hide laser & teleport reticle
