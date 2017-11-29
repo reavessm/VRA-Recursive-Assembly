@@ -21,6 +21,7 @@
  */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControllerGrabObject : MonoBehaviour
 {
@@ -76,7 +77,12 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (Controller.GetHairTriggerDown())
         {
-            if (collidingObject)
+            if (collidingObject.tag == "Restart")
+            {
+                SceneManager.LoadScene("Snowman");
+            }
+
+            if (collidingObject.tag == "Pickupable")
             {
                 GrabObject();
             }

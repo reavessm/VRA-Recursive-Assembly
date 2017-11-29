@@ -7,6 +7,9 @@ TagManager:
   - FxTemporaire
   - projectile
   - CanTeleport
+  - TeleportIgnore
+  - Pickupable
+  - Restart
   layers:
   - Default
   - TransparentFX
