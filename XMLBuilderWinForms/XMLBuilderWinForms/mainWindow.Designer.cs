@@ -38,7 +38,7 @@
             this.saveAsCommand = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.quitCommand = new System.Windows.Forms.ToolStripMenuItem();
-            this.addElementButton = new System.Windows.Forms.Button();
+            this.newSiblingBtn = new System.Windows.Forms.Button();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.idTextBox = new System.Windows.Forms.TextBox();
@@ -51,6 +51,7 @@
             this.assetTextBox = new System.Windows.Forms.TextBox();
             this.pdfLabel = new System.Windows.Forms.Label();
             this.pdfTextBox = new System.Windows.Forms.TextBox();
+            this.newChildBtn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +92,7 @@
             this.newCommand.Name = "newCommand";
             this.newCommand.Size = new System.Drawing.Size(114, 22);
             this.newCommand.Text = "New";
+            this.newCommand.Click += new System.EventHandler(this.newCommand_Click);
             // 
             // openCommand
             // 
@@ -130,14 +132,16 @@
             this.quitCommand.Text = "Quit";
             this.quitCommand.Click += new System.EventHandler(this.quitCommand_Click);
             // 
-            // addElementButton
+            // newSiblingBtn
             // 
-            this.addElementButton.Location = new System.Drawing.Point(13, 530);
-            this.addElementButton.Name = "addElementButton";
-            this.addElementButton.Size = new System.Drawing.Size(293, 44);
-            this.addElementButton.TabIndex = 6;
-            this.addElementButton.Text = "Add New Element";
-            this.addElementButton.UseVisualStyleBackColor = true;
+            this.newSiblingBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.newSiblingBtn.Location = new System.Drawing.Point(13, 530);
+            this.newSiblingBtn.Name = "newSiblingBtn";
+            this.newSiblingBtn.Size = new System.Drawing.Size(143, 44);
+            this.newSiblingBtn.TabIndex = 6;
+            this.newSiblingBtn.Text = "New Sibling";
+            this.newSiblingBtn.UseVisualStyleBackColor = true;
+            this.newSiblingBtn.Click += new System.EventHandler(this.newSiblingButton_Click);
             // 
             // nameTextBox
             // 
@@ -145,6 +149,7 @@
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(583, 20);
             this.nameTextBox.TabIndex = 7;
+            this.nameTextBox.Leave += new System.EventHandler(this.nameTextBox_Leave);
             // 
             // nameLabel
             // 
@@ -162,6 +167,7 @@
             this.idTextBox.Name = "idTextBox";
             this.idTextBox.Size = new System.Drawing.Size(583, 20);
             this.idTextBox.TabIndex = 9;
+            this.idTextBox.Leave += new System.EventHandler(this.idTextBox_Leave);
             // 
             // idLabel
             // 
@@ -189,6 +195,7 @@
             this.unityRefTextBox.Name = "unityRefTextBox";
             this.unityRefTextBox.Size = new System.Drawing.Size(583, 20);
             this.unityRefTextBox.TabIndex = 11;
+            this.unityRefTextBox.Leave += new System.EventHandler(this.unityRefTextBox_Leave);
             // 
             // kvtaglabel
             // 
@@ -242,11 +249,24 @@
             this.pdfTextBox.Size = new System.Drawing.Size(583, 20);
             this.pdfTextBox.TabIndex = 17;
             // 
+            // newChildBtn
+            // 
+            this.newChildBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.newChildBtn.Location = new System.Drawing.Point(162, 530);
+            this.newChildBtn.Name = "newChildBtn";
+            this.newChildBtn.Size = new System.Drawing.Size(143, 44);
+            this.newChildBtn.TabIndex = 19;
+            this.newChildBtn.Text = "New Child";
+            this.newChildBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.newChildBtn.UseVisualStyleBackColor = true;
+            this.newChildBtn.Click += new System.EventHandler(this.newChildBtn_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 586);
+            this.Controls.Add(this.newChildBtn);
             this.Controls.Add(this.pdfLabel);
             this.Controls.Add(this.pdfTextBox);
             this.Controls.Add(this.assetLabel);
@@ -259,7 +279,7 @@
             this.Controls.Add(this.idTextBox);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.nameTextBox);
-            this.Controls.Add(this.addElementButton);
+            this.Controls.Add(this.newSiblingBtn);
             this.Controls.Add(this.XMLTreeViewer);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -287,7 +307,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsCommand;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem quitCommand;
-        private System.Windows.Forms.Button addElementButton;
+        private System.Windows.Forms.Button newSiblingBtn;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.TextBox idTextBox;
@@ -300,6 +320,7 @@
         private System.Windows.Forms.TextBox assetTextBox;
         private System.Windows.Forms.Label pdfLabel;
         private System.Windows.Forms.TextBox pdfTextBox;
+        private System.Windows.Forms.Button newChildBtn;
     }
 }
 

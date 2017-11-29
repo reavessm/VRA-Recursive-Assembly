@@ -52,6 +52,7 @@
     <Compile Include="mainWindow.Designer.cs">
       <DependentUpon>mainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\NewElemCombo.cs" />
     <Compile Include="Models\Flattag.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Kvtag.cs" />
@@ -65,6 +66,9 @@
     <Compile Include="Models\Scene.cs" />
     <Compile Include="Models\World.cs" />
     <Compile Include="documentHandler.cs" />
+    <EmbeddedResource Include="AddNewElement.resx">
+      <DependentUpon>AddNewElement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainWindow.resx">
       <DependentUpon>mainWindow.cs</DependentUpon>
     </EmbeddedResource>

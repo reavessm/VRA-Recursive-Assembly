@@ -90,6 +90,7 @@ namespace XMLBuilderWinForms
             {
                 saveAsCommand_Click(sender, e);
             }
+            updateXMLTreeViewer();
         }
 
         private void saveAsCommand_Click(object sender, EventArgs e)
@@ -98,10 +99,11 @@ namespace XMLBuilderWinForms
             saveFile.Filter = "XML Doc|*.xml";
             saveFile.Title = "Save an XML File";
             saveFile.ShowDialog();
-            if(saveFile.Title != "")
+            if(saveFile.FileName != "")
             {
                 xmlDOM.Save(saveFile.FileName);
             }
+            updateXMLTreeViewer();
         }
 
         private void quitCommand_Click(object sender, EventArgs e)
@@ -165,13 +167,59 @@ namespace XMLBuilderWinForms
 
         }
 
-        private void addElementButton_Click(object sender, EventArgs e)
+        private void newSiblingButton_Click(object sender, EventArgs e)
         {
-            this.IsMdiContainer = true;
-            AddNewElement newElement = new AddNewElement();
-            newElement.Show();
-            //add new node to treeViewer based off of inputs
-            newElement.dispose();
+            XElement tempElement;
+            AddNewElement newWindow = new AddNewElement();
+            var result = newWindow.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                tempElement = newWindow.returnElement;
+                MessageBox.Show(currentSelection.ToString());
+                currentSelection.Parent.Add(tempElement);
+                updateXMLTreeViewer();
+            }
         }
+
+        private void newChildBtn_Click(object sender, EventArgs e)
+        {
+            XElement tempElement;
+            AddNewElement newWindow = new AddNewElement();
+            var result = newWindow.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                tempElement = newWindow.returnElement;
+                MessageBox.Show(currentSelection.ToString());
+                currentSelection.Add(tempElement);
+                updateXMLTreeViewer();
+            }
+        }
+
+        private void newCommand_Click(object sender, EventArgs e)
+        {
+            xmlDOM = new XDocument(new XElement("world",
+                                   new XAttribute("name", "root"),
+                                   new XAttribute("id", "root"),
+                                   new XAttribute("ref", "root")));
+            updateXMLTreeViewer();
+            filepath = "";
+        }
+
+        private void nameTextBox_Leave(object sender, EventArgs e)
+        {
+            currentSelection.SetAttributeValue("name", nameTextBox.Text);
+        }
+
+        private void idTextBox_Leave(object sender, EventArgs e)
+        {
+            currentSelection.SetAttributeValue("id", idTextBox.Text);
+            updateXMLTreeViewer();
+        }
+
+        private void unityRefTextBox_Leave(object sender, EventArgs e)
+        {
+            currentSelection.SetAttributeValue("ref", unityRefTextBox);
+        }
+        
     }
 }
