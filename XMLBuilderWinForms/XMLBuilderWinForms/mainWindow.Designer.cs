@@ -286,8 +286,7 @@
             this.MaximumSize = new System.Drawing.Size(923, 625);
             this.MinimumSize = new System.Drawing.Size(923, 625);
             this.Name = "MainWindow";
-            this.Text = "XMLBuilder Prototype - Alpha 1";
-            this.Load += new System.EventHandler(this.XMLTreeViewer_Load);
+            this.Text = "XMLBuilder Prototype - Alpha 2";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

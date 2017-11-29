@@ -23,10 +23,7 @@ namespace XMLBuilderWinForms
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void XMLTreeViewer_Load(object sender, EventArgs e)
-        {
+            newXmlDOM();
         }
 
         private void openCommand_Click(object sender, EventArgs e)
@@ -40,6 +37,9 @@ namespace XMLBuilderWinForms
                 ofd1.ShowDialog();
                 xmlDOM = XDocument.Load(ofd1.FileName);
                 filepath = ofd1.FileName;
+                currentSelection = xmlDOM.Root;
+                updateXMLTreeViewer();
+
             }
             catch (XmlException xmlEx)
             {
@@ -49,15 +49,21 @@ namespace XMLBuilderWinForms
             {
                 MessageBox.Show(ex.Message);
             }
-            updateXMLTreeViewer();
         }
         
         private void updateXMLTreeViewer()
         {
-            XMLTreeViewer.Nodes.Clear();
-            TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.Attribute("id").Value);
-            loadXmlElements(xmlDOM.Root, treeNode);
-            XMLTreeViewer.ExpandAll();
+            try
+            {
+                XMLTreeViewer.Nodes.Clear();
+                TreeNode treeNode = XMLTreeViewer.Nodes.Add(xmlDOM.Root.Attribute("id").Value);
+                loadXmlElements(xmlDOM.Root, treeNode);
+                XMLTreeViewer.ExpandAll();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("The xml DOM is not valid");
+            }
         }
 
         private void loadXmlElements(XElement xElem, TreeNode treeNode)
@@ -169,15 +175,21 @@ namespace XMLBuilderWinForms
 
         private void newSiblingButton_Click(object sender, EventArgs e)
         {
-            XElement tempElement;
-            AddNewElement newWindow = new AddNewElement();
-            var result = newWindow.ShowDialog();
-            if(result == DialogResult.OK)
+            if(currentSelection.Parent != null)
             {
-                tempElement = newWindow.returnElement;
-                MessageBox.Show(currentSelection.ToString());
-                currentSelection.Parent.Add(tempElement);
-                updateXMLTreeViewer();
+                XElement tempElement;
+                AddNewElement newWindow = new AddNewElement();
+                var result = newWindow.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    tempElement = newWindow.returnElement;
+                    currentSelection.Parent.Add(tempElement);
+                    updateXMLTreeViewer();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Cannot add a sibling to root");
             }
         }
 
@@ -189,7 +201,6 @@ namespace XMLBuilderWinForms
             if (result == DialogResult.OK)
             {
                 tempElement = newWindow.returnElement;
-                MessageBox.Show(currentSelection.ToString());
                 currentSelection.Add(tempElement);
                 updateXMLTreeViewer();
             }
@@ -197,10 +208,15 @@ namespace XMLBuilderWinForms
 
         private void newCommand_Click(object sender, EventArgs e)
         {
+            newXmlDOM();
+        }
+
+        private void newXmlDOM()
+        {
             xmlDOM = new XDocument(new XElement("world",
-                                   new XAttribute("name", "root"),
-                                   new XAttribute("id", "root"),
-                                   new XAttribute("ref", "root")));
+                       new XAttribute("name", "name"),
+                       new XAttribute("id", "world"),
+                       new XAttribute("ref", "ref")));
             updateXMLTreeViewer();
             filepath = "";
         }

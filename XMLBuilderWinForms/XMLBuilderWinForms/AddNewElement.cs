@@ -18,13 +18,8 @@ namespace XMLBuilderWinForms
 {
     public partial class AddNewElement : Form
     {
-        private string elementName;
-        private string elementID;
-        private ObservableCollection<Kvtag> kvtags;
-        private string assetUri;
         private ComboBox newElementCB;
         private Label NewElementLabel;
-        private string pdfPageNums;
         private List<NewElemCombo> comboBoxEntries;
         private TextBox newElemName;
         private Label elemName;
@@ -173,8 +168,7 @@ namespace XMLBuilderWinForms
 
         private void InitializeComboBox()
         {
-            comboBoxEntries = new List<NewElemCombo> { new NewElemCombo ("world"),
-                                                       new NewElemCombo ("scene"),
+            comboBoxEntries = new List<NewElemCombo> { new NewElemCombo ("scene"),
                                                        new NewElemCombo ("group"),
                                                        new NewElemCombo ("assembly"),
                                                        new NewElemCombo ("part"),
