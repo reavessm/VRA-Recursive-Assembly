@@ -2,7 +2,7 @@
 namespace VRTK.GrabAttachMechanics
 {
     using UnityEngine;
-    using UnityEngine.SceneManagement;
+
     /// <summary>
     /// The Child Of Controller Grab Attach script is used to make the grabbed object a child of the grabbing object upon grab.
     /// </summary>
@@ -26,11 +26,7 @@ namespace VRTK.GrabAttachMechanics
         /// <returns>Is true if the grab is successful, false if the grab is unsuccessful.</returns>
         public override bool StartGrab(GameObject grabbingObject, GameObject givenGrabbedObject, Rigidbody givenControllerAttachPoint)
         {
-            if (base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint) && (givenGrabbedObject.tag == "Restart"))
-            {
-                SceneManager.LoadScene("Snowman");
-            }
-            if (base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint) && givenGrabbedObject.tag == "Pickupable")
+            if (base.StartGrab(grabbingObject, givenGrabbedObject, givenControllerAttachPoint))
             {
                 SnapObjectToGrabToController(givenGrabbedObject);
                 grabbedObjectScript.isKinematic = true;

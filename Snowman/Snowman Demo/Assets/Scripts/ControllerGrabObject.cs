@@ -25,12 +25,15 @@ using UnityEngine.SceneManagement;
 
 public class ControllerGrabObject : MonoBehaviour
 {
-    
+    public Material ghostMaterial;
+
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
     private GameObject objectInHand;
+    private GameObject ghostObject;
     private Rigidbody objectRigidbody;
+    
 
     private SteamVR_Controller.Device Controller
     {
@@ -107,6 +110,21 @@ public class ControllerGrabObject : MonoBehaviour
         //objectRigidbody.constraints = RigidbodyConstraints.None;            
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
+        highlightGhost(objectInHand);
+    }
+
+    private void highlightGhost(GameObject heldObject)
+    {
+        string nameOfGhost = heldObject.name + "Ghost";
+        ghostObject = GameObject.Find(nameOfGhost);
+        ghostObject.GetComponent<Renderer>().material.color = Color.red;
+    }
+
+    private void unHighlightGhost(GameObject heldObject)
+    {
+        string nameOfGhost = heldObject.name + "Ghost";
+        ghostObject = GameObject.Find(nameOfGhost);
+        ghostObject.GetComponent<Renderer>().material = ghostMaterial;
     }
 
     private FixedJoint AddFixedJoint()
@@ -130,6 +148,7 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.velocity = Controller.velocity;
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
+            unHighlightGhost(objectInHand);
         }
 
         objectInHand = null;
