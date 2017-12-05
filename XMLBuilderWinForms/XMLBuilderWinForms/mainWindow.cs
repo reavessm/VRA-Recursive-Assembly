@@ -236,6 +236,11 @@ namespace XMLBuilderWinForms
         {
             currentSelection.SetAttributeValue("ref", unityRefTextBox);
         }
-        
+
+        private void DeleteNode_Click(object sender, EventArgs e)
+        {
+            currentSelection.Remove();
+            updateXMLTreeViewer();
+        }
     }
 }

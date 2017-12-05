@@ -121,6 +121,7 @@ namespace XMLBuilderWinForms
             // 
             // newElemCancel
             // 
+            this.newElemCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.newElemCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.newElemCancel.Location = new System.Drawing.Point(38, 221);
             this.newElemCancel.Name = "newElemCancel";
@@ -132,6 +133,7 @@ namespace XMLBuilderWinForms
             // 
             // newElemConfirm
             // 
+            this.newElemConfirm.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.newElemConfirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.newElemConfirm.Location = new System.Drawing.Point(119, 221);
             this.newElemConfirm.Name = "newElemConfirm";
@@ -143,6 +145,8 @@ namespace XMLBuilderWinForms
             // 
             // AddNewElement
             // 
+            this.AcceptButton = this.newElemConfirm;
+            this.CancelButton = this.newElemCancel;
             this.ClientSize = new System.Drawing.Size(234, 261);
             this.Controls.Add(this.newElemConfirm);
             this.Controls.Add(this.newElemCancel);
@@ -192,7 +196,7 @@ namespace XMLBuilderWinForms
             this.Close();
         }
 
-        private void newElemConfirm_Click(object sender, EventArgs e)
+        private void newElemConfirm_Click(object sender, EventArgs e) //FormClosingEventArgs
         {
             if((newElemName.Text != "") && (newElemID.Text != ""))
             {
@@ -206,6 +210,7 @@ namespace XMLBuilderWinForms
             else
             {
                 MessageBox.Show("New element name and id must not be empty");
+                //e.Cancel = true;
             }
         }
     }

@@ -52,6 +52,8 @@
             this.pdfLabel = new System.Windows.Forms.Label();
             this.pdfTextBox = new System.Windows.Forms.TextBox();
             this.newChildBtn = new System.Windows.Forms.Button();
+            this.deleteNode = new System.Windows.Forms.Button();
+            this.duplicateNode = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +61,7 @@
             // 
             this.XMLTreeViewer.Location = new System.Drawing.Point(12, 27);
             this.XMLTreeViewer.Name = "XMLTreeViewer";
-            this.XMLTreeViewer.Size = new System.Drawing.Size(294, 496);
+            this.XMLTreeViewer.Size = new System.Drawing.Size(294, 447);
             this.XMLTreeViewer.TabIndex = 0;
             this.XMLTreeViewer.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.XMLTreeViewer_AfterSelect);
             // 
@@ -90,52 +92,52 @@
             // newCommand
             // 
             this.newCommand.Name = "newCommand";
-            this.newCommand.Size = new System.Drawing.Size(114, 22);
+            this.newCommand.Size = new System.Drawing.Size(152, 22);
             this.newCommand.Text = "New";
             this.newCommand.Click += new System.EventHandler(this.newCommand_Click);
             // 
             // openCommand
             // 
             this.openCommand.Name = "openCommand";
-            this.openCommand.Size = new System.Drawing.Size(114, 22);
+            this.openCommand.Size = new System.Drawing.Size(152, 22);
             this.openCommand.Text = "Open";
             this.openCommand.Click += new System.EventHandler(this.openCommand_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(111, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // saveCommand
             // 
             this.saveCommand.Name = "saveCommand";
-            this.saveCommand.Size = new System.Drawing.Size(114, 22);
+            this.saveCommand.Size = new System.Drawing.Size(152, 22);
             this.saveCommand.Text = "Save";
             this.saveCommand.Click += new System.EventHandler(this.saveCommand_Click);
             // 
             // saveAsCommand
             // 
             this.saveAsCommand.Name = "saveAsCommand";
-            this.saveAsCommand.Size = new System.Drawing.Size(114, 22);
+            this.saveAsCommand.Size = new System.Drawing.Size(152, 22);
             this.saveAsCommand.Text = "Save As";
             this.saveAsCommand.Click += new System.EventHandler(this.saveAsCommand_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(111, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // quitCommand
             // 
             this.quitCommand.Name = "quitCommand";
-            this.quitCommand.Size = new System.Drawing.Size(114, 22);
+            this.quitCommand.Size = new System.Drawing.Size(152, 22);
             this.quitCommand.Text = "Quit";
             this.quitCommand.Click += new System.EventHandler(this.quitCommand_Click);
             // 
             // newSiblingBtn
             // 
             this.newSiblingBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.newSiblingBtn.Location = new System.Drawing.Point(13, 530);
+            this.newSiblingBtn.Location = new System.Drawing.Point(13, 481);
             this.newSiblingBtn.Name = "newSiblingBtn";
             this.newSiblingBtn.Size = new System.Drawing.Size(143, 44);
             this.newSiblingBtn.TabIndex = 6;
@@ -163,7 +165,7 @@
             // 
             // idTextBox
             // 
-            this.idTextBox.Location = new System.Drawing.Point(312, 114);
+            this.idTextBox.Location = new System.Drawing.Point(312, 113);
             this.idTextBox.Name = "idTextBox";
             this.idTextBox.Size = new System.Drawing.Size(583, 20);
             this.idTextBox.TabIndex = 9;
@@ -173,7 +175,7 @@
             // 
             this.idLabel.AutoSize = true;
             this.idLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idLabel.Location = new System.Drawing.Point(312, 91);
+            this.idLabel.Location = new System.Drawing.Point(312, 90);
             this.idLabel.Name = "idLabel";
             this.idLabel.Size = new System.Drawing.Size(102, 20);
             this.idLabel.TabIndex = 10;
@@ -183,7 +185,7 @@
             // 
             this.unityRefLabel.AutoSize = true;
             this.unityRefLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.unityRefLabel.Location = new System.Drawing.Point(312, 157);
+            this.unityRefLabel.Location = new System.Drawing.Point(312, 159);
             this.unityRefLabel.Name = "unityRefLabel";
             this.unityRefLabel.Size = new System.Drawing.Size(243, 20);
             this.unityRefLabel.TabIndex = 12;
@@ -191,7 +193,7 @@
             // 
             // unityRefTextBox
             // 
-            this.unityRefTextBox.Location = new System.Drawing.Point(312, 180);
+            this.unityRefTextBox.Location = new System.Drawing.Point(312, 182);
             this.unityRefTextBox.Name = "unityRefTextBox";
             this.unityRefTextBox.Size = new System.Drawing.Size(583, 20);
             this.unityRefTextBox.TabIndex = 11;
@@ -201,7 +203,7 @@
             // 
             this.kvtaglabel.AutoSize = true;
             this.kvtaglabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kvtaglabel.Location = new System.Drawing.Point(312, 221);
+            this.kvtaglabel.Location = new System.Drawing.Point(312, 229);
             this.kvtaglabel.Name = "kvtaglabel";
             this.kvtaglabel.Size = new System.Drawing.Size(120, 20);
             this.kvtaglabel.TabIndex = 14;
@@ -209,7 +211,7 @@
             // 
             // KVTagBox
             // 
-            this.KVTagBox.Location = new System.Drawing.Point(312, 244);
+            this.KVTagBox.Location = new System.Drawing.Point(312, 252);
             this.KVTagBox.Multiline = true;
             this.KVTagBox.Name = "KVTagBox";
             this.KVTagBox.Size = new System.Drawing.Size(583, 129);
@@ -219,7 +221,7 @@
             // 
             this.assetLabel.AutoSize = true;
             this.assetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.assetLabel.Location = new System.Drawing.Point(312, 395);
+            this.assetLabel.Location = new System.Drawing.Point(311, 411);
             this.assetLabel.Name = "assetLabel";
             this.assetLabel.Size = new System.Drawing.Size(160, 20);
             this.assetLabel.TabIndex = 16;
@@ -227,7 +229,7 @@
             // 
             // assetTextBox
             // 
-            this.assetTextBox.Location = new System.Drawing.Point(312, 418);
+            this.assetTextBox.Location = new System.Drawing.Point(311, 434);
             this.assetTextBox.Name = "assetTextBox";
             this.assetTextBox.Size = new System.Drawing.Size(583, 20);
             this.assetTextBox.TabIndex = 15;
@@ -236,7 +238,7 @@
             // 
             this.pdfLabel.AutoSize = true;
             this.pdfLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pdfLabel.Location = new System.Drawing.Point(312, 463);
+            this.pdfLabel.Location = new System.Drawing.Point(311, 481);
             this.pdfLabel.Name = "pdfLabel";
             this.pdfLabel.Size = new System.Drawing.Size(219, 20);
             this.pdfLabel.TabIndex = 18;
@@ -244,7 +246,7 @@
             // 
             // pdfTextBox
             // 
-            this.pdfTextBox.Location = new System.Drawing.Point(312, 486);
+            this.pdfTextBox.Location = new System.Drawing.Point(311, 504);
             this.pdfTextBox.Name = "pdfTextBox";
             this.pdfTextBox.Size = new System.Drawing.Size(583, 20);
             this.pdfTextBox.TabIndex = 17;
@@ -252,7 +254,7 @@
             // newChildBtn
             // 
             this.newChildBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.newChildBtn.Location = new System.Drawing.Point(162, 530);
+            this.newChildBtn.Location = new System.Drawing.Point(162, 481);
             this.newChildBtn.Name = "newChildBtn";
             this.newChildBtn.Size = new System.Drawing.Size(143, 44);
             this.newChildBtn.TabIndex = 19;
@@ -261,11 +263,34 @@
             this.newChildBtn.UseVisualStyleBackColor = true;
             this.newChildBtn.Click += new System.EventHandler(this.newChildBtn_Click);
             // 
+            // deleteNode
+            // 
+            this.deleteNode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.deleteNode.Location = new System.Drawing.Point(12, 531);
+            this.deleteNode.Name = "deleteNode";
+            this.deleteNode.Size = new System.Drawing.Size(143, 44);
+            this.deleteNode.TabIndex = 20;
+            this.deleteNode.Text = "Delete Node";
+            this.deleteNode.UseVisualStyleBackColor = true;
+            this.deleteNode.Click += new System.EventHandler(this.DeleteNode_Click);
+            // 
+            // duplicateNode
+            // 
+            this.duplicateNode.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.duplicateNode.Location = new System.Drawing.Point(162, 531);
+            this.duplicateNode.Name = "duplicateNode";
+            this.duplicateNode.Size = new System.Drawing.Size(143, 44);
+            this.duplicateNode.TabIndex = 21;
+            this.duplicateNode.Text = "Duplicate Node";
+            this.duplicateNode.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(907, 586);
+            this.Controls.Add(this.duplicateNode);
+            this.Controls.Add(this.deleteNode);
             this.Controls.Add(this.newChildBtn);
             this.Controls.Add(this.pdfLabel);
             this.Controls.Add(this.pdfTextBox);
@@ -320,6 +345,8 @@
         private System.Windows.Forms.Label pdfLabel;
         private System.Windows.Forms.TextBox pdfTextBox;
         private System.Windows.Forms.Button newChildBtn;
+        private System.Windows.Forms.Button deleteNode;
+        private System.Windows.Forms.Button duplicateNode;
     }
 }
 
