@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Linq;
 using XMLBuilder;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace XMLBuilderWinForms
 {
@@ -163,7 +164,7 @@ namespace XMLBuilderWinForms
                 unityRefTextBox.Text = (string) currentSelection.Attribute("ref");
                 assetTextBox.Text = (string) currentSelection.Attribute("asset");
                 pdfTextBox.Text = (string) currentSelection.Attribute("pagenumber");
-                KVTagBox.Text = "Placeholder Text";
+                KVTagBox.Text = "Placeholder Text"; //currentSelection.Descendants("kvtags")
 
             }
             catch (XmlException xe)
@@ -239,8 +240,40 @@ namespace XMLBuilderWinForms
 
         private void DeleteNode_Click(object sender, EventArgs e)
         {
-            currentSelection.Remove();
-            updateXMLTreeViewer();
+            if (currentSelection != xmlDOM.Root)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to delete " + currentSelection.Attribute("name").ToString(), "Confirm Deletion", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    currentSelection.Remove();
+                    updateXMLTreeViewer();
+                }
+            }
+        }
+
+        private List<XElement> parseKVTagString(String kvTags)
+        {
+            List<XElement> temp = new List<XElement>();
+            String noSpace = Regex.Replace(kvTags, @"\s+", string.Empty);
+            string[] individTags = noSpace.Split(',');
+            try
+            {
+                currentSelection.Descendants("kvtags").Remove();
+            }
+            catch (Exception e)
+            {
+                throw new NoNullAllowedException("KVTag Parser Failed");
+            }
+            foreach (string tag in individTags)
+            {
+                string[] splitTag = tag.Split('=');
+                XElement tempEl = new XElement("kvtags", new XAttribute("name", splitTag[0]),
+                                                        new XAttribute("key", splitTag[0]),
+                                                        new XAttribute("value", splitTag[1]),
+                                                        new XAttribute("id", Guid.NewGuid().ToString()));
+                temp.Add(tempEl);
+            }
+            return temp;
         }
     }
 }
