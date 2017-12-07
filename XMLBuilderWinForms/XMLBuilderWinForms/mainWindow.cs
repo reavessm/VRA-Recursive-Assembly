@@ -164,7 +164,7 @@ namespace XMLBuilderWinForms
                 unityRefTextBox.Text = (string) currentSelection.Attribute("ref");
                 assetTextBox.Text = (string) currentSelection.Attribute("asset");
                 pdfTextBox.Text = (string) currentSelection.Attribute("pagenumber");
-                KVTagBox.Text = "Placeholder Text"; //currentSelection.Descendants("kvtags")
+                KVTagBox.Text = ""; //currentSelection.Descendants("kvtags")
 
             }
             catch (XmlException xe)
