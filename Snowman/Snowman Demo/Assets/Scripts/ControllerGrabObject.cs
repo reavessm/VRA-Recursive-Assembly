@@ -82,6 +82,7 @@ public class ControllerGrabObject : MonoBehaviour
         {
             if (collidingObject.tag == "Restart")
             {
+                //SceneManager.LoadScene("Snowman");
                 SceneManager.LoadScene("Snowman");
             }
 
