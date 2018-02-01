@@ -20,6 +20,6 @@ To run our test, you can follow these steps:
   
 You can also run the test by running the following command in your terminal/command prompt
 
-```bash
+```cmd
 Unity.exe -runTests -projectPath <PATH_TO_YOUR_PROJECT> -testResults <PATH_TO_SAVE>\results.xml -testPlatform editmode
 ```
