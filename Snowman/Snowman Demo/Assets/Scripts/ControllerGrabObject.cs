@@ -33,9 +33,12 @@ public class ControllerGrabObject : MonoBehaviour
     private GameObject objectInHand;
     private GameObject ghostObject;
     private Rigidbody objectRigidbody;
-    
+	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
+	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
 
-    private SteamVR_Controller.Device Controller
+
+
+	private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
@@ -118,14 +121,14 @@ public class ControllerGrabObject : MonoBehaviour
     {
         string nameOfGhost = heldObject.name + "Ghost";
         ghostObject = GameObject.Find(nameOfGhost);
-        ghostObject.GetComponent<Renderer>().material.color = Color.red;
+		ghostObject.GetComponent<Renderer>().material.color = ghostColorHi;
     }
 
     private void unHighlightGhost(GameObject heldObject)
     {
         string nameOfGhost = heldObject.name + "Ghost";
         ghostObject = GameObject.Find(nameOfGhost);
-        ghostObject.GetComponent<Renderer>().material = ghostMaterial;
+        ghostObject.GetComponent<Renderer>().material.color = ghostColor;
     }
 
     private FixedJoint AddFixedJoint()
