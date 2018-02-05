@@ -26,6 +26,7 @@ using UnityEngine.SceneManagement;
 public class ControllerGrabObject : MonoBehaviour
 {
     public Material ghostMaterial;
+	public float snapDistance;
 
     private SteamVR_TrackedObject trackedObj;
 
@@ -84,8 +85,7 @@ public class ControllerGrabObject : MonoBehaviour
         if (Controller.GetHairTriggerDown())
         {
             if (collidingObject.tag == "Restart")
-            {
-                //SceneManager.LoadScene("Snowman");
+			{
                 SceneManager.LoadScene("Snowman");
             }
 
@@ -131,6 +131,17 @@ public class ControllerGrabObject : MonoBehaviour
         ghostObject.GetComponent<Renderer>().material.color = ghostColor;
     }
 
+	private void snapToGhost(GameObject snappingObject)								//will find an object to snap to, uses snap distance to find distance
+	{
+		string nameOfGhost = snappingObject.name + "Ghost";
+		ghostObject = GameObject.Find(nameOfGhost);
+		if (Vector3.Distance(snappingObject.transform.position, ghostObject.transform.position) < snapDistance)
+		{
+			//snappingObject.transform.Translate(									//TODO
+		}
+
+	}
+
     private FixedJoint AddFixedJoint()
     {
         FixedJoint fx = gameObject.AddComponent<FixedJoint>();
@@ -153,6 +164,7 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
             unHighlightGhost(objectInHand);
+			snapToGhost(objectInHand);
         }
 
         objectInHand = null;
