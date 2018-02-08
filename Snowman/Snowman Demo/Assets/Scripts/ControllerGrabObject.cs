@@ -135,9 +135,10 @@ public class ControllerGrabObject : MonoBehaviour
 	{
 		string nameOfGhost = snappingObject.name + "Ghost";
 		ghostObject = GameObject.Find(nameOfGhost);
-		if (Vector3.Distance(snappingObject.transform.position, ghostObject.transform.position) < snapDistance)
+		float realDistance = Vector3.Distance(snappingObject.transform.position, ghostObject.transform.position);
+		if (realDistance < snapDistance)
 		{
-			//snappingObject.transform.Translate(									//TODO
+			//snappingObject.transform.position.Set = ghostObject.transform.position;				//TODO
 		}
 
 	}

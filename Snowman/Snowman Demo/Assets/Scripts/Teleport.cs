@@ -20,6 +20,9 @@
  * THE SOFTWARE.
  */
 
+ //this script will undergo major modification to inherit from the laser pointer script
+ 
+
 using UnityEngine;
 
 public class Teleport : MonoBehaviour

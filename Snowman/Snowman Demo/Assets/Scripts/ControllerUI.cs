@@ -20,7 +20,7 @@ public class ControllerUI : MonoBehaviour {
 	void Update () {
 		if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
 		{
-			Debug.Log(gameObject.name + " Grip Press");
+			//Debug.Log(gameObject.name + " Grip Press");
 		}
 	}
 }
