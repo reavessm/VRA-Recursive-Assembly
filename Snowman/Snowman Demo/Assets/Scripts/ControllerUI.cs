@@ -5,6 +5,8 @@ using UnityEngine;
 public class ControllerUI : MonoBehaviour {
 
 	private SteamVR_TrackedObject trackedObj;
+	private GameObject[] lightSource = GameObject.FindGameObjectsWithTag("Light");
+	private bool lightsDimmed = false;
 
 	private SteamVR_Controller.Device Controller
 	{
@@ -20,7 +22,25 @@ public class ControllerUI : MonoBehaviour {
 	void Update () {
 		if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
 		{
-			//Debug.Log(gameObject.name + " Grip Press");
+			if (!lightsDimmed)
+				DimLights();
 		}
 	}
+
+	void DimLights()
+	{
+		for (int i = 0; i < lightSource.Length; i++)
+		{
+			lightSource[i].GetComponent<Light>().intensity = .75F;
+		}
+	}
+
+	void BrightenLights()
+	{
+		for (int i = 0; i < lightSource.Length; i++)
+		{
+			lightSource[i].GetComponent<Light>().intensity = 1;
+		}
+	}
+
 }

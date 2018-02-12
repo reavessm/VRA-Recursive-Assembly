@@ -32,10 +32,10 @@ public class ControllerGrabObject : MonoBehaviour
 
     private GameObject collidingObject;
     private GameObject objectInHand;
-    private GameObject ghostObject;
+    private GameObject[] ghostObject;
     private Rigidbody objectRigidbody;
 	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xC0);
 
 
 
@@ -119,28 +119,45 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void highlightGhost(GameObject heldObject)
     {
-        string nameOfGhost = heldObject.name + "Ghost";
-        ghostObject = GameObject.Find(nameOfGhost);
-		ghostObject.GetComponent<Renderer>().material.color = ghostColorHi;
+		GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost");										//kind of broken right now
+		int j = 0;
+		for (int i = 0; i < arr.Length; i++)
+		{
+			if (arr[i].name.Equals(heldObject.name))
+			{
+				ghostObject[j] = arr[i];
+				j++;
+			}
+		}
+		for (int i = 0; i < ghostObject.Length; i++)
+		{
+			ghostObject[i].GetComponent<Renderer>().material.color = ghostColorHi;
+			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColorHi;
+		}
     }
 
     private void unHighlightGhost(GameObject heldObject)
     {
-        string nameOfGhost = heldObject.name + "Ghost";
-        ghostObject = GameObject.Find(nameOfGhost);
-        ghostObject.GetComponent<Renderer>().material.color = ghostColor;
-    }
-
-	private void snapToGhost(GameObject snappingObject)								//will find an object to snap to, uses snap distance to find distance
-	{
-		string nameOfGhost = snappingObject.name + "Ghost";
-		ghostObject = GameObject.Find(nameOfGhost);
-		float realDistance = Vector3.Distance(snappingObject.transform.position, ghostObject.transform.position);
-		if (realDistance < snapDistance)
+		GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost");
+		int j = 0;
+		for (int i = 0; i < arr.Length; i++)
 		{
-			//snappingObject.transform.position.Set = ghostObject.transform.position;				//TODO
+			if (arr[i].name.Equals(heldObject.name))
+			{
+				ghostObject[j] = arr[i];
+				j++;
+			}
 		}
+		for (int i = 0; i < ghostObject.Length; i++)
+		{
+			ghostObject[i].GetComponent<Renderer>().material.color = ghostColor;
+			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
+		}
+	}
 
+	private void snapToGhost(GameObject snappingObject, GameObject locationObject)								//will find an object to snap to, uses snap distance to find distance
+	{
+		
 	}
 
     private FixedJoint AddFixedJoint()
@@ -165,9 +182,20 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
             unHighlightGhost(objectInHand);
-			snapToGhost(objectInHand);
         }
 
-        objectInHand = null;
+																			//since ghostObject is an array, search all possible
+		ghostObject = GameObject.FindGameObjectsWithTag("Ghost");
+
+		for (int i = 0; i < ghostObject.Length; i++)
+		{
+			float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject[i].transform.position);
+			if (realDistance < snapDistance)
+			{
+				snapToGhost(objectInHand, ghostObject[i]);
+			}
+		}
+
+		objectInHand = null;
     }
 }
