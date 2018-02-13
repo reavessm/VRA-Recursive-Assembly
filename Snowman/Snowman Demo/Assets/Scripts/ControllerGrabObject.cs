@@ -33,13 +33,16 @@ public class ControllerGrabObject : MonoBehaviour
     private GameObject collidingObject;
     private GameObject objectInHand;
     private GameObject[] ghostObject;
+    private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR
     private Rigidbody objectRigidbody;
 	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
 	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xC0);
+    
 
 
 
-	private SteamVR_Controller.Device Controller
+
+    private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
@@ -47,6 +50,8 @@ public class ControllerGrabObject : MonoBehaviour
     void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
+        gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
+        ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
     }
 
 
@@ -119,13 +124,13 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void highlightGhost(GameObject heldObject)
     {
-		GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost");										//kind of broken right now
+		
 		int j = 0;
-		for (int i = 0; i < arr.Length; i++)
+		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
-			if (arr[i].name.Equals(heldObject.name))
+			if (gameObjectArray[i].name.Equals(heldObject.name))
 			{
-				ghostObject[j] = arr[i];
+				ghostObject[j] = gameObjectArray[i];
 				j++;
 			}
 		}
@@ -138,13 +143,13 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void unHighlightGhost(GameObject heldObject)
     {
-		GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost");
+		//GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost"); // use gameObjectArray from 'Awake()' -SR
 		int j = 0;
-		for (int i = 0; i < arr.Length; i++)
+		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
-			if (arr[i].name.Equals(heldObject.name))
+			if (gameObjectArray[i].name.Equals(heldObject.name))
 			{
-				ghostObject[j] = arr[i];
+				ghostObject[j] = gameObjectArray[i];
 				j++;
 			}
 		}
@@ -183,9 +188,6 @@ public class ControllerGrabObject : MonoBehaviour
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
             unHighlightGhost(objectInHand);
         }
-
-																			//since ghostObject is an array, search all possible
-		ghostObject = GameObject.FindGameObjectsWithTag("Ghost");
 
 		for (int i = 0; i < ghostObject.Length; i++)
 		{

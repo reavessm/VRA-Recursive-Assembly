@@ -5,8 +5,8 @@ using UnityEngine;
 public class ControllerUI : MonoBehaviour {
 
 	private SteamVR_TrackedObject trackedObj;
-	private GameObject[] lightSource = GameObject.FindGameObjectsWithTag("Light");
-	private bool lightsDimmed = false;
+    private GameObject[] lightSource;  // UnityException FindGameObjectWithTag is not allowed to be called from a MonoBehaviour Constructor, moved to 'Start()' -SR	
+    private bool lightsDimmed = false;
 
 	private SteamVR_Controller.Device Controller
 	{
@@ -15,8 +15,8 @@ public class ControllerUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        lightSource = GameObject.FindGameObjectsWithTag("Light");  // UnityException FindGameObjectWithTag is not allowed to be called from a MonoBehaviour Constructor, moved to 'Start()' -SR	
+    }
 	
 	// Update is called once per frame
 	void Update () {
