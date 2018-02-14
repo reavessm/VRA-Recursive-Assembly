@@ -33,10 +33,10 @@ public class ControllerGrabObject : MonoBehaviour
     private GameObject collidingObject;
     private GameObject objectInHand;
     private GameObject[] ghostObject;
-    private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR
+    private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR //was only using one, to highlight multiple of something (eyes) as well as a temporary array to store all children of ghost prefab, then sorting through
     private Rigidbody objectRigidbody;
 	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xC0);
+	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
     
 
 

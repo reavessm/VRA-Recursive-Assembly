@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<world name="name" id="world" ref="ref">
+  <scene name="scene1" id="001" ref="NA">
+    <group name="group1" id="001-001" ref="NA">
+      <assembly name="part1" id="05672345" ref="C:\Users\Ian\Documents\Beautiful-Open-Ended-Interior-Graphics\Assets\Objects\Test 1.fbx" />
+    </group>
+  </scene>
+</world>
