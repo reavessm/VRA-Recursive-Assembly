@@ -14,13 +14,8 @@ public class XMLoader : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-		readXMLFile();
-		IEnumerable<XElement> elements = from el in xmlDOM.Root.Elements("scene") select el;
-		foreach (XElement el in elements)
-		{
-			Debug.Log(el.FirstAttribute);
-		}
-		//Debug.Log(xmlDOM.Elements("group1").ToString());
+		readXMLFile(xmlFilePath);
+		outToLog(getAllGroups());
 	}
 	
 	// Update is called once per frame
@@ -28,8 +23,29 @@ public class XMLoader : MonoBehaviour {
 		
 	}
 
-	private void readXMLFile()
+	private void outToLog(IEnumerable<XElement> e) {
+		Debug.Log("Printing Out The Element List...");
+		foreach (XElement element in e) {
+			Debug.Log("Element Name: " + element.Attribute("name") + " ID: " + element.Attribute("id") + "\n");
+		}
+	}
+
+	private IEnumerable<XElement> getAllScenes() {
+		IEnumerable<XElement> temp = from scene in xmlDOM.Root.Elements() select scene;
+		return temp;
+	}
+
+	private IEnumerable<XElement> getAllGroups() {
+		IEnumerable<XElement> temp = from groups in xmlDOM.Root.Descendants("scene").Elements() select groups;
+		return temp;	
+	}
+
+	private IEnumerable<XElement> getAllAssemblies() {
+		IEnumerable<XElement> temp 
+	}
+
+	private void readXMLFile(String location)
 	{
-		xmlDOM = XDocument.Load(xmlFilePath);
+		xmlDOM = XDocument.Load(location);
 	}
 }

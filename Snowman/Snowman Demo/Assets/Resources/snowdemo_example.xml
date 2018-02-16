@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<world name="name" id="world" ref="ref">
+  <scene name="snowman_demo" id="snow" ref="">
+    <group name="demo_items" id="demo_items" ref="">
+      <assembly name="snowman" id="snowman" ref="">
+        <part name="nose" id="nose" ref="" />
+        <part name="left_eye" id="left_eye" ref="" />
+        <part name="right_eye" id="right_eye" ref="" />
+        <part name="head" id="head" ref="" />
+        <part name="body" id="body" ref="" />
+        <part name="lower_body" id="lower_body" ref="" />
+      </assembly>
+    </group>
+  </scene>
+</world>
