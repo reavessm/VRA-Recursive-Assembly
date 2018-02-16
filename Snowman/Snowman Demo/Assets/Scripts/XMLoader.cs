@@ -15,7 +15,7 @@ public class XMLoader : MonoBehaviour {
 	void Start ()
 	{
 		readXMLFile(xmlFilePath);
-		outToLog(getAllGroups());
+		outToLog(getAllParts());
 	}
 	
 	// Update is called once per frame
@@ -41,7 +41,13 @@ public class XMLoader : MonoBehaviour {
 	}
 
 	private IEnumerable<XElement> getAllAssemblies() {
-		IEnumerable<XElement> temp 
+		IEnumerable<XElement> temp = from assemblies in xmlDOM.Root.Descendants("scene").Descendants("group").Elements() select assemblies;
+		return temp;
+	}
+
+	private IEnumerable<XElement> getAllParts() {
+		IEnumerable<XElement> temp = from part in xmlDOM.Root.Descendants("scene").Descendants("group").Descendants("assembly").Elements() select part;
+		return temp;
 	}
 
 	private void readXMLFile(String location)
