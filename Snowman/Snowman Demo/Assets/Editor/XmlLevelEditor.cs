@@ -58,12 +58,13 @@ public class XmlLevelEditor : EditorWindow
         GUILayout.Label("Import to Log", EditorStyles.boldLabel);
         GUILayout.Label("Import the prefabs from an xml file and display them to the debu log");
         if (GUILayout.Button("Import to Log")) {
-          XMLoader.Start();
+          xmlLoader.Start();
         }
     }
 
     private void init()
     {
+        if (xmlLoader == null) xmlLoader = new xmlLoader();
         //if (deserializedLevelsLoader == null) deserializedLevelsLoader = new DeserializedLevelsLoader();
         //if (deserializedLevelsSaver == null) deserializedLevelsSaver = new DeserializedLevelsSaver();
         //if (deserializedLevelsCrossChecker == null) deserializedLevelsCrossChecker = new DeserializedLevelsCrossChecker();
