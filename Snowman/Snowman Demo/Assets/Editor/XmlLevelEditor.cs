@@ -7,6 +7,7 @@ public class XmlLevelEditor : EditorWindow
 //    DeserializedLevelsLoader deserializedLevelsLoader;
 //    DeserializedLevelsSaver deserializedLevelsSaver;
 //    DeserializedLevelsCrossChecker deserializedLevelsCrossChecker;
+    XMLoader xmlLoader;
 
     string importGOName = DeserializedLevelsLoader.xmlItemsGOName;
     string exportGOName = DeserializedLevelsSaver.xmlItemsToExportGOName;
