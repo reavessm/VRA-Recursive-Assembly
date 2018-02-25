@@ -27,39 +27,46 @@ public class XmlLevelEditor : EditorWindow
         GUILayout.Label("Import", EditorStyles.boldLabel);
         GUILayout.Label("Import Levels.xml into the scene");
 
-        if (GUILayout.Button("Import Levels.xml"))
-            deserializedLevelsLoader.generateItems();
-
+        if (GUILayout.Button("Import Levels.xml")) {
+//            deserializedLevelsLoader.generateItems();
+        }
 
         // Export section
         GUILayout.Label("Export", EditorStyles.boldLabel);
         GUILayout.Label("Export children of \"" + exportGOName + "\" GameObject into " + exportGOName + ".xml", EditorStyles.wordWrappedLabel);
-        if (GUILayout.Button("Export " + exportGOName))
-            deserializedLevelsSaver.saveExportItems();
-
+        if (GUILayout.Button("Export " + exportGOName)) {
+//            deserializedLevelsSaver.saveExportItems();
+        }
 
         // Delete section
         GUILayout.Label("Delete", EditorStyles.boldLabel);
         GUILayout.Label("Delete " + importGOName + " and " + exportGOName + " GameObjects from scene", EditorStyles.wordWrappedLabel);
         if (GUILayout.Button("Delete"))
         {
-            DestroyImmediate(GameObject.Find(importGOName));
-            DestroyImmediate(GameObject.Find(exportGOName));
+//            DestroyImmediate(GameObject.Find(importGOName));
+//            DestroyImmediate(GameObject.Find(exportGOName));
         }
-
 
         // Cross check section
         GUILayout.Label("Cross Check", EditorStyles.boldLabel);
         GUILayout.Label("Cross check /Resources/Prefabs and Levels.xml if there are any item prefabs that exist only in one but not the other", EditorStyles.wordWrappedLabel);
-        if (GUILayout.Button("Cross Check"))
-            deserializedLevelsCrossChecker.crossCheck();
+        if (GUILayout.Button("Cross Check")) {
+//            deserializedLevelsCrossChecker.crossCheck();
+        }
+
+        // Test Importing to log
+        GUILayout.Label("Import to Log", EditorStyles.boldLabel);
+        GUILayout.Label("Import the prefabs from an xml file and display them to the debu log");
+        if (GUILayout.Button("Import to Log")) {
+          XMLoader.Start();
+        }
     }
 
     private void init()
     {
-        if (deserializedLevelsLoader == null) deserializedLevelsLoader = new DeserializedLevelsLoader();
-        if (deserializedLevelsSaver == null) deserializedLevelsSaver = new DeserializedLevelsSaver();
-        if (deserializedLevelsCrossChecker == null) deserializedLevelsCrossChecker = new DeserializedLevelsCrossChecker();
+        //if (deserializedLevelsLoader == null) deserializedLevelsLoader = new DeserializedLevelsLoader();
+        //if (deserializedLevelsSaver == null) deserializedLevelsSaver = new DeserializedLevelsSaver();
+        //if (deserializedLevelsCrossChecker == null) deserializedLevelsCrossChecker = new DeserializedLevelsCrossChecker();
     }
 
 }
