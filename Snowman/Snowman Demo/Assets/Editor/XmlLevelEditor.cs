@@ -4,9 +4,9 @@ using UnityEditor;
 public class XmlLevelEditor : EditorWindow
 {
 
-    DeserializedLevelsLoader deserializedLevelsLoader;
-    DeserializedLevelsSaver deserializedLevelsSaver;
-    DeserializedLevelsCrossChecker deserializedLevelsCrossChecker;
+//    DeserializedLevelsLoader deserializedLevelsLoader;
+//    DeserializedLevelsSaver deserializedLevelsSaver;
+//    DeserializedLevelsCrossChecker deserializedLevelsCrossChecker;
 
     string importGOName = DeserializedLevelsLoader.xmlItemsGOName;
     string exportGOName = DeserializedLevelsSaver.xmlItemsToExportGOName;
