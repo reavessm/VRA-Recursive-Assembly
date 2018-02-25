@@ -24,6 +24,13 @@ public class XmlLevelEditor : EditorWindow
         // create DeserializedLevelsLoader, Saver and CrossChecker instances
         init();
 
+        // Test Importing to log
+        GUILayout.Label("Import to Log", EditorStyles.boldLabel);
+        GUILayout.Label("Import the prefabs from an xml file and display them to the debu log");
+          if (GUILayout.Button("Import to Log")) {
+            xmlLoader.readDefaultXMLFile();
+          }
+
         // Import section
         GUILayout.Label("Import", EditorStyles.boldLabel);
         GUILayout.Label("Import Levels.xml into the scene");
@@ -55,12 +62,6 @@ public class XmlLevelEditor : EditorWindow
 //            deserializedLevelsCrossChecker.crossCheck();
         }
 
-        // Test Importing to log
-        GUILayout.Label("Import to Log", EditorStyles.boldLabel);
-        GUILayout.Label("Import the prefabs from an xml file and display them to the debu log");
-        if (GUILayout.Button("Import to Log")) {
-          xmlLoader.readDefaultXMLFile();
-        }
     }
 
     private void init()
