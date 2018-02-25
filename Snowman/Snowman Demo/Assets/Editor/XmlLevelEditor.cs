@@ -9,8 +9,8 @@ public class XmlLevelEditor : EditorWindow
 //    DeserializedLevelsCrossChecker deserializedLevelsCrossChecker;
     XMLoader xmlLoader;
 
-    string importGOName = DeserializedLevelsLoader.xmlItemsGOName;
-    string exportGOName = DeserializedLevelsSaver.xmlItemsToExportGOName;
+    string importGOName = ""; //DeserializedLevelsLoader.xmlItemsGOName;
+    string exportGOName = ""; //DeserializedLevelsSaver.xmlItemsToExportGOName;
 
     [MenuItem("Window/Xml Level Editor")]
     public static void ShowWindow()
@@ -59,13 +59,13 @@ public class XmlLevelEditor : EditorWindow
         GUILayout.Label("Import to Log", EditorStyles.boldLabel);
         GUILayout.Label("Import the prefabs from an xml file and display them to the debu log");
         if (GUILayout.Button("Import to Log")) {
-          xmlLoader.Start();
+          xmlLoader.readDefaultXMLFile();
         }
     }
 
     private void init()
     {
-        if (xmlLoader == null) xmlLoader = new xmlLoader();
+        if (xmlLoader == null) xmlLoader = new XMLoader();
         //if (deserializedLevelsLoader == null) deserializedLevelsLoader = new DeserializedLevelsLoader();
         //if (deserializedLevelsSaver == null) deserializedLevelsSaver = new DeserializedLevelsSaver();
         //if (deserializedLevelsCrossChecker == null) deserializedLevelsCrossChecker = new DeserializedLevelsCrossChecker();

@@ -6,7 +6,7 @@ using System.IO;
 using System;
 using System.Linq;
 
-public class XMLoader : MonoBehaviour {
+public class XMLoader {//: MonoBehaviour {
 
 	public String xmlFilePath = Directory.GetCurrentDirectory() + "\\Assets\\Resources\\world.xml";
 	private XDocument xmlDOM;
@@ -59,5 +59,11 @@ public class XMLoader : MonoBehaviour {
 	private void readXMLFile(String location)
 	{
 		xmlDOM = XDocument.Load(location);
+
+	}
+
+  public void readDefaultXMLFile()
+	{
+		xmlDOM = XDocument.Load("\\Assets\\Resources\\world.xml");
 	}
 }
