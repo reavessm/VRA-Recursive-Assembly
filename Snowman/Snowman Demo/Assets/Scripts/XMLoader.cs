@@ -6,9 +6,9 @@ using System.IO;
 using System;
 using System.Linq;
 
-public class XMLoader : MonoBehaviour {
+public class XMLoader { //: MonoBehaviour { // Throws error when using 'new' with MonoBehaviour
 
-	public String xmlFilePath = Directory.GetCurrentDirectory() + "\\Assets\\Resources\\world.xml";
+	public String xmlFilePath = Directory.GetCurrentDirectory() + "/Assets/Resources/demo.xml";
 	private XDocument xmlDOM;
 
 	// Use this for initialization
@@ -17,11 +17,16 @@ public class XMLoader : MonoBehaviour {
 		readXMLFile(xmlFilePath);
 		outToLog(getAllParts());
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
+
+  public XMLoader(){}
+  public XMLoader(string filepath) {
+    xmlFilePath = filepath;
+  }
 
 	private void outToLog(IEnumerable<XElement> e) {
 		Debug.Log("Printing Out The Element List...");
@@ -37,7 +42,7 @@ public class XMLoader : MonoBehaviour {
 
 	private IEnumerable<XElement> getAllGroups() {
 		IEnumerable<XElement> temp = from groups in xmlDOM.Root.Descendants("scene").Elements() select groups;
-		return temp;	
+		return temp;
 	}
 
 	private IEnumerable<XElement> getAllAssemblies() {
@@ -54,4 +59,8 @@ public class XMLoader : MonoBehaviour {
 	{
 		xmlDOM = XDocument.Load(location);
 	}
+
+  public void readDefaultXMLFile(){
+    xmlDOM = XDocument.Load(xmlFilePath);
+  }
 }
