@@ -6,28 +6,22 @@ using System.IO;
 using System;
 using System.Linq;
 
-public class XMLoader {//: MonoBehaviour {
+public class XMLoader : MonoBehaviour {
 
 	public String xmlFilePath = Directory.GetCurrentDirectory() + "\\Assets\\Resources\\world.xml";
 	private XDocument xmlDOM;
 
 	// Use this for initialization
-  void Start ()
+	void Start ()
 	{
 		readXMLFile(xmlFilePath);
 		outToLog(getAllParts());
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
-
+		
 	}
-
-  public XMLoader() {} // default constructor
-
-  public XMLoader(String location) {
-    readXMLFile(location);
-  }
 
 	private void outToLog(IEnumerable<XElement> e) {
 		Debug.Log("Printing Out The Element List...");
@@ -43,7 +37,7 @@ public class XMLoader {//: MonoBehaviour {
 
 	private IEnumerable<XElement> getAllGroups() {
 		IEnumerable<XElement> temp = from groups in xmlDOM.Root.Descendants("scene").Elements() select groups;
-		return temp;
+		return temp;	
 	}
 
 	private IEnumerable<XElement> getAllAssemblies() {
@@ -59,11 +53,5 @@ public class XMLoader {//: MonoBehaviour {
 	private void readXMLFile(String location)
 	{
 		xmlDOM = XDocument.Load(location);
-
-	}
-
-  public void readDefaultXMLFile()
-	{
-		xmlDOM = XDocument.Load("\\Assets\\Resources\\world.xml");
 	}
 }
