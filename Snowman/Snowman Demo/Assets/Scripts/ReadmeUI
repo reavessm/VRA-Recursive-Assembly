@@ -1,0 +1,6 @@
+On button press, pull up canvas
+
+Transform canvas position to be x units in front of user
+  * Play with x values
+
+On button press again, hide canvas
