@@ -1,16 +1,16 @@
 ﻿/*
  * Copyright (c) 2016 Razeware LLC
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,9 +35,11 @@ public class ControllerGrabObject : MonoBehaviour
     private GameObject[] ghostObject;
     private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR //was only using one, to highlight multiple of something (eyes) as well as a temporary array to store all children of ghost prefab, then sorting through
     private Rigidbody objectRigidbody;
-	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
-    
+	  private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
+	  private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+    private bool uiIsUp = false; // This changes whenever the UI is pulled up
+    public Canvas GUICanvas;
+
 
 
 
@@ -52,6 +54,7 @@ public class ControllerGrabObject : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
         ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
+        GUICanvas.gameObject.SetActive(false); // Hides UI initially
     }
 
 
@@ -107,6 +110,35 @@ public class ControllerGrabObject : MonoBehaviour
                 ReleaseObject();
             }
         }
+
+        if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
+        {
+          Debug.Log(gameObject.name + " Grip Press");
+          if (uiIsUp)
+          {
+            HideUI();
+          } else
+          {
+            ShowUI();
+          }
+        }
+
+        if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
+        {
+          Debug.Log(gameObject.name + " Grip Release");
+        }
+    }
+
+    private void ShowUI()
+    {
+      Debug.Log("Showing UI stuff");
+      GUICanvas.gameObject.SetActive(true);
+    }
+
+    private void HideUI()
+    {
+      Debug.Log("Hiding UI stuff");
+      GUICanvas.gameObject.SetActive(false);
     }
 
     private void GrabObject()
@@ -116,7 +148,7 @@ public class ControllerGrabObject : MonoBehaviour
         collidingObject = null;
         var joint = AddFixedJoint();
         objectRigidbody.isKinematic = false;
-        //objectRigidbody.constraints = RigidbodyConstraints.None;            
+        //objectRigidbody.constraints = RigidbodyConstraints.None;
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
         highlightGhost(objectInHand);
@@ -124,7 +156,7 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void highlightGhost(GameObject heldObject)
     {
-		
+
 		int j = 0;
 		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
@@ -162,7 +194,7 @@ public class ControllerGrabObject : MonoBehaviour
 
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)								//will find an object to snap to, uses snap distance to find distance
 	{
-		
+
 	}
 
     private FixedJoint AddFixedJoint()
