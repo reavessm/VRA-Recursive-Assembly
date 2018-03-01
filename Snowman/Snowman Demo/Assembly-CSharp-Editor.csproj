@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\AnnotationWindow.cs" />
      <Compile Include="Assets\Editor\XmlLevelEditor.cs" />
      <Compile Include="Assets\Scripts\Editor\PickUpTest.cs" />
      <Compile Include="Assets\SteamVR\Editor\SteamVR_Editor.cs" />
