@@ -90,13 +90,14 @@ public class Metadata : MonoBehaviour {
 
 		// We're now going to check to see if there is an ordering discontinuity. If there is, this
 		// object is not the next object in order.		
-		int cursor = startorder;
 		bool[] ary = new bool[rootObject.transform.childCount + 1];
 		foreach (Transform element in rootObject.transform) {
 			int orderindex = element.GetComponent<Metadata>().getOrder() - 1;
 			if (orderindex >= 0) {
 				if (!ary[orderindex]) {
-					ary[orderindex] = true;
+					if (this.getBuilt()) {
+						ary[orderindex] = true;
+					}
 				}
 			}
 		}
