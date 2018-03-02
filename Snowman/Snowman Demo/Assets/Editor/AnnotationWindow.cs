@@ -56,6 +56,15 @@ public class AnnotationWindow : EditorWindow {
 				}
 			}
 		}
+
+		if (GUILayout.Button("Set Current Object as Root")) {
+			foreach (mData element in rawtree) {
+				if (element.Obj.GetComponent<Metadata>() != null) {
+					element.Obj.GetComponent<Metadata>().setRootObject(currentobj);
+				}
+			}
+		}
+
 		foreach (mData element in rawtree) {
 			EditorGUI.indentLevel = element.Depth;
 			Metadata md = element.Obj.GetComponent("Metadata") as Metadata;
