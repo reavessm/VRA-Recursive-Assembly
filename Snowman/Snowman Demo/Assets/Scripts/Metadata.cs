@@ -6,7 +6,7 @@ using System;
 public class Metadata : MonoBehaviour {
 	public string kvtagstring;
 	public GameObject rootObject;
-	private Boolean built = false;
+	public Boolean built = false;
 	private SortedDictionary<string, string> kvtags;
 
 	/// <summary>
@@ -23,10 +23,12 @@ public class Metadata : MonoBehaviour {
 	/// </summary>
 	void Start()
 	{
-		built = false;
+		updateTags();
+		//built = false;
 	}
 
 	private void updateTags() {
+		kvtags = new SortedDictionary<string, string>();
 		try {
 			if (!String.IsNullOrEmpty(kvtagstring)) {
 				if (kvtagstring.Contains(":") && !kvtagstring.EndsWith(":")) {
@@ -63,8 +65,9 @@ public class Metadata : MonoBehaviour {
 	// Will return true so long as no misordering violation is detected--this means is should be
 	// callable for unordered assembly too.
 	public bool isNextInOrder() {
+		updateTags();
 		// This is the goal number.
-		int thisorder = this.getOrder() - 1;
+		int thisorder = getOrder() - 1;
 		
 		// If the current object's order is -1, it means the object is unordered and should
 		// be considered buildable.
@@ -92,11 +95,11 @@ public class Metadata : MonoBehaviour {
 		// object is not the next object in order.		
 		bool[] ary = new bool[rootObject.transform.childCount + 1];
 		foreach (Transform element in rootObject.transform) {
-			int orderindex = element.GetComponent<Metadata>().getOrder() - 1;
-			if (orderindex >= 0) {
-				if (!ary[orderindex]) {
-					if (this.getBuilt()) {
-						ary[orderindex] = true;
+			int orderindex = element.gameObject.GetComponent<Metadata>().getOrder();
+			if (orderindex > 0) {
+				if (!ary[orderindex-1]) {
+					if (element.gameObject.GetComponent<Metadata>().getBuilt()) {
+						ary[orderindex-1] = true;
 					}
 				}
 			}
@@ -118,9 +121,12 @@ public class Metadata : MonoBehaviour {
 		return kvtags;
 	}
 
-	public int getOrder() {
-		int temp = -1;
-		Int32.TryParse(kvtags["order"], out temp);
+	public Int32 getOrder() {
+		updateTags();
+		Int32 temp = -1;
+		if (kvtags.ContainsKey("order")) {
+			Int32.TryParse(kvtags["order"], out temp);
+		}
 		return temp;
 	}
 	

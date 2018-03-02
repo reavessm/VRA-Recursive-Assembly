@@ -65,6 +65,11 @@ public class AnnotationWindow : EditorWindow {
 			}
 		}
 
+		if (GUILayout.Button("Validate Ordering")) {
+			Metadata md = currentobj.GetComponent<Metadata>();
+			Debug.Log(md.isNextInOrder());
+		}
+
 		foreach (mData element in rawtree) {
 			EditorGUI.indentLevel = element.Depth;
 			Metadata md = element.Obj.GetComponent("Metadata") as Metadata;
