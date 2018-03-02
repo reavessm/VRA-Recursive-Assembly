@@ -1,9 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 
 public class AnnotationWindow : EditorWindow {
+
+	[Serializable]
+	public class MDVals {
+		public int order;
+		public int length;
+		public int height;
+		public int width;
+		public int partid;
+		public string misc;
+	}
+
+	
 
 	private class mData {
 		public int Depth {get; set;}
@@ -35,22 +49,20 @@ public class AnnotationWindow : EditorWindow {
 		currentobj = Selection.activeGameObject;
 		rawtree = buildRawTree(currentobj);
 		// Window Code Goes Here
-		GUILayout.Label("Annotate Objects");
-		List<string> names = new List<string>();
-		List<string> tags = new List<string>();
+		if (GUILayout.Button("Generate Metadata Skeleton")){
+			foreach (mData element in rawtree) {;
+				if (element.Obj.GetComponent<Metadata>() == null) {
+					element.Obj.AddComponent<Metadata>();
+				}
+			}
+		}
 		foreach (mData element in rawtree) {
 			EditorGUI.indentLevel = element.Depth;
-			names.Add(EditorGUILayout.TextField("Object Name", element.Obj.name));
-			EditorGUI.indentLevel = element.Depth + 1;
-			if (element.Obj.GetComponent("Metadata") != null) {
-				Metadata md = element.Obj.GetComponent("Metadata") as Metadata;
-				tags.Add(EditorGUILayout.TextField("Tag Notation", md.kvtagstring));
+			Metadata md = element.Obj.GetComponent("Metadata") as Metadata;
+			if (md != null) {
+				md.kvtagstring = EditorGUILayout.TextField(element.Obj.name, md.kvtagstring);
 			}
 		}			
-	}
-
-	void OnSelectionChange() {
-		currentobj = Selection.activeGameObject;
 	}
 
 	List<mData> buildRawTree(GameObject current) {
@@ -63,8 +75,8 @@ public class AnnotationWindow : EditorWindow {
 		return temp;
 	}
 
-	[MenuItem ("Window/Annotate Scene")]
+	[MenuItem ("Window/Annotate Object Metadata")]
 	public static void ShowWindow() {
-		EditorWindow.GetWindow(typeof(AnnotationWindow));
+		EditorWindow.GetWindow(typeof(AnnotationWindow), true, "Annotate Object Metadata");
 	}
 }
