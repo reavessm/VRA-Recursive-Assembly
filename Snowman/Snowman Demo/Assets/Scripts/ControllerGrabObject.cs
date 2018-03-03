@@ -55,7 +55,7 @@ public class ControllerGrabObject : MonoBehaviour
         gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
         ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
-        guiDistance = 10f; // can change this if needed
+        guiDistance = 0.2f; // can change this if needed
     }
 
 
