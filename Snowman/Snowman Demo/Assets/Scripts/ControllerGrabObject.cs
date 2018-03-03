@@ -26,8 +26,8 @@ using UnityEngine.SceneManagement;
 public class ControllerGrabObject : MonoBehaviour
 {
     public Material ghostMaterial;
-	public float snapDistance;
-
+	  public float snapDistance;
+    public Canvas GUICanvas;
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
@@ -38,7 +38,7 @@ public class ControllerGrabObject : MonoBehaviour
 	  private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
 	  private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
-    public Canvas GUICanvas;
+    private float guiDistance; // how far to place the gui infront of the player
 
 
 
@@ -55,6 +55,7 @@ public class ControllerGrabObject : MonoBehaviour
         gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
         ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
+        guiDistance = 10f; // can change this if needed
     }
 
 
@@ -136,7 +137,7 @@ public class ControllerGrabObject : MonoBehaviour
         Debug.Log("Showing UI stuff");
         GUICanvas.gameObject.SetActive(true);
         uiIsUp = true;
-        // Transform to be in front of player
+        GUICanvas.gameObject.transform.position = Camera.main.transform.position + Camera.main.transform.forward * guiDistance; // Transform to be in front of player, i hope...
     }
 
     private void HideUI()
