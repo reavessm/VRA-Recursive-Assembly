@@ -53,7 +53,7 @@ public class ControllerGrabObject : MonoBehaviour
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
-        ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
+        //ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
         guiDistance = 0.2f; // can change this if needed
     }
@@ -104,48 +104,15 @@ public class ControllerGrabObject : MonoBehaviour
             }
         }
 
-        if (Controller.GetHairTriggerUp())
-        {
-            if (objectInHand)
-            {
-                ReleaseObject();
-            }
-        }
-
-        if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
-        {
-          Debug.Log(gameObject.name + " Grip Press");
-          if (uiIsUp)
-          {
-            HideUI();
-          } else
-          {
-            ShowUI();
-          }
-        }
-
-        if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
-        {
-          Debug.Log(gameObject.name + " Grip Release");
-        }
-
-        uiIsUp = GUICanvas.gameObject.activeSelf;
+		if (Controller.GetHairTriggerUp())
+		{
+			if (objectInHand)
+			{
+				ReleaseObject();
+			}
+		}
     }
 
-    private void ShowUI()
-    {
-        Debug.Log("Showing UI stuff");
-        GUICanvas.gameObject.SetActive(true);
-        uiIsUp = true;
-        GUICanvas.gameObject.transform.position = Camera.main.transform.position + Camera.main.transform.forward * guiDistance; // Transform to be in front of player, i hope...
-    }
-
-    private void HideUI()
-    {
-        Debug.Log("Hiding UI stuff");
-        GUICanvas.gameObject.SetActive(false);
-        uiIsUp = false;
-    }
 
     // Check to make sure we aren't "skipping backwards" in the build order.
     // Ex if 1, 2, 3, 4 have been built, make sure you can't remove 1, 2, 3.

@@ -76,10 +76,13 @@ public class Teleport : MonoBehaviour
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, teleportMask) && hit.collider != null)
             {
                 hitPoint = hit.point;
-                ShowLaser(hit);
+                //ShowLaser(hit);
 
                 //Show teleport reticle
-                if ((hitPoint.x < trackedObj.transform.position.x + range) && (hitPoint.x > trackedObj.transform.position.x - range) && (hitPoint.z < trackedObj.transform.position.z + range) && (hitPoint.z > trackedObj.transform.position.z - range)) {//&& (hit.collider.tag.Equals("CanTeleport")))
+                if ((hitPoint.x < trackedObj.transform.position.x + range) 
+					&& (hitPoint.x > trackedObj.transform.position.x - range) 
+					&& (hitPoint.z < trackedObj.transform.position.z + range) 
+					&& (hitPoint.z > trackedObj.transform.position.z - range)) {//&& (hit.collider.tag.Equals("CanTeleport")))
                     reticle.SetActive(true);
                     teleportReticleTransform.position = hitPoint + teleportReticleOffset;
 					shouldTeleport = true;
@@ -93,7 +96,7 @@ public class Teleport : MonoBehaviour
         }
         else// Touchpad not held down, hide laser & teleport reticle
         {
-            laser.SetActive(false);
+            //laser.SetActive(false);
             reticle.SetActive(false);
         }
 
@@ -104,14 +107,16 @@ public class Teleport : MonoBehaviour
         }
     }
 
-    private void ShowLaser(RaycastHit hit)
+	/*
+	private void ShowLaser(RaycastHit hit)
     {
-        laser.SetActive(true); //Show the laser
+        //laser.SetActive(true); //Show the laser
         laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
         laserTransform.LookAt(hitPoint); // Rotate laser facing the hit point
         laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y,
-            hit.distance); // Scale laser so it fits exactly between the controller & the hit point
+			hit.distance); // Scale laser so it fits exactly between the controller & the hit point
     }
+	*/
 
     private void DoTeleport()
     {
