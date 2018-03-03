@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using XMLBuilder;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace XMLBuilderWinForms
 {
@@ -229,8 +230,18 @@ namespace XMLBuilderWinForms
 
         private void idTextBox_Leave(object sender, EventArgs e)
         {
-            currentSelection.SetAttributeValue("id", idTextBox.Text);
-            updateXMLTreeViewer();
+            var idExists = from x in xmlDOM.Elements() where x.Attribute("id").ToString() == idTextBox.Text select x;
+            Debug.WriteLine(idExists);
+            if (idExists == null)
+            {
+                currentSelection.SetAttributeValue("id", idTextBox.Text);
+                updateXMLTreeViewer();
+            }
+            else
+            {
+                MessageBox.Show("ID must be unique");
+            }
+
         }
 
         private void unityRefTextBox_Leave(object sender, EventArgs e)
@@ -274,6 +285,25 @@ namespace XMLBuilderWinForms
                 temp.Add(tempEl);
             }
             return temp;
+        }
+
+        private void duplicateNode_Click(object sender, EventArgs e)
+        {
+            if (currentSelection != xmlDOM.Root)
+            {
+                XElement newElement = new XElement(currentSelection);
+                newElement.SetAttributeValue("id", Guid.NewGuid().ToString());
+                foreach (XElement node in newElement.Descendants())
+                {
+                    node.SetAttributeValue("id", Guid.NewGuid().ToString());
+                }
+                currentSelection.Parent.Add(newElement);
+                updateXMLTreeViewer();
+            }
+            else
+            {
+                MessageBox.Show("Cannot duplicate the root node");
+            }
         }
     }
 }
