@@ -29,15 +29,13 @@ using UnityEngine;
 
 public class LaserPointer : MonoBehaviour
 {
-	public Transform cameraRigTransform;
-	public Transform headTransform; // The camera rig's head
 	public int range;
 	private SteamVR_TrackedObject trackedObj;
 	public GameObject laserPrefab; // The laser prefab
 	private GameObject laser; // A reference to the spawned laser
 	private Transform laserTransform; // The transform component of the laser for ease of use
-
-	private Vector3 hitPoint; // Point where the raycast hits
+	public Vector3 hitPoint; // Point where the raycast hits
+	public LayerMask laserMask;
 
 
 	private SteamVR_Controller.Device Controller
@@ -57,38 +55,49 @@ public class LaserPointer : MonoBehaviour
 		laserTransform = laser.transform;
 	}
 
-	void Update()
+
+	public void TurnOn(bool active, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
-		// Is the trigger held down?
-		if (Controller.GetHairTriggerDown())
+
+		if (active)
 		{
 			RaycastHit hit;
 
 			// Send out a raycast from the controller
-			if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, range) && hit.collider != null)
+			if (Physics.Raycast(obj.transform.position, transform.forward, out hit, range) && hit.collider != null)
 			{
 				hitPoint = hit.point;
-				ShowLaser(hit);
+				ShowLaser(hit, obj, laserPrefab);
 
 				//Show teleport reticle
-				if ((hitPoint.x < trackedObj.transform.position.x + range) && (hitPoint.x > trackedObj.transform.position.x - range) && (hitPoint.z < trackedObj.transform.position.z + range) && (hitPoint.z > trackedObj.transform.position.z - range)) { }
+				if ((hitPoint.x < obj.transform.position.x + range) && (hitPoint.x > obj.transform.position.x - range) && (hitPoint.z < obj.transform.position.z + range) && (hitPoint.z > obj.transform.position.z - range))
+				{
+					laser.SetActive(true);
+				}
 				else
 				{
-					laser.SetActive(false);		//really janky way of hiding the laser if you drag it over the horizon
+					laser.SetActive(false);     //really janky way of hiding the laser if you drag it over the horizon
 				}
 			}
 		}
-		else// Touchpad not held down, hide laser & teleport reticle
+		else
 		{
 			laser.SetActive(false);
 		}
 	}
 
-	private void ShowLaser(RaycastHit hit)
+	private void ShowLaser(RaycastHit hit, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
+		
+		laser = laserPrefab;
+		laserTransform = laser.transform;
 		laser.SetActive(true); //Show the laser
-		laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
+		laserTransform.position = Vector3.Lerp(obj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
 		laserTransform.LookAt(hitPoint); // Rotate laser facing the hit point
 		laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance); // Scale laser so it fits exactly between the controller & the hit point
+	}
+	public LaserPointer()
+	{
+		
 	}
 }
