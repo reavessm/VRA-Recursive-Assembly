@@ -127,18 +127,23 @@ public class ControllerGrabObject : MonoBehaviour
         {
           Debug.Log(gameObject.name + " Grip Release");
         }
+
+        uiIsUp = GUICanvas.gameObject.activeSelf;
     }
 
     private void ShowUI()
     {
-      Debug.Log("Showing UI stuff");
-      GUICanvas.gameObject.SetActive(true);
+        Debug.Log("Showing UI stuff");
+        GUICanvas.gameObject.SetActive(true);
+        uiIsUp = true;
+        // Transform to be in front of player
     }
 
     private void HideUI()
     {
-      Debug.Log("Hiding UI stuff");
-      GUICanvas.gameObject.SetActive(false);
+        Debug.Log("Hiding UI stuff");
+        GUICanvas.gameObject.SetActive(false);
+        uiIsUp = false;
     }
 
     // Check to make sure we aren't "skipping backwards" in the build order.
