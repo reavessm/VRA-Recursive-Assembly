@@ -141,6 +141,8 @@ public class ControllerGrabObject : MonoBehaviour
       GUICanvas.gameObject.SetActive(false);
     }
 
+    // Check to make sure we aren't "skipping backwards" in the build order.
+    // Ex if 1, 2, 3, 4 have been built, make sure you can't remove 1, 2, 3.
     private void GrabObject()
     {
         objectInHand = collidingObject;

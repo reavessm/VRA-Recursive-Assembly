@@ -65,9 +65,29 @@ public class AnnotationWindow : EditorWindow {
 			}
 		}
 
-		if (GUILayout.Button("Validate Ordering")) {
+		if (GUILayout.Button("Check If This Item Is Next")) {
 			Metadata md = currentobj.GetComponent<Metadata>();
 			Debug.Log(md.isNextInOrder());
+		}
+
+		if (GUILayout.Button("Auto Ordering")) {
+			int count = 0;
+			if (currentobj == currentobj.GetComponent<Metadata>().getRootObject()) {
+				foreach (mData element in rawtree) {
+					Metadata md = element.Obj.GetComponent<Metadata>() as Metadata;
+					md.appendTags("order:" + count++);
+				}	
+			}
+			else {
+				Debug.Log("Really Bad No Order Order On This.");
+			}
+		}
+
+		if (GUILayout.Button("Clear All Tags")) {
+			foreach (mData element in rawtree) {
+				Metadata md = element.Obj.GetComponent<Metadata>() as Metadata;
+				md.clearKVTags();
+			}
 		}
 
 		foreach (mData element in rawtree) {
@@ -77,6 +97,10 @@ public class AnnotationWindow : EditorWindow {
 				md.kvtagstring = EditorGUILayout.TextField(element.Obj.name, md.kvtagstring);
 			}
 		}			
+	}
+
+	public void Update() {
+		Repaint();
 	}
 
 	List<mData> buildRawTree(GameObject current) {

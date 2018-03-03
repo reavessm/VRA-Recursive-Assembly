@@ -45,6 +45,20 @@ public class Metadata : MonoBehaviour {
 		}
 	}
 
+	public void appendTags(string tag_append) {
+		foreach (string outer in tag_append.Split(';')) {
+			if (kvtagstring.Length != 0) {
+				if (kvtagstring[kvtagstring.Length - 1] != ';') {
+					kvtagstring += ';';
+				}
+			}
+			if (outer.Contains(":")) {
+				kvtagstring += outer + ';';
+			}
+		}
+		updateTags();
+	}
+
 	public GameObject getRootObject() {
 		return rootObject;
 	}
@@ -88,7 +102,7 @@ public class Metadata : MonoBehaviour {
 			startorder = 0;
 		}
 		else {
-			startorder = rootObject.GetComponent<Metadata>().getOrder() - 1;
+			startorder = rootObject.GetComponent<Metadata>().getOrder();
 		}
 
 		// We're now going to check to see if there is an ordering discontinuity. If there is, this
@@ -119,6 +133,32 @@ public class Metadata : MonoBehaviour {
 
 	public SortedDictionary<string, string> getTags() {
 		return kvtags;
+	}
+
+	public void clearKVTags() {
+		kvtagstring = "";
+		kvtags = new SortedDictionary<string, string>();
+	}
+
+	public override string ToString() {
+		string temp = "";
+		foreach (KeyValuePair<string, string> entry in kvtags) {
+			temp += entry.Key + ":" + entry.Value + ";";
+		}
+		return temp;
+	}
+
+	public void clearKVTag(string key) {
+		kvtags.Remove(key);
+		kvtagstring = ToString();
+	}
+
+	public string getValueAtTag(string key) {
+		string value = "";
+		if (kvtags.ContainsKey(key)) {
+			value = kvtags[key];
+		}
+		return value;
 	}
 
 	public Int32 getOrder() {
