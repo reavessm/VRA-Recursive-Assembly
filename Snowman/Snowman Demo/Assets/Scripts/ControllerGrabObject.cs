@@ -172,7 +172,7 @@ public class ControllerGrabObject : MonoBehaviour
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
 	{
     snappingObject.GetComponent<Metadata>().setBuilt(true);
-    snappingObject.Transform.position = locationObject.Transform.position;
+    snappingObject.transform.position = locationObject.transform.position;
 	}
 
     private FixedJoint AddFixedJoint()
