@@ -125,8 +125,9 @@ public class ControllerGrabObject : MonoBehaviour
         //objectRigidbody.constraints = RigidbodyConstraints.None;
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
-        if (objectInHand.GetComponent<Metadata>().isNextInOrder()) {
+        if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt()) {
           highlightGhost(objectInHand);
+          objectInHand.GetComponent<Metadata>().setBuilt(true);
         }
     }
 
@@ -167,10 +168,11 @@ public class ControllerGrabObject : MonoBehaviour
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
 		}
 	}
-
-	private void snapToGhost(GameObject snappingObject, GameObject locationObject)								//will find an object to snap to, uses snap distance to find distance
+	//will find an object to snap to, uses snap distance to find distance
+	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
 	{
-
+    snappingObject.GetComponent<Metadata>().setBuilt(true);
+    snappingObject.Transform.position = locationObject.Transform.position;
 	}
 
     private FixedJoint AddFixedJoint()
