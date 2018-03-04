@@ -11,6 +11,15 @@ public class UIWrapper : MonoBehaviour {
 	private LaserPointer laser = new LaserPointer();
 	public GameObject laserPrefab;
 
+  // for keeping track of individual hands
+  int handIndex;
+  int guiIndex;
+  //SteamVR_Controller.Device rightHandController;
+  //SteamVR_Controller.Device leftHandController;
+
+
+
+
 	private SteamVR_Controller.Device Controller
 	{
 		get { return SteamVR_Controller.Input((int)trackedObj.index); }
@@ -23,6 +32,9 @@ public class UIWrapper : MonoBehaviour {
 		uiIsUp = false; // This changes whenever the UI is pulled up
 		laser.laserMask = 5;
 
+    // to keep track of individual hands
+    handIndex = (int)trackedObj.index;
+    guiIndex = 0;
 	}
 
 // Update is called once per frame
@@ -57,12 +69,18 @@ public class UIWrapper : MonoBehaviour {
 		uiIsUp = true;
 		GUICanvas.gameObject.transform.position = Camera.main.transform.position + Camera.main.transform.forward * guiDistance; // Transform to be in front of player, i hope...
 		GUICanvas.gameObject.transform.rotation = Camera.main.transform.rotation;
+    guiIndex = handIndex;
+    Controller.TriggerHapticPulse(1000); // buzz buzz
 	}
 
 	private void HideUI()
 	{
-		//Debug.Log("Hiding UI stuff");
-		GUICanvas.gameObject.SetActive(false);
-		uiIsUp = false;
+    if (guiIndex == handIndex) {
+		  //Debug.Log("Hiding UI stuff");
+		  GUICanvas.gameObject.SetActive(false);
+		  uiIsUp = false;
+      guiIndex = 0;
+      Controller.TriggerHapticPulse(500); // buzz
+    }
 	}
 }
