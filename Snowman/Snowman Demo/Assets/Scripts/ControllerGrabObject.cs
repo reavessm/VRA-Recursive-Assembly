@@ -38,8 +38,9 @@ public class ControllerGrabObject : MonoBehaviour
     private GameObject[] ghostObject;
     private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR //was only using one, to highlight multiple of something (eyes) as well as a temporary array to store all children of ghost prefab, then sorting through
     private Rigidbody objectRigidbody;
-	  private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-	  private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
+	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+    private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
     private float guiDistance; // how far to place the gui infront of the player
 
@@ -51,12 +52,23 @@ public class ControllerGrabObject : MonoBehaviour
     void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        gameObjectArray = GameObject.FindGameObjectsWithTag("Ghost");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
-        //ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
+        gameObjectArray = GameObject.FindGameObjectsWithTag("Pickupable");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
+        ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
         guiDistance = 0.2f; // can change this if needed
+        ColorNext();
     }
 
+    public void ColorNext()
+    {
+        foreach (GameObject obj in gameObjectArray)
+        {
+            if (obj.GetComponent<Metadata>().isNextInOrder())
+            {
+                obj.GetComponent<Renderer>().material.color = nextToPickUp;
+            }
+        }
+    }
 
     public void OnTriggerEnter(Collider other)
     {
@@ -126,15 +138,16 @@ public class ControllerGrabObject : MonoBehaviour
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
         if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt()) {
-          highlightGhost(objectInHand);
-          objectInHand.GetComponent<Metadata>().setBuilt(true);
+            highlightGhost(objectInHand);
+            objectInHand.GetComponent<Metadata>().setBuilt(true);
+            ColorNext();
         }
     }
 
     private void highlightGhost(GameObject heldObject)
     {
 
-		int j = 0;
+		/*int j = 0;
 		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
 			if (gameObjectArray[i].name.Equals(heldObject.name))
@@ -147,13 +160,21 @@ public class ControllerGrabObject : MonoBehaviour
 		{
 			ghostObject[i].GetComponent<Renderer>().material.color = ghostColorHi;
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColorHi;
-		}
+		}*/
+
+        foreach (GameObject ghost in ghostObject)
+        {
+            if (ghost.name == heldObject.name) {
+                ghost.GetComponent<Renderer>().material.color = ghostColorHi;
+                ghost.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
+            }
+        }
     }
 
     private void unHighlightGhost(GameObject heldObject)
     {
 		//GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost"); // use gameObjectArray from 'Awake()' -SR
-		int j = 0;
+		/*int j = 0;
 		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
 			if (gameObjectArray[i].name.Equals(heldObject.name))
@@ -166,7 +187,7 @@ public class ControllerGrabObject : MonoBehaviour
 		{
 			ghostObject[i].GetComponent<Renderer>().material.color = ghostColor;
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
-		}
+		}*/
 	}
 	//will find an object to snap to, uses snap distance to find distance
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
