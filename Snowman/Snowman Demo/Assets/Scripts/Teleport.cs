@@ -128,3 +128,7 @@ public class Teleport : MonoBehaviour
         cameraRigTransform.position = hitPoint + difference; // Change the camera rig position to where the the teleport reticle was. Also add the difference so the new virtual room position is relative to the player position, allowing the player's new position to be exactly where they pointed. (see illustration)
     }
 }
+
+
+
+//don't reference this file until we get it figured out -ian
