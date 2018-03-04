@@ -51,20 +51,20 @@ public class LaserPointer : MonoBehaviour
 	//new
 	void Start()
 	{
-		laser = Instantiate(laserPrefab);
-		laserTransform = laser.transform;
+        laser = Instantiate(laserPrefab);
+        laserTransform = laser.transform;
 	}
 
 
 	public void TurnOn(bool active, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
-
-		if (active)
+       
+        if (active)
 		{
 			RaycastHit hit;
 
 			// Send out a raycast from the controller
-			if (Physics.Raycast(obj.transform.position, transform.forward, out hit, range) && hit.collider != null)
+			if (Physics.Raycast(obj.transform.position, obj.transform.forward, out hit, range) && hit.collider != null)
 			{
 				hitPoint = hit.point;
 				ShowLaser(hit, obj, laserPrefab);
@@ -88,9 +88,11 @@ public class LaserPointer : MonoBehaviour
 
 	private void ShowLaser(RaycastHit hit, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
-		
-		laser = laserPrefab;
-		laserTransform = laser.transform;
+       
+        laser = laserPrefab;
+        if (laser == null)
+       
+        laserTransform = laser.transform;
 		laser.SetActive(true); //Show the laser
 		laserTransform.position = Vector3.Lerp(obj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
 		laserTransform.LookAt(hitPoint); // Rotate laser facing the hit point
@@ -100,4 +102,14 @@ public class LaserPointer : MonoBehaviour
 	{
 		
 	}
+
+    public LaserPointer GetLaserPointer()
+    {
+        return this;
+    }
+
+    public GameObject GetLaser()
+    {
+        return this.laser;
+    }
 }

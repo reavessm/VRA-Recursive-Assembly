@@ -29,14 +29,18 @@ using System;
 public class ControllerGrabObject : MonoBehaviour
 {
     public Material ghostMaterial;
-	  public float snapDistance;
+	public float snapDistance;
     public Canvas GUICanvas;
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
     private GameObject objectInHand;
-    private GameObject[] ghostObject;
-    private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR //was only using one, to highlight multiple of something (eyes) as well as a temporary array to store all children of ghost prefab, then sorting through
+    //private GameObject[] ghostObject;
+    //private GameObject[] gameObjectArray; // do we need two GameObject[]? -SR //was only using one, to highlight multiple of something (eyes) as well as a temporary array to store all children of ghost prefab, then sorting through
+    private SortedDictionary<string, GameObject> gameObjectDictionary;
+    private SortedDictionary<string, GameObject> ghostObjectDictionary;
+    private SortedDictionary<string, Color> defaultMaterialDictionary;
+    private SortedDictionary<string, Color> currentMaterialDictionary;
     private Rigidbody objectRigidbody;
 	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
 	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
@@ -53,8 +57,25 @@ public class ControllerGrabObject : MonoBehaviour
     void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        gameObjectArray = GameObject.FindGameObjectsWithTag("Pickupable");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
-        ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
+        gameObjectDictionary = new SortedDictionary<string, GameObject>();
+        ghostObjectDictionary = new SortedDictionary<string, GameObject>();
+        defaultMaterialDictionary = new SortedDictionary<string, Color>();
+        currentMaterialDictionary = new SortedDictionary<string, Color>();
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
+        {
+            gameObjectDictionary.Add(obj.name, obj.gameObject);
+        }
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
+        {
+            ghostObjectDictionary.Add(obj.name, obj);
+        }
+        foreach (KeyValuePair<string,GameObject> obj in gameObjectDictionary)
+        {
+            defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+        }
+        currentMaterialDictionary = defaultMaterialDictionary;
+        //gameObjectArray = GameObject.FindGameObjectsWithTag("Pickupable");		//kind of broken right now -IF                              // Moved to 'Awake' -SR
+        //ghostObject = GameObject.FindGameObjectsWithTag("Ghost");           //since ghostObject is an array, search all possible -IF    // Moved to 'Awake()' -SR
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
         guiDistance = 0.2f; // can change this if needed
         ColorNext();
@@ -62,13 +83,14 @@ public class ControllerGrabObject : MonoBehaviour
 
     public void ColorNext()
     {
-        foreach (GameObject obj in gameObjectArray)
+        foreach (KeyValuePair<string,GameObject> obj in gameObjectDictionary)
         {
-            if (obj.GetComponent<Metadata>().isNextInOrder())
+            if (obj.Value.GetComponent<Metadata>().isNextInOrder())
             {
-                obj.GetComponent<Renderer>().material.color = nextToPickUp;
-                obj.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+                obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
+                obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
             }
+
         }
     }
 
@@ -124,6 +146,7 @@ public class ControllerGrabObject : MonoBehaviour
 				ReleaseObject();
 			}
 		}
+
     }
 
 
@@ -135,16 +158,19 @@ public class ControllerGrabObject : MonoBehaviour
         objectRigidbody = objectInHand.GetComponent<Rigidbody>();
         collidingObject = null;
         var joint = AddFixedJoint();
-        objectRigidbody.isKinematic = false;
+        objectRigidbody.isKinematic = false; // was false
         //objectRigidbody.constraints = RigidbodyConstraints.None;
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
         if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt()) {
             highlightGhost(objectInHand);
             objectInHand.GetComponent<Metadata>().setBuilt(true);
-            ColorNext();
+            //ColorNext();
         }
-        unHighlightGhost(objectInHand);
+        if (objectInHand.GetComponent<Metadata>().getBuilt()) {
+            unHighlightGhost(objectInHand);
+        }
+        
     }
 
     private void highlightGhost(GameObject heldObject)
@@ -165,11 +191,11 @@ public class ControllerGrabObject : MonoBehaviour
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColorHi;
 		}*/
 
-        foreach (GameObject ghost in ghostObject)
+        foreach (KeyValuePair<string,GameObject> ghost in ghostObjectDictionary)
         {
-            if (ghost.name == heldObject.name) {
-                ghost.GetComponent<Renderer>().material.color = ghostColorHi;
-                ghost.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
+            if (ghost.Key == heldObject.name) {
+                ghost.Value.GetComponent<Renderer>().material.color = ghostColorHi;
+                ghost.Value.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
             }
         }
     }
@@ -191,16 +217,28 @@ public class ControllerGrabObject : MonoBehaviour
 			ghostObject[i].GetComponent<Renderer>().material.color = ghostColor;
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
 		}*/
-        heldObject.GetComponent<Renderer>().material.color = setInPlace;
-        heldObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
+        
 	}
 	//will find an object to snap to, uses snap distance to find distance
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
 	{
-        snappingObject.GetComponent<Metadata>().setBuilt(true);
-        snappingObject.transform.position = locationObject.transform.position;
-        unHighlightGhost(snappingObject);
+            snappingObject.GetComponent<Metadata>().setBuilt(true);
+            snappingObject.transform.position = locationObject.transform.position;
+            unHighlightGhost(snappingObject);
+            snappingObject.GetComponent<Renderer>().material.color = setInPlace;
+            snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
+            ColorNext();     
 	}
+    
+    private void unsnapToGhost(GameObject snappingObject, GameObject locationObject)
+    {
+        snappingObject.GetComponent<Metadata>().setBuilt(false);
+        //snappingObject.transform.position = locationObject.transform.position;
+        unHighlightGhost(snappingObject);
+        snappingObject.GetComponent<Renderer>().material.color = nextToPickUp;
+        snappingObject.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+        ColorNext();
+    }
 
     private FixedJoint AddFixedJoint()
     {
@@ -223,17 +261,28 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.velocity = Controller.velocity;
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
-            unHighlightGhost(objectInHand);
+            //unHighlightGhost(objectInHand); 
+            string objectInHandName = objectInHand.name;
+            GameObject ghostObject = ghostObjectDictionary[objectInHandName];
+            float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
+            if (realDistance < snapDistance)
+            {
+                snapToGhost(objectInHand, ghostObject);
+            } else
+            {
+                unsnapToGhost(objectInHand, ghostObject);
+            }
+
         }
 
-		for (int i = 0; i < ghostObject.Length; i++)
+		/*for (int i = 0; i < ghostObjectDictionary.Length; i++)
 		{
 			float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject[i].transform.position);
 			if (realDistance < snapDistance)
 			{
 				snapToGhost(objectInHand, ghostObject[i]);
 			}
-		}
+		}*/
 
 		objectInHand = null;
     }

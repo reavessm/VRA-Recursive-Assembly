@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Pickupable
+  - CanTeleport
+  - Light
+  - Restart
+  - Ghost
+  - FloatingButton
   layers:
   - Default
   - TransparentFX
