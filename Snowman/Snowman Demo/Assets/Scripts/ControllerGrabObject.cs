@@ -41,6 +41,7 @@ public class ControllerGrabObject : MonoBehaviour
 	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
 	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
+    private Color setInPlace = new Color32(0, 255, 0, 0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
     private float guiDistance; // how far to place the gui infront of the player
 
@@ -66,6 +67,7 @@ public class ControllerGrabObject : MonoBehaviour
             if (obj.GetComponent<Metadata>().isNextInOrder())
             {
                 obj.GetComponent<Renderer>().material.color = nextToPickUp;
+                obj.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
             }
         }
     }
@@ -142,6 +144,7 @@ public class ControllerGrabObject : MonoBehaviour
             objectInHand.GetComponent<Metadata>().setBuilt(true);
             ColorNext();
         }
+        unHighlightGhost(objectInHand);
     }
 
     private void highlightGhost(GameObject heldObject)
@@ -173,8 +176,8 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void unHighlightGhost(GameObject heldObject)
     {
-		//GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost"); // use gameObjectArray from 'Awake()' -SR
-		/*int j = 0;
+        //GameObject[] arr = GameObject.FindGameObjectsWithTag("Ghost"); // use gameObjectArray from 'Awake()' -SR
+        /*int j = 0;
 		for (int i = 0; i < gameObjectArray.Length; i++)
 		{
 			if (gameObjectArray[i].name.Equals(heldObject.name))
@@ -188,12 +191,15 @@ public class ControllerGrabObject : MonoBehaviour
 			ghostObject[i].GetComponent<Renderer>().material.color = ghostColor;
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
 		}*/
+        heldObject.GetComponent<Renderer>().material.color = setInPlace;
+        heldObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
 	}
 	//will find an object to snap to, uses snap distance to find distance
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
 	{
-    snappingObject.GetComponent<Metadata>().setBuilt(true);
-    snappingObject.transform.position = locationObject.transform.position;
+        snappingObject.GetComponent<Metadata>().setBuilt(true);
+        snappingObject.transform.position = locationObject.transform.position;
+        unHighlightGhost(snappingObject);
 	}
 
     private FixedJoint AddFixedJoint()

@@ -79,7 +79,11 @@ public class Metadata : MonoBehaviour {
 	// Will return true so long as no misordering violation is detected--this means is should be
 	// callable for unordered assembly too.
 	public bool isNextInOrder() {
-		updateTags();
+        if (this.getBuilt())
+        {
+            return false;
+        }
+        updateTags();
 		// This is the goal number.
 		int thisorder = getOrder() - 1;
 		
