@@ -42,7 +42,6 @@ public class ControllerGrabObject : MonoBehaviour
 	  private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
     private float guiDistance; // how far to place the gui infront of the player
-    //private Metatdata objectMetadata;
 
     private SteamVR_Controller.Device Controller
     {
@@ -126,7 +125,6 @@ public class ControllerGrabObject : MonoBehaviour
         //objectRigidbody.constraints = RigidbodyConstraints.None;
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
-        //objectMetadata = objectInHand.GetComponent<Metadata>();
         if (objectInHand.GetComponent<Metadata>().isNextInOrder()) {
           highlightGhost(objectInHand);
         }
