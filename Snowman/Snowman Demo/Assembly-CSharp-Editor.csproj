@@ -70,9 +70,6 @@
      <Compile Include="Assets\VRTK\Editor\VRTK_SDKSetupEditor.cs" />
      <Compile Include="Assets\VRTK\Editor\VRTK_SupportInfoWindow.cs" />
      <Compile Include="Assets\VRTK\Editor\VRTK_UpdatePrompt.cs" />
- <Reference Include="Facebook.Unity.Settings">
- <HintPath>D:/BOEING-Repo/Beautiful-Open-Ended-Interior-Graphics/Snowman/Snowman Demo/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

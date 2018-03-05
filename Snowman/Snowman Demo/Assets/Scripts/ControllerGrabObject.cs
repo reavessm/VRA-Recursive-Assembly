@@ -25,6 +25,7 @@ using UnityEngine.SceneManagement;
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class ControllerGrabObject : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class ControllerGrabObject : MonoBehaviour
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
     private float guiDistance; // how far to place the gui infront of the player
     public bool moveThrough;
+    private Text textbox;
+    public String defaultObjInfo = "Pick up an object to see it's info here.";
 
     private SteamVR_Controller.Device Controller
     {
@@ -62,6 +65,11 @@ public class ControllerGrabObject : MonoBehaviour
         ghostObjectDictionary = new SortedDictionary<string, GameObject>();
         defaultMaterialDictionary = new SortedDictionary<string, Color>();
         currentMaterialDictionary = new SortedDictionary<string, Color>();
+        foreach (Transform element in GUICanvas.transform) {
+            if (element.gameObject.name == "Object Info") {
+                textbox = element.GetComponent<Text>();
+            }
+        }
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
         {
             gameObjectDictionary.Add(obj.name, obj.gameObject);
@@ -172,6 +180,8 @@ public class ControllerGrabObject : MonoBehaviour
         if (objectInHand.GetComponent<Metadata>().getBuilt()) {
             unHighlightGhost(objectInHand);
         }
+        textbox.text = objectInHand.GetComponent<Metadata>().ToString();
+
     }
 
     private void highlightGhost(GameObject heldObject)
@@ -298,6 +308,8 @@ public class ControllerGrabObject : MonoBehaviour
 			}
 		}*/
 
-		objectInHand = null;
+	objectInHand = null;
+    textbox.text = defaultObjInfo;
+
     }
 }
