@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class UIWrapper : MonoBehaviour {
 
@@ -120,6 +121,27 @@ public class UIWrapper : MonoBehaviour {
         
 
     }
+
+	void RaycastWorldUI() {
+		Debug.Log("Enter Raycast World UI");
+		PointerEventData pointerData = new PointerEventData(EventSystem.current);
+
+		pointerData.position = trackedObj.transform.position;
+
+		List<RaycastResult> results = new List<RaycastResult>();
+
+		EventSystem.current.RaycastAll(pointerData, results);
+
+		Debug.Log(results.ToString());
+
+		if (results.Count > 0) {
+			if (results[0].gameObject.layer == LayerMask.NameToLayer("UI")) {
+				string dbg = "";
+				Debug.Log(string.Format(dbg, results[results.Count - 1].gameObject.name, results[0].gameObject.name));
+				results.Clear();
+			}
+		}
+	}
 
 	private void ShowUI()
 	{

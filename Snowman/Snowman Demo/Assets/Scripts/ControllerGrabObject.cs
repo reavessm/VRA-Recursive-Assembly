@@ -52,6 +52,10 @@ public class ControllerGrabObject : MonoBehaviour
     public bool moveThrough;
     private Text textbox;
     public String defaultObjInfo = "Pick up an object to see it's info here.";
+    private bool autoassemble = false; 
+    private KeyValuePair<string, GameObject>[] autoassemble_model;
+    private KeyValuePair<string, GameObject>[] autoassemble_target;
+    private int index_autoassemble;
 
     private SteamVR_Controller.Device Controller
     {
@@ -60,6 +64,7 @@ public class ControllerGrabObject : MonoBehaviour
 
     void Awake()
     {
+        index_autoassemble = 0;
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         gameObjectDictionary = new SortedDictionary<string, GameObject>();
         ghostObjectDictionary = new SortedDictionary<string, GameObject>();
@@ -141,8 +146,21 @@ public class ControllerGrabObject : MonoBehaviour
 			{
                 SceneManager.LoadScene("Snowman");
             }
-
-            if (collidingObject.tag == "Pickupable")
+            else if (collidingObject.tag == "AutoAssemble")
+            {
+                autoassemble_model = new KeyValuePair<string, GameObject>[gameObjectDictionary.Count];
+                autoassemble_target = new KeyValuePair<string, GameObject>[ghostObjectDictionary.Count];
+                int count= 0;
+                foreach (KeyValuePair<string, GameObject> element in gameObjectDictionary) {
+                    autoassemble_model[count++] = element;
+                }
+                count = 0;
+                foreach (KeyValuePair<string, GameObject> element in ghostObjectDictionary) {
+                    autoassemble_target[count++] = element;
+                }
+                autoassemble = true;
+            }
+            else if (collidingObject.tag == "Pickupable")
             {
                 GrabObject();
             }
@@ -155,6 +173,10 @@ public class ControllerGrabObject : MonoBehaviour
 				ReleaseObject();
 			}
 		}
+
+        if (autoassemble) {
+            slurpToGhost(index_autoassemble);
+        }
 
     }
 
@@ -251,6 +273,38 @@ public class ControllerGrabObject : MonoBehaviour
             Destroy(snappingObject.GetComponent<Rigidbody>());
             snappingObject.GetComponent<MeshCollider>().convex = false;     
 	}
+
+    private void slurpToGhost(int index) {
+            GameObject snappingObject = autoassemble_model[index].Value;
+            GameObject locationObject = autoassemble_target[index].Value;
+            Debug.Log(snappingObject.name);
+            Debug.Log(locationObject.name);
+            snappingObject.GetComponent<Metadata>().setBuilt(true);
+            if (moveThrough)
+            {
+                snappingObject.GetComponent<MeshCollider>().convex = false;
+            }
+            snappingObject.GetComponent<MeshCollider>().convex = false;     
+            snappingObject.transform.position = Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime);
+            unHighlightGhost(snappingObject);
+            snappingObject.GetComponent<Renderer>().material.color = setInPlace;
+            snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
+            Debug.Log(snappingObject.transform.position);
+            ColorNext();
+            snappingObject.GetComponent<MeshCollider>().convex = false;  
+            if (snappingObject.transform.position == locationObject.transform.position) { 
+                Debug.Log(index_autoassemble);
+                Debug.Log(gameObjectDictionary.Count);
+                Debug.Log(ghostObjectDictionary.Count);
+                if (index_autoassemble < (gameObjectDictionary.Count - 1)) {
+                    index_autoassemble++;
+                }
+                else {
+                    Debug.Log("Done?");
+                    autoassemble = false;
+                }
+            }         
+    }
     
     private void unsnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
