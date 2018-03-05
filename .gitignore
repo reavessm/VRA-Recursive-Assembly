@@ -284,6 +284,7 @@ __pycache__/
 
 # Ignore the UnityLockFile
 *UnityLockfile*
+*/Temp/*
 
 # Ignore all the shitty stuff that always causes merge conflicts for no useful reason.
 */Library/metadata/*
