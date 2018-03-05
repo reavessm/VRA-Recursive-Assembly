@@ -48,6 +48,7 @@ public class ControllerGrabObject : MonoBehaviour
     private Color setInPlace = new Color32(0, 255, 0, 0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
     private float guiDistance; // how far to place the gui infront of the player
+    public bool moveThrough;
 
     private SteamVR_Controller.Device Controller
     {
@@ -156,6 +157,7 @@ public class ControllerGrabObject : MonoBehaviour
     {
         objectInHand = collidingObject;
         objectRigidbody = objectInHand.GetComponent<Rigidbody>();
+        objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         collidingObject = null;
         var joint = AddFixedJoint();
         objectRigidbody.isKinematic = false; // was false
@@ -170,7 +172,6 @@ public class ControllerGrabObject : MonoBehaviour
         if (objectInHand.GetComponent<Metadata>().getBuilt()) {
             unHighlightGhost(objectInHand);
         }
-        
     }
 
     private void highlightGhost(GameObject heldObject)
@@ -223,11 +224,22 @@ public class ControllerGrabObject : MonoBehaviour
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
 	{
             snappingObject.GetComponent<Metadata>().setBuilt(true);
-            snappingObject.transform.position = locationObject.transform.position;
+            if (moveThrough)
+            {
+                snappingObject.GetComponent<MeshCollider>().convex = false;
+                Destroy(snappingObject.GetComponent<Rigidbody>());
+
+            }
+            snappingObject.GetComponent<MeshCollider>().convex = false;     
+            snappingObject.transform.SetPositionAndRotation(locationObject.transform.position, 
+                locationObject.transform.rotation);
             unHighlightGhost(snappingObject);
             snappingObject.GetComponent<Renderer>().material.color = setInPlace;
             snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
-            ColorNext();     
+            Debug.Log(snappingObject.transform.position);
+            ColorNext();
+            Destroy(snappingObject.GetComponent<Rigidbody>());
+            snappingObject.GetComponent<MeshCollider>().convex = false;     
 	}
     
     private void unsnapToGhost(GameObject snappingObject, GameObject locationObject)
@@ -243,8 +255,8 @@ public class ControllerGrabObject : MonoBehaviour
     private FixedJoint AddFixedJoint()
     {
         FixedJoint fx = gameObject.AddComponent<FixedJoint>();
-        fx.breakForce = 20000;
-        fx.breakTorque = 20000;
+        fx.breakForce = 2000000;
+        fx.breakTorque = 2000000;
         return fx;
     }
 
@@ -262,9 +274,12 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
             //unHighlightGhost(objectInHand); 
-            string objectInHandName = objectInHand.name;
+            string objectInHandName = objectInHand.name + " ghost";
+            Debug.Log(objectInHandName);
             GameObject ghostObject = ghostObjectDictionary[objectInHandName];
             float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
+            Debug.Log(realDistance);
+            objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             if (realDistance < snapDistance)
             {
                 snapToGhost(objectInHand, ghostObject);
@@ -272,7 +287,6 @@ public class ControllerGrabObject : MonoBehaviour
             {
                 unsnapToGhost(objectInHand, ghostObject);
             }
-
         }
 
 		/*for (int i = 0; i < ghostObjectDictionary.Length; i++)
