@@ -38,7 +38,7 @@ public class Metadata : MonoBehaviour {
 						kvtags.Add(inner[0], inner[1]);
 					}
 				}
-			}	
+			}
 		}
 		catch (Exception e) {
 			//Debug.Log(e.Message);
@@ -86,19 +86,19 @@ public class Metadata : MonoBehaviour {
         updateTags();
 		// This is the goal number.
 		int thisorder = getOrder() - 1;
-		
+
 		// If the current object's order is -1, it means the object is unordered and should
 		// be considered buildable.
 		if (thisorder < 0) {
 			return true;
 		}
-		
-		// Check to see if the root object *has* metadata. If not, the program has been misconfigured. 
+
+		// Check to see if the root object *has* metadata. If not, the program has been misconfigured.
 		if (rootObject.GetComponent<Metadata>() == null) {
 			Debug.Log("The root object has an improper Metadata initialization, please create Metadata Skeleton and set the root object.", rootObject);
 			return false;
 		}
-		
+
 		// We need to find the starting order number, to handle the multiple assembly case.
 		int startorder;
 		if (rootObject.GetComponent<Metadata>().getOrder() == -1) {
@@ -110,7 +110,7 @@ public class Metadata : MonoBehaviour {
 		}
 
 		// We're now going to check to see if there is an ordering discontinuity. If there is, this
-		// object is not the next object in order.		
+		// object is not the next object in order.
 		bool[] ary = new bool[rootObject.transform.childCount + 1];
 		foreach (Transform element in rootObject.transform) {
 			int orderindex = element.gameObject.GetComponent<Metadata>().getOrder();
@@ -144,6 +144,21 @@ public class Metadata : MonoBehaviour {
 		kvtags = new SortedDictionary<string, string>();
 	}
 
+  public string PrettyPrint() {
+		string temp = "";
+
+    if (kvtags.Length() == 0) {
+      temp += "Please use the Metadata Annotation Window to add metadata";
+      temp += " tags to objects.  Then you will see the data here."
+    } else {
+      temp += "Here is a list of metadata tags:\n"
+		  foreach (KeyValuePair<string, string> entry in kvtags) {
+			  temp += entry.Key + " = " + entry.Value + "\n";
+		  }
+    }
+		return temp;
+	}
+
 	public override string ToString() {
 		string temp = "";
 		foreach (KeyValuePair<string, string> entry in kvtags) {
@@ -173,9 +188,9 @@ public class Metadata : MonoBehaviour {
 		}
 		return temp;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 }
