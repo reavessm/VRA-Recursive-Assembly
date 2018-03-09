@@ -52,7 +52,7 @@ public class ControllerGrabObject : MonoBehaviour
     public bool moveThrough;
     private Text textbox;
     public String defaultObjInfo = "Pick up an object to see it's info here.";
-    private bool autoassemble = false; 
+    private bool autoassemble = false;
     private KeyValuePair<string, GameObject>[] autoassemble_model;
     private KeyValuePair<string, GameObject>[] autoassemble_target;
     private int index_autoassemble;
@@ -202,7 +202,7 @@ public class ControllerGrabObject : MonoBehaviour
         if (objectInHand.GetComponent<Metadata>().getBuilt()) {
             unHighlightGhost(objectInHand);
         }
-        textbox.text = objectInHand.GetComponent<Metadata>().ToString();
+        textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
 
     }
 
@@ -250,7 +250,7 @@ public class ControllerGrabObject : MonoBehaviour
 			ghostObject[i].GetComponent<Renderer>().material.color = ghostColor;
 			ghostObject[i].GetComponentInChildren<Renderer>().material.color = ghostColor;
 		}*/
-        
+
 	}
 	//will find an object to snap to, uses snap distance to find distance
 	private void snapToGhost(GameObject snappingObject, GameObject locationObject)
@@ -262,8 +262,8 @@ public class ControllerGrabObject : MonoBehaviour
                 Destroy(snappingObject.GetComponent<Rigidbody>());
 
             }
-            snappingObject.GetComponent<MeshCollider>().convex = false;     
-            snappingObject.transform.SetPositionAndRotation(locationObject.transform.position, 
+            snappingObject.GetComponent<MeshCollider>().convex = false;
+            snappingObject.transform.SetPositionAndRotation(locationObject.transform.position,
                 locationObject.transform.rotation);
             unHighlightGhost(snappingObject);
             snappingObject.GetComponent<Renderer>().material.color = setInPlace;
@@ -271,7 +271,7 @@ public class ControllerGrabObject : MonoBehaviour
             Debug.Log(snappingObject.transform.position);
             ColorNext();
             Destroy(snappingObject.GetComponent<Rigidbody>());
-            snappingObject.GetComponent<MeshCollider>().convex = false;     
+            snappingObject.GetComponent<MeshCollider>().convex = false;
 	}
 
     private void slurpToGhost(int index) {
@@ -284,15 +284,15 @@ public class ControllerGrabObject : MonoBehaviour
             {
                 snappingObject.GetComponent<MeshCollider>().convex = false;
             }
-            snappingObject.GetComponent<MeshCollider>().convex = false;     
+            snappingObject.GetComponent<MeshCollider>().convex = false;
             snappingObject.transform.position = Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime);
             unHighlightGhost(snappingObject);
             snappingObject.GetComponent<Renderer>().material.color = setInPlace;
             snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
             Debug.Log(snappingObject.transform.position);
             ColorNext();
-            snappingObject.GetComponent<MeshCollider>().convex = false;  
-            if (snappingObject.transform.position == locationObject.transform.position) { 
+            snappingObject.GetComponent<MeshCollider>().convex = false;
+            if (snappingObject.transform.position == locationObject.transform.position) {
                 Debug.Log(index_autoassemble);
                 Debug.Log(gameObjectDictionary.Count);
                 Debug.Log(ghostObjectDictionary.Count);
@@ -303,9 +303,9 @@ public class ControllerGrabObject : MonoBehaviour
                     Debug.Log("Done?");
                     autoassemble = false;
                 }
-            }         
+            }
     }
-    
+
     private void unsnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
         snappingObject.GetComponent<Metadata>().setBuilt(false);
@@ -337,7 +337,7 @@ public class ControllerGrabObject : MonoBehaviour
             //objectRigidbody.velocity = Controller.velocity;
             //objectRigidbody.angularVelocity = Controller.angularVelocity;
             //objectInHand.GetComponent<Rigidbody>().useGravity = true;
-            //unHighlightGhost(objectInHand); 
+            //unHighlightGhost(objectInHand);
             string objectInHandName = objectInHand.name + " ghost";
             Debug.Log(objectInHandName);
             GameObject ghostObject = ghostObjectDictionary[objectInHandName];
