@@ -30,7 +30,7 @@ using UnityEngine.UI;
 public class ControllerGrabObject : MonoBehaviour
 {
     public Material ghostMaterial;
-	public float snapDistance;
+  	public float snapDistance;
     public Canvas GUICanvas;
     private SteamVR_TrackedObject trackedObj;
 
@@ -43,8 +43,8 @@ public class ControllerGrabObject : MonoBehaviour
     private SortedDictionary<string, Color> defaultMaterialDictionary;
     private SortedDictionary<string, Color> currentMaterialDictionary;
     private Rigidbody objectRigidbody;
-	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+  	private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
+  	private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private Color setInPlace = new Color32(0, 255, 0, 0);
     private bool uiIsUp = false; // This changes whenever the UI is pulled up
@@ -144,6 +144,9 @@ public class ControllerGrabObject : MonoBehaviour
         {
             if (collidingObject.tag == "Restart")
 			{
+                // Should fix reset bug
+                setEverythingUnbuilt();
+
                 SceneManager.LoadScene("Snowman");
             }
             else if (collidingObject.tag == "AutoAssemble")
@@ -322,6 +325,20 @@ public class ControllerGrabObject : MonoBehaviour
         fx.breakForce = 2000000;
         fx.breakTorque = 2000000;
         return fx;
+    }
+
+    private void setAllBuilt(SortedDictionary dict, bool boolean) {
+      foreach (KeyValuePair<string, GameObject> obj in dict) { 
+        obj.Value.GetComponent<Metadata>().setBuilt(boolean);
+      }
+    }
+
+    private void setEverythingBuilt() {
+      setAllBuilt(gameObjectDictionary, true);
+    }
+
+    private void setEverythingUnbuilt() {
+      setAllBuilt(gameObjectDictionary, false);
     }
 
     private void ReleaseObject()
