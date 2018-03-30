@@ -64,6 +64,11 @@ public class ControllerGrabObject : MonoBehaviour
 
     void Awake()
     {
+        CustomInit();
+    }
+
+    private void CustomInit() {
+        autoassemble = false;
         index_autoassemble = 0;
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         gameObjectDictionary = new SortedDictionary<string, GameObject>();
@@ -93,18 +98,24 @@ public class ControllerGrabObject : MonoBehaviour
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
         guiDistance = 0.2f; // can change this if needed
         ColorNext();
+        Debug.Log("Scene Ready!");
     }
 
     public void ColorNext()
     {
         foreach (KeyValuePair<string,GameObject> obj in gameObjectDictionary)
         {
-            if (obj.Value.GetComponent<Metadata>().isNextInOrder())
-            {
+            try {
+                if (obj.Value.GetComponent<Metadata>().isNextInOrder())
+                {
+                    obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
+                    obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+                }
+            }
+            catch (NullReferenceException e) {
                 obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
                 obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
             }
-
         }
     }
 
@@ -142,30 +153,39 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (Controller.GetHairTriggerDown())
         {
-            if (collidingObject.tag == "Restart")
-			{
-                // Should fix reset bug
-                setEverythingUnbuilt();
+            try {
+                if (collidingObject.tag == "Restart")
+                {
+                    // Should fix reset bug
+                    setEverythingUnbuilt();
 
-                SceneManager.LoadScene("Snowman");
-            }
-            else if (collidingObject.tag == "AutoAssemble")
-            {
-                autoassemble_model = new KeyValuePair<string, GameObject>[gameObjectDictionary.Count];
-                autoassemble_target = new KeyValuePair<string, GameObject>[ghostObjectDictionary.Count];
-                int count= 0;
-                foreach (KeyValuePair<string, GameObject> element in gameObjectDictionary) {
-                    autoassemble_model[count++] = element;
+                    autoassemble = false;
+                    index_autoassemble = 0;
+                    SceneManager.LoadScene("Snowman", LoadSceneMode.Single);
                 }
-                count = 0;
-                foreach (KeyValuePair<string, GameObject> element in ghostObjectDictionary) {
-                    autoassemble_target[count++] = element;
+                else if (collidingObject.tag == "AutoAssemble")
+                {
+                    Debug.Log("AutoAssemble Trigger: " + index_autoassemble + " " + autoassemble);
+                    autoassemble_model = new KeyValuePair<string, GameObject>[gameObjectDictionary.Count];
+                    autoassemble_target = new KeyValuePair<string, GameObject>[ghostObjectDictionary.Count];
+                    int count= 0;
+                    foreach (KeyValuePair<string, GameObject> element in gameObjectDictionary) {
+                        Debug.Log(element);
+                        autoassemble_model[count++] = element;
+                    }
+                    count = 0;
+                    foreach (KeyValuePair<string, GameObject> element in ghostObjectDictionary) {
+                        autoassemble_target[count++] = element;
+                    }
+                    autoassemble = true;
                 }
-                autoassemble = true;
+                else if (collidingObject.tag == "Pickupable")
+                {
+                    GrabObject();
+                }
             }
-            else if (collidingObject.tag == "Pickupable")
-            {
-                GrabObject();
+            catch (NullReferenceException e) {
+                Debug.Log("Object In Hand Not Configured -- Pickup");
             }
         }
 
@@ -278,6 +298,7 @@ public class ControllerGrabObject : MonoBehaviour
 	}
 
     private void slurpToGhost(int index) {
+            Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
             GameObject snappingObject = autoassemble_model[index].Value;
             GameObject locationObject = autoassemble_target[index].Value;
             Debug.Log(snappingObject.name);
@@ -327,10 +348,14 @@ public class ControllerGrabObject : MonoBehaviour
         return fx;
     }
 
-    private void setAllBuilt(SortedDictionary dict, bool boolean) {
-      foreach (KeyValuePair<string, GameObject> obj in dict) { 
-        obj.Value.GetComponent<Metadata>().setBuilt(boolean);
-      }
+    private void setAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean) {
+        try {
+            foreach (KeyValuePair<string, GameObject> obj in dict) { 
+                obj.Value.GetComponent<Metadata>().setBuilt(boolean);
+            }
+        }
+        catch (NullReferenceException e) {
+        }
     }
 
     private void setEverythingBuilt() {
@@ -345,28 +370,33 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (GetComponent<FixedJoint>())
         {
-            GetComponent<FixedJoint>().connectedBody = null;
-            Destroy(GetComponent<FixedJoint>());
+            try {
+                GetComponent<FixedJoint>().connectedBody = null;
+                Destroy(GetComponent<FixedJoint>());
 
-            objectRigidbody = objectInHand.GetComponent<Rigidbody>();
-            objectRigidbody.isKinematic = true;
-            //objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
-            //objectRigidbody.velocity = Controller.velocity;
-            //objectRigidbody.angularVelocity = Controller.angularVelocity;
-            //objectInHand.GetComponent<Rigidbody>().useGravity = true;
-            //unHighlightGhost(objectInHand);
-            string objectInHandName = objectInHand.name + " ghost";
-            Debug.Log(objectInHandName);
-            GameObject ghostObject = ghostObjectDictionary[objectInHandName];
-            float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
-            Debug.Log(realDistance);
-            objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            if (realDistance < snapDistance)
-            {
-                snapToGhost(objectInHand, ghostObject);
-            } else
-            {
-                unsnapToGhost(objectInHand, ghostObject);
+                objectRigidbody = objectInHand.GetComponent<Rigidbody>();
+                objectRigidbody.isKinematic = true;
+                //objectRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                //objectRigidbody.velocity = Controller.velocity;
+                //objectRigidbody.angularVelocity = Controller.angularVelocity;
+                //objectInHand.GetComponent<Rigidbody>().useGravity = true;
+                //unHighlightGhost(objectInHand);
+                string objectInHandName = objectInHand.name + " ghost";
+                Debug.Log(objectInHandName);
+                GameObject ghostObject = ghostObjectDictionary[objectInHandName];
+                float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
+                Debug.Log(realDistance);
+                objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                if (realDistance < snapDistance)
+                {
+                    snapToGhost(objectInHand, ghostObject);
+                } else
+                {
+                    unsnapToGhost(objectInHand, ghostObject);
+                }
+            }
+            catch (KeyNotFoundException e) {
+                Debug.Log("Object In Hand Not Configured -- Release");
             }
         }
 

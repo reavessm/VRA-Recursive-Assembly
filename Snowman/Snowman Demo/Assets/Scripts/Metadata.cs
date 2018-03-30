@@ -147,11 +147,11 @@ public class Metadata : MonoBehaviour {
   public string PrettyPrint() {
 		string temp = "";
 
-    if (kvtags.Length() == 0) {
+    if (kvtags.Count == 0) {
       temp += "Please use the Metadata Annotation Window to add metadata";
-      temp += " tags to objects.  Then you will see the data here."
+      temp += " tags to objects.  Then you will see the data here.";
     } else {
-      temp += "Here is a list of metadata tags:\n"
+      temp += "Here is a list of metadata tags:\n";
 		  foreach (KeyValuePair<string, string> entry in kvtags) {
 			  temp += entry.Key + " = " + entry.Value + "\n";
 		  }
