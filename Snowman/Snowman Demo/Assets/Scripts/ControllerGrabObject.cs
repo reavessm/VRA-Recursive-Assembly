@@ -32,6 +32,7 @@ public class ControllerGrabObject : MonoBehaviour
     public Material ghostMaterial;
   	public float snapDistance;
     public Canvas GUICanvas;
+    public SceneSetter sceneDirector;
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
@@ -51,7 +52,11 @@ public class ControllerGrabObject : MonoBehaviour
 
     void Awake()
     {
-        SceneSetter.CustomInit();
+        if (sceneDirector == null)
+        {
+            sceneDirector = new SceneSetter();
+        }
+        sceneDirector.CustomInit();
         CustomInit();
     }
 
@@ -106,11 +111,11 @@ public class ControllerGrabObject : MonoBehaviour
             try {
                 if (collidingObject.tag == "Restart")
                 {
-                    SceneSetter.Restart();
+                    sceneDirector.Restart();
                 }
                 else if (collidingObject.tag == "AutoAssemble")
                 {
-                    SceneSetter.AutoAssemble();
+                    sceneDirector.AutoAssemble();
                 }
                 else if (collidingObject.tag == "Pickupable")
                 {
@@ -129,7 +134,7 @@ public class ControllerGrabObject : MonoBehaviour
 				ReleaseObject();
 			}
 		}
-        SceneSetter.SlurpToGhost();
+        sceneDirector.SlurpToGhost();
     }
 
     // Check to make sure we aren't "skipping backwards" in the build order.
@@ -145,13 +150,14 @@ public class ControllerGrabObject : MonoBehaviour
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
         if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt()) {
-            SceneSetter.HighlightGhost(objectInHand);
-            objectInHand.GetComponent<Metadata>().setBuilt(true);
+            sceneDirector.HighlightGhost(objectInHand);
+            //objectInHand.GetComponent<Metadata>().setBuilt(true);
         }
         if (objectInHand.GetComponent<Metadata>().getBuilt()) {
-           SceneSetter.UnHighlightGhost(objectInHand);
+           sceneDirector.UnHighlightGhost(objectInHand);
         }
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
+        Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
 
     }
 
@@ -173,21 +179,21 @@ public class ControllerGrabObject : MonoBehaviour
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true;
-                GameObject ghostObject = SceneSetter.FindGhost(objectInHand);
+                GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
                 Debug.Log("Got Past ScenSetter");
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
                 Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 if (realDistance < snapDistance)
                 {
-                    SceneSetter.SnapToGhost(objectInHand, ghostObject);
+                    sceneDirector.SnapToGhost(objectInHand, ghostObject);
                 } else
                 {
-                    SceneSetter.UnsnapToGhost(objectInHand, ghostObject);
+                    sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
             }
             catch (KeyNotFoundException e) {
-                Debug.Log("Object In Hand Not Configured -- Release");
+                Debug.Log("Object In Hand Not Configured -- Release: " + e.Message);
             }
         }
 

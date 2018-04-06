@@ -24,7 +24,7 @@ public class Metadata : MonoBehaviour {
 	void Start()
 	{
 		updateTags();
-		//built = false;
+		built = false;
 	}
 
 	private void updateTags() {

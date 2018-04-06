@@ -8,36 +8,39 @@ using UnityEngine.SceneManagement;
 
 public class SceneSetter : MonoBehaviour {
 
-    static SortedDictionary<string, GameObject> gameObjectDictionary;
-    static SortedDictionary<string, GameObject> ghostObjectDictionary;
-    static SortedDictionary<string, Color> defaultMaterialDictionary;
-    static SortedDictionary<string, Color> currentMaterialDictionary;
+    private SortedDictionary<string, GameObject> gameObjectDictionary;
+    private SortedDictionary<string, GameObject> ghostObjectDictionary;
+    private SortedDictionary<string, Color> defaultMaterialDictionary;
+    private SortedDictionary<string, Color> currentMaterialDictionary;
 
-    static bool autoassemble = false;
-    static KeyValuePair<string, GameObject>[] autoassemble_model;
-    static KeyValuePair<string, GameObject>[] autoassemble_target;
-    static int index_autoassemble;
+    private bool autoassemble = false;
+    private KeyValuePair<string, GameObject>[] autoassemble_model;
+    private KeyValuePair<string, GameObject>[] autoassemble_target;
+    private int index_autoassemble;
 
-    static Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-    static Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
-    static Color nextToPickUp = new Color32(255, 0, 0, 0);
-    static Color setInPlace = new Color32(0, 255, 0, 0);
+    private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
+    private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+    private Color nextToPickUp = new Color32(255, 0, 0, 0);
+    private Color setInPlace = new Color32(0, 255, 0, 0);
 
     public static bool moveThrough = false;
     //static Canvas GUICanvas;
 
     // Use this for initialization
     void Start () {
-        //GUICanvas = GameObject.Find("Canvas").GetComponent<Canvas>;
+        Debug.Log("This is Start()");
+        CustomInit();
 	}
 
     private void Awake()
     {
-        CustomInit();
+        Debug.Log("This is Awake()");
+        //CustomInit();
     }
 
-    public static void CustomInit()
+    public void CustomInit()
     {
+        Debug.Log("Starting CustomInit()");
         autoassemble = false;
         index_autoassemble = 0;
         gameObjectDictionary = new SortedDictionary<string, GameObject>();
@@ -45,25 +48,12 @@ public class SceneSetter : MonoBehaviour {
         defaultMaterialDictionary = new SortedDictionary<string, Color>();
         currentMaterialDictionary = new SortedDictionary<string, Color>();
 
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
-        {
-            gameObjectDictionary.Add(obj.name, obj.gameObject);
-        }
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
-        {
-            ghostObjectDictionary.Add(obj.name, obj);
-        }
-        foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
-        {
-            defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
-        }
-        currentMaterialDictionary = defaultMaterialDictionary;
-
         ColorNext();
     }
 
-    static void ColorNext()
+    void ColorNext()
     {
+        rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
             try
@@ -82,7 +72,35 @@ public class SceneSetter : MonoBehaviour {
         }
     }
 
-    public static void Restart()
+    private bool rebuildGODB()
+    {
+        if (gameObjectDictionary.Count == 0)
+        {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
+            {
+                gameObjectDictionary.Add(obj.name, obj.gameObject);
+            }
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
+            {
+                ghostObjectDictionary.Add(obj.name, obj);
+            }
+            foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
+            {
+                defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+            }
+            currentMaterialDictionary = defaultMaterialDictionary;
+        }
+        if (gameObjectDictionary.Count >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Restart()
     {
         // Should fix reset bug
         SetEverythingUnbuilt();
@@ -92,8 +110,9 @@ public class SceneSetter : MonoBehaviour {
         SceneManager.LoadScene("Snowman", LoadSceneMode.Single);
     }
 
-    public static void AutoAssemble()
+    public void AutoAssemble()
     {
+        rebuildGODB();
         Debug.Log("AutoAssemble Trigger: " + index_autoassemble + " " + autoassemble);
         autoassemble_model = new KeyValuePair<string, GameObject>[gameObjectDictionary.Count];
         autoassemble_target = new KeyValuePair<string, GameObject>[ghostObjectDictionary.Count];
@@ -111,7 +130,7 @@ public class SceneSetter : MonoBehaviour {
         autoassemble = true;
     }
 
-    public static void HighlightGhost(GameObject obj)
+    public void HighlightGhost(GameObject obj)
     {
         foreach (KeyValuePair<string, GameObject> ghost in ghostObjectDictionary)
         {
@@ -123,7 +142,7 @@ public class SceneSetter : MonoBehaviour {
         }
     }
 
-    public static void SnapToGhost(GameObject snappingObject, GameObject locationObject)
+    public void SnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
         snappingObject.GetComponent<Metadata>().setBuilt(true);
         if (moveThrough)
@@ -142,14 +161,15 @@ public class SceneSetter : MonoBehaviour {
         ColorNext();
         Destroy(snappingObject.GetComponent<Rigidbody>());
         snappingObject.GetComponent<MeshCollider>().convex = false;
+        snappingObject.GetComponent<Metadata>().setBuilt(true);
     }
 
-    public static void SlurpToGhost()
+    public void SlurpToGhost()
     {
-        SceneSetter.SlurpToGhost(index_autoassemble);
+        this.SlurpToGhost(index_autoassemble);
     }
 
-    public static void SlurpToGhost(int index)
+    public void SlurpToGhost(int index)
     {
         if (!autoassemble)
         {
@@ -191,12 +211,12 @@ public class SceneSetter : MonoBehaviour {
         }
     }
 
-    public static void UnHighlightGhost(GameObject obj)
+    public void UnHighlightGhost(GameObject obj)
     {
 
     }
 
-    public static void UnsnapToGhost(GameObject snappingObject, GameObject locationObject)
+    public void UnsnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
         snappingObject.GetComponent<Metadata>().setBuilt(false);
         //snappingObject.transform.position = locationObject.transform.position;
@@ -206,7 +226,7 @@ public class SceneSetter : MonoBehaviour {
         ColorNext();
     }
 
-    public static void SetAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean)
+    public void SetAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean)
     {
         try
         {
@@ -220,7 +240,7 @@ public class SceneSetter : MonoBehaviour {
         }
     }
 
-    public static GameObject FindGhost(GameObject obj)
+    public GameObject FindGhost(GameObject obj)
     {
         string ghostName = obj.name + " ghost";
         Debug.Log(ghostName);
@@ -229,12 +249,12 @@ public class SceneSetter : MonoBehaviour {
         return ghost;
     }
 
-    private static void SetEverythingBuilt()
+    private void SetEverythingBuilt()
     {
         SetAllBuilt(gameObjectDictionary, true);
     }
 
-    private static void SetEverythingUnbuilt()
+    private void SetEverythingUnbuilt()
     {
         SetAllBuilt(gameObjectDictionary, false);
     }
