@@ -19,23 +19,35 @@ public class SceneSetter : MonoBehaviour {
     private int index_autoassemble;
 
     private Color ghostColor = new Color32(0x00, 0xF2, 0xAC, 0x5D);
-    private Color ghostColorHi = new Color32(0x00, 0xF2, 0xAC, 0xA0);
+    private Color ghostColorHi = new Color32(0x00, 0x00, 0xAC, 0xA0);
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private Color setInPlace = new Color32(0, 255, 0, 0);
 
-    public static bool moveThrough = false;
+    public bool moveThrough = false;
+    public int speedScale = 30;
     //static Canvas GUICanvas;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         Debug.Log("This is Start()");
         CustomInit();
-	}
+    }
 
     private void Awake()
     {
         Debug.Log("This is Awake()");
         //CustomInit();
+    }
+
+    void OnEnable()
+    {
+        Debug.Log("OnEnable called");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene aScene, LoadSceneMode aMode)
+    {
+        ColorNext();
     }
 
     public void CustomInit()
@@ -48,12 +60,14 @@ public class SceneSetter : MonoBehaviour {
         defaultMaterialDictionary = new SortedDictionary<string, Color>();
         currentMaterialDictionary = new SortedDictionary<string, Color>();
 
-        ColorNext();
+        rebuildGODB(); // initialize db for ColorNext
+
+        ColorNext(); // initialize colors
     }
 
     void ColorNext()
     {
-        rebuildGODB();
+        //rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
             try
@@ -74,6 +88,7 @@ public class SceneSetter : MonoBehaviour {
 
     private bool rebuildGODB()
     {
+        //ColorNext();
         if (gameObjectDictionary.Count == 0)
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
@@ -144,7 +159,6 @@ public class SceneSetter : MonoBehaviour {
 
     public void SnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
-        snappingObject.GetComponent<Metadata>().setBuilt(true);
         if (moveThrough)
         {
             snappingObject.GetComponent<MeshCollider>().convex = false;
@@ -187,7 +201,9 @@ public class SceneSetter : MonoBehaviour {
             snappingObject.GetComponent<MeshCollider>().convex = false;
         }
         snappingObject.GetComponent<MeshCollider>().convex = false;
-        snappingObject.transform.position = Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime);
+        // This didn't work.
+        //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
+        snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
@@ -224,6 +240,8 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<Renderer>().material.color = nextToPickUp;
         snappingObject.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
         ColorNext();
+        autoassemble = false;
+        index_autoassemble = 0;
     }
 
     public void SetAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean)
