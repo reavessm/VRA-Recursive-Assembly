@@ -171,8 +171,15 @@ public class ControllerGrabObject : MonoBehaviour
 
     void OnJointBreak(float breakForce)
     {
-        objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        sceneDirector.ColorNext();
+        if (!sceneDirector.brokenMode) {
+            objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            sceneDirector.ColorNext();
+            objectRigidbody.isKinematic = true;
+            objectInHand = null;
+        }
+        else {
+            return;
+        }
     }
 
     private void ReleaseObject()

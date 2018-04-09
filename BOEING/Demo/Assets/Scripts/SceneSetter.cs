@@ -25,6 +25,7 @@ public class SceneSetter : MonoBehaviour {
 
     public bool moveThrough = false;
     public int speedScale = 30;
+    public bool brokenMode = false;
     //static Canvas GUICanvas;
 
     // Use this for initialization
