@@ -65,7 +65,7 @@ public class SceneSetter : MonoBehaviour {
         ColorNext(); // initialize colors
     }
 
-    void ColorNext()
+    public void ColorNext()
     {
         //rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
@@ -76,6 +76,10 @@ public class SceneSetter : MonoBehaviour {
                 {
                     obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
                     obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+                }
+                else {
+                    obj.Value.GetComponent<Renderer>().material.color = defaultMaterialDictionary[obj.Value.name];
+                    obj.Value.GetComponentInChildren<Renderer>().material.color = defaultMaterialDictionary[obj.Value.name];
                 }
             }
             catch (NullReferenceException e)
@@ -172,10 +176,10 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
         Debug.Log(snappingObject.transform.position);
-        ColorNext();
         Destroy(snappingObject.GetComponent<Rigidbody>());
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.GetComponent<Metadata>().setBuilt(true);
+        ColorNext();
     }
 
     public void SlurpToGhost()
@@ -281,10 +285,5 @@ public class SceneSetter : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
-     /*   if (autoassemble)
-        {
-            SlurpToGhost(index_autoassemble);
-        } */
     }
 }

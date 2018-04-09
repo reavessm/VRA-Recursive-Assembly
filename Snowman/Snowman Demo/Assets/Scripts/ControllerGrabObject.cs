@@ -169,6 +169,12 @@ public class ControllerGrabObject : MonoBehaviour
         return fx;
     }
 
+    void OnJointBreak(float breakForce)
+    {
+        objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        sceneDirector.ColorNext();
+    }
+
     private void ReleaseObject()
     {
         if (GetComponent<FixedJoint>())
@@ -191,6 +197,7 @@ public class ControllerGrabObject : MonoBehaviour
                 {
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
+                sceneDirector.ColorNext();
             }
             catch (KeyNotFoundException e) {
                 Debug.Log("Object In Hand Not Configured -- Release: " + e.Message);
