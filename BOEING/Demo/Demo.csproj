@@ -296,6 +296,7 @@
     <Compile Include="Assets\Scripts\PDFCitation.cs" />
     <Compile Include="Assets\Scripts\SceneSetter.cs" />
     <Compile Include="Assets\Scripts\Teleport.cs" />
+    <Compile Include="Assets\Scripts\UINew.cs" />
     <Compile Include="Assets\Scripts\UIWrapper.cs" />
     <Compile Include="Assets\Scripts\ViveControllerInputTest.cs" />
     <Compile Include="Assets\Scripts\XMLoader.cs" />

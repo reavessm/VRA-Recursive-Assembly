@@ -146,7 +146,7 @@ public class UIWrapper : MonoBehaviour {
 	private void ShowUI()
 	{
 		//Debug.Log("Showing UI stuff");
-		GUICanvas.gameObject.SetActive(true);
+		//GUICanvas.gameObject.SetActive(true);
 		uiIsUp = true;
 		GUICanvas.gameObject.transform.position = Camera.main.transform.position + Camera.main.transform.forward * guiDistance; // Transform to be in front of player, i hope...
 		GUICanvas.gameObject.transform.position = new Vector3(GUICanvas.gameObject.transform.position.x, 1.5f, GUICanvas.gameObject.transform.position.z);
