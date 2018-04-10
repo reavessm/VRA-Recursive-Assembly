@@ -5,11 +5,13 @@ using UnityEngine;
 public class UINew : MonoBehaviour
 {
 
-	private SteamVR_TrackedObject trackedObj;
 	public GameObject UIPrefab;
+	
+  private SteamVR_TrackedObject trackedObj;
 	private GameObject UI;
 	private GameObject collidingObject;
 	private SceneSetter sceneDirector;
+  private SortedDictionary<string, GameObject> uiDict;
 
 
 	private SteamVR_Controller.Device Controller
@@ -26,12 +28,19 @@ public class UINew : MonoBehaviour
 			sceneDirector = new SceneSetter();
 		}
 		sceneDirector.CustomInit();
+
+    // Get all UI blocks
+
 	}
 
 	void Start()
 	{
 		UI = Instantiate(UIPrefab);
 		UI.SetActive(false);
+    uiDict = new SortedDictionary<string, GameObject>();
+    foreach(Transform child in UI.transform) {
+      uiDict.Add(child.gameObject.name, child.gameObject);
+    }
 	}
 
 	public void OnTriggerEnter(Collider other)
@@ -94,6 +103,11 @@ public class UINew : MonoBehaviour
 			}
 		}
 		sceneDirector.SlurpToGhost();
+
+    // Rotate UI Blocks
+    foreach (SortedDictionary<string, GameObject> obj in uiDict) {
+      obj.Value.transform.Rotate(new Vector3(15,30,45) * Time.deltaTime);
+    }
 	}
 
 }
