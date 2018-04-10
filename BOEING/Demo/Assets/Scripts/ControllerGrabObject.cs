@@ -193,7 +193,7 @@ public class ControllerGrabObject : MonoBehaviour
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true;
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
-                Debug.Log("Got Past ScenSetter");
+                Debug.Log("Got Past SceneSetter");
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
                 Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
