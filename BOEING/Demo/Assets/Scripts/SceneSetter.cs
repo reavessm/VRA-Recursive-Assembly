@@ -127,7 +127,7 @@ public class SceneSetter : MonoBehaviour {
 
         autoassemble = false;
         index_autoassemble = 0;
-        SceneManager.LoadScene("Snowman", LoadSceneMode.Single);
+        SceneManager.LoadScene("Demo", LoadSceneMode.Single);
     }
 
     public void AutoAssemble()
