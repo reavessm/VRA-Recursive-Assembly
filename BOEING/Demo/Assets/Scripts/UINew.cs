@@ -7,11 +7,13 @@ public class UINew : MonoBehaviour
 
 	public GameObject UIPrefab;
 	
-  private SteamVR_TrackedObject trackedObj;
+    private SteamVR_TrackedObject trackedObj;
 	private GameObject UI;
 	private GameObject collidingObject;
 	private SceneSetter sceneDirector;
-  private SortedDictionary<string, GameObject> uiDict;
+    private SortedDictionary<string, GameObject> uiDict;
+    private GameObject resetter;
+    private GameObject auto;
 
 
 	private SteamVR_Controller.Device Controller
@@ -37,10 +39,16 @@ public class UINew : MonoBehaviour
 	{
 		UI = Instantiate(UIPrefab);
 		UI.SetActive(false);
-    uiDict = new SortedDictionary<string, GameObject>();
-    foreach(Transform child in UI.transform) {
-      uiDict.Add(child.gameObject.name, child.gameObject);
-    }
+        uiDict = new SortedDictionary<string, GameObject>();
+        /* foreach(Transform child in UI.transform) {
+             uiDict.Add(child.gameObject.name, child.gameObject);
+         } */
+
+        /* uiDict.Add("reset",GameObject.FindGameObjectWithTag("Restart"));
+        uiDict.Add("auto", GameObject.FindGameObjectWithTag("AutoAssemble"));
+        Debug.Log(uiDict.ToString()); */
+        resetter = GameObject.FindGameObjectWithTag("Restart");
+        auto = GameObject.FindGameObjectWithTag("AutoAssemble");
 	}
 
 	public void OnTriggerEnter(Collider other)
@@ -104,10 +112,16 @@ public class UINew : MonoBehaviour
 		}
 		sceneDirector.SlurpToGhost();
 
-    // Rotate UI Blocks
-    foreach (SortedDictionary<string, GameObject> obj in uiDict) {
-      obj.Value.transform.Rotate(new Vector3(15,30,45) * Time.deltaTime);
+        // Rotate UI Blocks
+        /* foreach (KeyValuePair<string, GameObject> obj in uiDict) {
+          obj.Value.transform.Rotate(new Vector3(15,30,45) * Time.deltaTime);
+        } */
+        if (UI.activeSelf)
+        {
+            resetter.transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
+            auto.transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
+        }
+
     }
-	}
 
 }
