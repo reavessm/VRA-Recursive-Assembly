@@ -9,8 +9,8 @@ public class UINew : MonoBehaviour
 	public GameObject UIPrefab;
 	private GameObject UI;
 	private GameObject collidingObject;
-	private SceneSetter sceneDirector;
-
+	public SceneSetter sceneDirector;
+	private Transform[] UITransforms;
 
 	private SteamVR_Controller.Device Controller
 	{
@@ -21,10 +21,7 @@ public class UINew : MonoBehaviour
 	void Awake()
 	{
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
-		if (sceneDirector == null)
-		{
-			sceneDirector = new SceneSetter();
-		}
+		sceneDirector = ScriptableObject.CreateInstance("SceneSetter") as SceneSetter;
 		sceneDirector.CustomInit();
 	}
 
@@ -72,8 +69,11 @@ public class UINew : MonoBehaviour
 		if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
 		{
 			UI.SetActive(true);
+			UITransforms = UI.GetComponentsInChildren<Transform>();
 			UI.transform.position = trackedObj.transform.position;
 			UI.transform.rotation = Quaternion.Euler(0f, trackedObj.transform.rotation.eulerAngles.y, 0f);
+			foreach (Transform trans in UITransforms)
+				trans.Rotate(Vector3.up*Time.deltaTime*6f);
 			//UI.transform.Rotate(new Vector3(0f, trackedObj.transform.rotation.y, 0f));		
 		}
 		if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))

@@ -52,10 +52,7 @@ public class ControllerGrabObject : MonoBehaviour
 
     void Awake()
     {
-        if (sceneDirector == null)
-        {
-            sceneDirector = new SceneSetter();
-        }
+        sceneDirector = ScriptableObject.CreateInstance("SceneSetter") as SceneSetter;
         sceneDirector.CustomInit();
         CustomInit();
     }

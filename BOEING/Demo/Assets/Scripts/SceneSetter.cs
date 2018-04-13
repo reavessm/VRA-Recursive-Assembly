@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-public class SceneSetter : MonoBehaviour {
+public class SceneSetter : ScriptableObject {
 
     private SortedDictionary<string, GameObject> gameObjectDictionary;
     private SortedDictionary<string, GameObject> ghostObjectDictionary;
