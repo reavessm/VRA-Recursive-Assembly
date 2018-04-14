@@ -16,7 +16,7 @@ public class UINew : MonoBehaviour
     private GameObject auto;
 
 
-	private SteamVR_Controller.Device Controller
+    private SteamVR_Controller.Device Controller
 	{
 		get { return SteamVR_Controller.Input((int)trackedObj.index); }
 	}
@@ -106,7 +106,7 @@ public class UINew : MonoBehaviour
 				if (collidingObject.tag == "AutoAssemble")
 				{
 					Debug.Log("auto");
-					sceneDirector.AutoAssemble();
+                    sceneDirector.AutoAssemble();
 				}
 			}
 		}

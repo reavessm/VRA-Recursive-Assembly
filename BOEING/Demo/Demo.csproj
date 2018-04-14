@@ -294,6 +294,7 @@
     <Compile Include="Assets\Scripts\LaserPointer.cs" />
     <Compile Include="Assets\Scripts\Metadata.cs" />
     <Compile Include="Assets\Scripts\PDFCitation.cs" />
+    <Compile Include="Assets\Scripts\Reloader.cs" />
     <Compile Include="Assets\Scripts\SceneSetter.cs" />
     <Compile Include="Assets\Scripts\Teleport.cs" />
     <Compile Include="Assets\Scripts\UINew.cs" />

@@ -22,6 +22,7 @@ public class SceneSetter : MonoBehaviour {
     private Color ghostColorHi = new Color32(0x00, 0x00, 0xAC, 0xA0);
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private Color setInPlace = new Color32(0, 255, 0, 0);
+    private bool doneInit = false;
 
     public bool moveThrough = false;
     public int speedScale = 30;
@@ -31,13 +32,11 @@ public class SceneSetter : MonoBehaviour {
     // Use this for initialization
     void Start() {
         Debug.Log("This is Start()");
-        CustomInit();
+        //CustomInit();
     }
 
     private void Awake()
     {
-        Debug.Log("This is Awake()");
-        CustomInit();
     }
 
     void OnEnable()
@@ -62,18 +61,22 @@ public class SceneSetter : MonoBehaviour {
         currentMaterialDictionary = new SortedDictionary<string, Color>();
 
         rebuildGODB(); // initialize db for ColorNext
-
+        doneInit = true;
         ColorNext(); // initialize colors
     }
 
     public void ColorNext()
     {
-        rebuildGODB();
+        if (!doneInit)
+        {
+            return;
+        }
+        //rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
             try
             {
-                if (obj.Value.GetComponent<Metadata>().isNextInOrder())
+                if (obj.Value.GetComponent<Metadata>().isNextInOrder() && !obj.Value.GetComponent<Metadata>().getBuilt())
                 {
                     obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
                     obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
@@ -106,11 +109,14 @@ public class SceneSetter : MonoBehaviour {
                 Debug.Log(obj.name);
                 ghostObjectDictionary.Add(obj.name, obj.gameObject);
             }
-            foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
+            if (defaultMaterialDictionary.Count == 0)
             {
-                defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
+                {
+                    defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                }
             }
-            currentMaterialDictionary = defaultMaterialDictionary;
+            currentMaterialDictionary = defaultMaterialDictionary; 
         }
         if (gameObjectDictionary.Count >= 0)
         {
@@ -154,14 +160,10 @@ public class SceneSetter : MonoBehaviour {
 
     public void HighlightGhost(GameObject obj)
     {
-        foreach (KeyValuePair<string, GameObject> ghost in ghostObjectDictionary)
-        {
-            if (ghost.Key == obj.name)
-            {
-                ghost.Value.GetComponent<Renderer>().material.color = ghostColorHi;
-                ghost.Value.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
-            }
-        }
+        GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
+        Debug.Log("Highlight " + obj.name + " with " + ghost.name);
+        ghost.GetComponent<Renderer>().material.color = ghostColorHi;
+        ghost.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
     }
 
     public void SnapToGhost(GameObject snappingObject, GameObject locationObject)
@@ -175,6 +177,7 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.transform.SetPositionAndRotation(locationObject.transform.position,
             locationObject.transform.rotation);
+        Debug.Log(snappingObject.ToString());
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
@@ -236,19 +239,30 @@ public class SceneSetter : MonoBehaviour {
 
     public void UnHighlightGhost(GameObject obj)
     {
-
+        GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
+        Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
+        ghost.GetComponent<Renderer>().material.color = Color.clear;
+        foreach (KeyValuePair<string, Color> col in defaultMaterialDictionary)
+        {
+            Debug.Log("Default Material Dictionary: " + col.Key + " || " + col.Value);
+        }
+        Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
+        obj.GetComponent<Renderer>().material.color = defaultMaterialDictionary[obj.name];
+        obj.GetComponentInChildren<Renderer>().material.color = defaultMaterialDictionary[obj.name];
     }
 
     public void UnsnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
         snappingObject.GetComponent<Metadata>().setBuilt(false);
         //snappingObject.transform.position = locationObject.transform.position;
-        UnHighlightGhost(snappingObject);
+        //UnHighlightGhost(snappingObject);
+        locationObject.SetActive(true);
         snappingObject.GetComponent<Renderer>().material.color = nextToPickUp;
         snappingObject.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
         ColorNext();
         autoassemble = false;
         index_autoassemble = 0;
+
     }
 
     public void SetAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean)
@@ -268,9 +282,9 @@ public class SceneSetter : MonoBehaviour {
     public GameObject FindGhost(GameObject obj)
     {
         string ghostName = obj.name + " ghost";
-        Debug.Log(ghostName);
+        Debug.Log("Find Ghost: " + ghostName);
         GameObject ghost = ghostObjectDictionary[ghostName];
-        Debug.Log(ghost.name);
+        Debug.Log("FindGhost Part 2: " + ghost.name);
         return ghost;
     }
 

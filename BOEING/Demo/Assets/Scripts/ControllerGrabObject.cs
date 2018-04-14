@@ -154,7 +154,7 @@ public class ControllerGrabObject : MonoBehaviour
             //objectInHand.GetComponent<Metadata>().setBuilt(true);
         }
         if (objectInHand.GetComponent<Metadata>().getBuilt()) {
-           sceneDirector.UnHighlightGhost(objectInHand);
+           //sceneDirector.UnHighlightGhost(objectInHand);
         }
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
         Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
@@ -187,11 +187,13 @@ public class ControllerGrabObject : MonoBehaviour
         if (GetComponent<FixedJoint>())
         {
             try {
+                Debug.Log("Entering Release Try/Catch");
                 GetComponent<FixedJoint>().connectedBody = null;
                 Destroy(GetComponent<FixedJoint>());
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true;
+                Debug.Log("Starting Ghost Key Retrieval");
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
                 Debug.Log("Got Past SceneSetter");
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
@@ -204,6 +206,7 @@ public class ControllerGrabObject : MonoBehaviour
                 {
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
+                Debug.Log("Ending Release");
                 sceneDirector.ColorNext();
             }
             catch (KeyNotFoundException e) {
