@@ -82,7 +82,8 @@ public class Teleport : MonoBehaviour
                 if ((hitPoint.x < trackedObj.transform.position.x + range) 
 					&& (hitPoint.x > trackedObj.transform.position.x - range) 
 					&& (hitPoint.z < trackedObj.transform.position.z + range) 
-					&& (hitPoint.z > trackedObj.transform.position.z - range)) {//&& (hit.collider.tag.Equals("CanTeleport")))
+					&& (hitPoint.z > trackedObj.transform.position.z - range) 
+                    && (hit.collider.tag.Equals("CanTeleport"))) { 
                     reticle.SetActive(true);
                     teleportReticleTransform.position = hitPoint + teleportReticleOffset;
 					shouldTeleport = true;

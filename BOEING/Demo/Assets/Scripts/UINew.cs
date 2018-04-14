@@ -116,11 +116,11 @@ public class UINew : MonoBehaviour
         /* foreach (KeyValuePair<string, GameObject> obj in uiDict) {
           obj.Value.transform.Rotate(new Vector3(15,30,45) * Time.deltaTime);
         } */
-        if (UI.activeSelf)
+       /* if (UI.activeSelf)
         {
             resetter.transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
             auto.transform.Rotate(new Vector3(15, 30, 45) * Time.deltaTime);
-        }
+        } */
 
     }
 

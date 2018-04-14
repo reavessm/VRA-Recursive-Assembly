@@ -37,7 +37,7 @@ public class SceneSetter : MonoBehaviour {
     private void Awake()
     {
         Debug.Log("This is Awake()");
-        //CustomInit();
+        CustomInit();
     }
 
     void OnEnable()
@@ -68,7 +68,7 @@ public class SceneSetter : MonoBehaviour {
 
     public void ColorNext()
     {
-        //rebuildGODB();
+        rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
             try
@@ -98,11 +98,13 @@ public class SceneSetter : MonoBehaviour {
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
             {
+                Debug.Log(obj.name);
                 gameObjectDictionary.Add(obj.name, obj.gameObject);
             }
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
             {
-                ghostObjectDictionary.Add(obj.name, obj);
+                Debug.Log(obj.name);
+                ghostObjectDictionary.Add(obj.name, obj.gameObject);
             }
             foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
             {
