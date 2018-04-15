@@ -25,7 +25,7 @@ public class SceneSetter : MonoBehaviour {
     private bool doneInit = false;
 
     public bool moveThrough = false;
-    public int speedScale = 30;
+    public int speedScale = 10;
     public bool brokenMode = false;
     //static Canvas GUICanvas;
 
@@ -213,7 +213,9 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<MeshCollider>().convex = false;
         // This didn't work.
         //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
-        snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        //   snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        snappingObject.transform.rotation = locationObject.transform.rotation;
+        snappingObject.transform.position = Vector3.Slerp(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime);
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;

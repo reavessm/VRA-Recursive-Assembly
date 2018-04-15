@@ -6,6 +6,7 @@ public class Deploy : MonoBehaviour {
 	public Vector3 PartsOffset;
 	public Vector3 GhostOffset;
     public GameObject table;
+    public float tableHeight = 0.25f;
 
     private Vector3 OriginalLocation;
     private Vector3 tableLocation;
@@ -26,6 +27,7 @@ public class Deploy : MonoBehaviour {
 		//parts_pile = Instantiate(temp, new Vector3(0, 0, 0), Quaternion.identity);
 		parts_pile = Instantiate(temp, null, true);
         parts_pile.gameObject.transform.position = (OriginalLocation + PartsOffset);
+        parts_pile.gameObject.transform.position += new Vector3(0, tableHeight, 0);
         parts_pile.name = temp.name + "_parts";
 		foreach (Transform element in parts_pile.transform) {
 			element.name = element.name;
@@ -34,10 +36,10 @@ public class Deploy : MonoBehaviour {
 			if (element.gameObject.GetComponent<MeshCollider>() == null) {
 				element.gameObject.AddComponent<MeshCollider>();
 			}
-			element.gameObject.GetComponent<Rigidbody>().useGravity = false;
+            element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 			element.gameObject.GetComponent<Rigidbody>().mass = 100;
-			//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
-			element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            //element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
+            element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			element.gameObject.GetComponent<MeshCollider>().convex = true;
 			element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             center += element.gameObject.GetComponent<Renderer>().bounds.center;
@@ -50,11 +52,11 @@ public class Deploy : MonoBehaviour {
             bounds.Encapsulate(element.gameObject.GetComponent<Renderer>().bounds);
         }
 
-        table.transform.localScale = new Vector3(bounds.size.x,1,bounds.size.z);
+        table.transform.localScale = new Vector3(bounds.size.x,tableHeight,bounds.size.z);
         Debug.Log("Center: " + center + " Parts Pos " + parts_pile.transform.position);
         Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
         Vector3 templocation = center + parts_pile.transform.position;
-        table.transform.localPosition = new Vector3(-templocation.x, -0.5f, templocation.z);
+        table.transform.localPosition = new Vector3(-templocation.x, -tableHeight/2f, templocation.z);
         //ghost = Instantiate(temp, new Vector3(0,0,0), Quaternion.identity);
         ghost = Instantiate(temp, null, true);		
 		ghost.gameObject.transform.position = (OriginalLocation + PartsOffset + GhostOffset);
@@ -74,6 +76,11 @@ public class Deploy : MonoBehaviour {
 			element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 		}
 		Destroy(DeployPrefab.gameObject);
+
+        foreach (Transform element in parts_pile.transform)
+        {
+            element.gameObject.GetComponent<Rigidbody>().useGravity = true;
+        }
 	}
 	
 	// Update is called once per frame
