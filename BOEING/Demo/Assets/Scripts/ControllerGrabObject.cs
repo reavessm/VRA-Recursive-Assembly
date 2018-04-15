@@ -22,7 +22,7 @@
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
@@ -30,7 +30,7 @@ using UnityEngine.UI;
 public class ControllerGrabObject : MonoBehaviour
 {
     public Material ghostMaterial;
-  	public float snapDistance;
+    public float snapDistance;
     public Canvas GUICanvas;
     public SceneSetter sceneDirector;
     private SteamVR_TrackedObject trackedObj;
@@ -60,19 +60,17 @@ public class ControllerGrabObject : MonoBehaviour
         CustomInit();
     }
 
-    private void CustomInit() {
+    private void CustomInit()
+    {
+        DontDestroyOnLoad(GUICanvas);
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        
-        foreach (Transform element in GUICanvas.transform) {
-            if (element.gameObject.name == "Object Info") {
-                textbox = element.GetComponent<Text>();
-            }
-        }
-        GUICanvas.gameObject.SetActive(false); // Hides UI initially
+        textbox = GUICanvas.transform.Find("Tool Space").transform.Find("Object Info").GetComponent<Text>();
+        GUICanvas.gameObject.SetActive(true);
         guiDistance = 0.2f; // can change this if needed
 
         Debug.Log("Scene Ready!");
     }
+
 
     public void OnTriggerEnter(Collider other)
     {
@@ -108,32 +106,26 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (Controller.GetHairTriggerDown())
         {
-            try {
-                if (collidingObject.tag == "Restart")
-                {
-                    sceneDirector.Restart();
-                }
-                else if (collidingObject.tag == "AutoAssemble")
-                {
-                    sceneDirector.AutoAssemble();
-                }
-                else if (collidingObject.tag == "Pickupable")
+            try
+            {
+                if (collidingObject.tag == "Pickupable")
                 {
                     GrabObject();
                 }
             }
-            catch (NullReferenceException e) {
+            catch (NullReferenceException e)
+            {
                 Debug.Log("Object In Hand Not Configured -- Pickup");
             }
         }
 
-		if (Controller.GetHairTriggerUp())
-		{
-			if (objectInHand)
-			{
-				ReleaseObject();
-			}
-		}
+        if (Controller.GetHairTriggerUp())
+        {
+            if (objectInHand)
+            {
+                ReleaseObject();
+            }
+        }
         sceneDirector.SlurpToGhost();
     }
 
@@ -149,14 +141,17 @@ public class ControllerGrabObject : MonoBehaviour
         objectRigidbody.isKinematic = false; // was false
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
-        if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt()) {
+        if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt())
+        {
             sceneDirector.HighlightGhost(objectInHand);
             //objectInHand.GetComponent<Metadata>().setBuilt(true);
         }
-        if (objectInHand.GetComponent<Metadata>().getBuilt()) {
-           sceneDirector.UnHighlightGhost(objectInHand);
+        if (objectInHand.GetComponent<Metadata>().getBuilt())
+        {
+            //sceneDirector.UnHighlightGhost(objectInHand);
         }
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
+        Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
         Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
 
     }
@@ -171,14 +166,21 @@ public class ControllerGrabObject : MonoBehaviour
 
     void OnJointBreak(float breakForce)
     {
-        if (!sceneDirector.brokenMode) {
+        if (!sceneDirector.brokenMode)
+        {
             objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             sceneDirector.ColorNext();
             objectRigidbody.isKinematic = true;
             objectInHand = null;
-        }
-        else {
-            return;
+            if (textbox == null)
+            {
+                Debug.Log("textbox is null");
+            }
+            else
+            {
+                textbox.text = defaultObjInfo;
+                Debug.Log(defaultObjInfo);
+            }
         }
     }
 
@@ -186,33 +188,49 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (GetComponent<FixedJoint>())
         {
-            try {
+            try
+            {
+                Debug.Log("Entering Release Try/Catch");
                 GetComponent<FixedJoint>().connectedBody = null;
                 Destroy(GetComponent<FixedJoint>());
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true;
+                Debug.Log("Starting Ghost Key Retrieval");
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
-                Debug.Log("Got Past ScenSetter");
+                Debug.Log("Got Past SceneSetter");
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
                 Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 if (realDistance < snapDistance)
                 {
                     sceneDirector.SnapToGhost(objectInHand, ghostObject);
-                } else
+                }
+                else
                 {
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
+                Debug.Log("Ending Release");
                 sceneDirector.ColorNext();
             }
-            catch (KeyNotFoundException e) {
+            catch (KeyNotFoundException e)
+            {
                 Debug.Log("Object In Hand Not Configured -- Release: " + e.Message);
             }
         }
 
-	objectInHand = null;
-    textbox.text = defaultObjInfo;
+        objectInHand = null;
+
+        if (textbox == null)
+        {
+            Debug.Log("textbox is null");
+        }
+        else
+        {
+            textbox.text = defaultObjInfo;
+            Debug.Log(defaultObjInfo);
+        }
+
 
     }
 }

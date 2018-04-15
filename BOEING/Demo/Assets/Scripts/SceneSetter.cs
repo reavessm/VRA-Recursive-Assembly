@@ -22,22 +22,34 @@ public class SceneSetter : MonoBehaviour {
     private Color ghostColorHi = new Color32(0x00, 0x00, 0xAC, 0xA0);
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private Color setInPlace = new Color32(0, 255, 0, 0);
+    private bool doneInit = false;
 
     public bool moveThrough = false;
-    public int speedScale = 30;
+    public int speedScale = 10;
     public bool brokenMode = false;
     //static Canvas GUICanvas;
+
+    private static bool autoAssembleOnStart = false;
 
     // Use this for initialization
     void Start() {
         Debug.Log("This is Start()");
-        CustomInit();
+        //CustomInit();
+        if (autoAssembleOnStart)
+        {
+            Debug.Log("autoAssembleOnStart is true");
+            StartCoroutine(Wait(5));
+            this.AutoAssemble();
+        }
+    }
+
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
     }
 
     private void Awake()
     {
-        Debug.Log("This is Awake()");
-        //CustomInit();
     }
 
     void OnEnable()
@@ -62,18 +74,23 @@ public class SceneSetter : MonoBehaviour {
         currentMaterialDictionary = new SortedDictionary<string, Color>();
 
         rebuildGODB(); // initialize db for ColorNext
-
+        doneInit = true;
         ColorNext(); // initialize colors
     }
 
+
     public void ColorNext()
     {
+        if (!doneInit)
+        {
+            return;
+        }
         //rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
             try
             {
-                if (obj.Value.GetComponent<Metadata>().isNextInOrder())
+                if (obj.Value.GetComponent<Metadata>().isNextInOrder() && !obj.Value.GetComponent<Metadata>().getBuilt())
                 {
                     obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
                     obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
@@ -98,17 +115,22 @@ public class SceneSetter : MonoBehaviour {
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
             {
+                Debug.Log(obj.name);
                 gameObjectDictionary.Add(obj.name, obj.gameObject);
             }
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
             {
-                ghostObjectDictionary.Add(obj.name, obj);
+                Debug.Log(obj.name);
+                ghostObjectDictionary.Add(obj.name, obj.gameObject);
             }
-            foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
+            if (defaultMaterialDictionary.Count == 0)
             {
-                defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
+                {
+                    defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                }
             }
-            currentMaterialDictionary = defaultMaterialDictionary;
+            currentMaterialDictionary = defaultMaterialDictionary; 
         }
         if (gameObjectDictionary.Count >= 0)
         {
@@ -130,6 +152,12 @@ public class SceneSetter : MonoBehaviour {
         SceneManager.LoadScene("Demo", LoadSceneMode.Single);
     }
 
+    public void ResetAssemble()
+    {
+        autoAssembleOnStart = true;
+        this.Restart();
+    }
+
     public void AutoAssemble()
     {
         rebuildGODB();
@@ -148,18 +176,15 @@ public class SceneSetter : MonoBehaviour {
             autoassemble_target[count++] = element;
         }
         autoassemble = true;
+        autoAssembleOnStart = false;
     }
 
     public void HighlightGhost(GameObject obj)
     {
-        foreach (KeyValuePair<string, GameObject> ghost in ghostObjectDictionary)
-        {
-            if (ghost.Key == obj.name)
-            {
-                ghost.Value.GetComponent<Renderer>().material.color = ghostColorHi;
-                ghost.Value.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
-            }
-        }
+        GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
+        Debug.Log("Highlight " + obj.name + " with " + ghost.name);
+        ghost.GetComponent<Renderer>().material.color = ghostColorHi;
+        ghost.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
     }
 
     public void SnapToGhost(GameObject snappingObject, GameObject locationObject)
@@ -173,6 +198,7 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.transform.SetPositionAndRotation(locationObject.transform.position,
             locationObject.transform.rotation);
+        Debug.Log(snappingObject.ToString());
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
@@ -183,32 +209,22 @@ public class SceneSetter : MonoBehaviour {
         ColorNext();
     }
 
-    public void SlurpToGhost()
+/*    public void SlerpTogether(GameObject thing)
     {
-        this.SlurpToGhost(index_autoassemble);
+        GameObject snappingObject = thing;
+        GameObject locationObject = ghostObjectDictionary[thing.name + " ghost"];
+        SlerpTogether(snappingObject, locationObject);
     }
 
-    public void SlurpToGhost(int index)
+    public void SlerpTogether(GameObject snappingObject, GameObject locationObject)
     {
-        if (!autoassemble)
-        {
-            return;
-        }
-        Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
-        Debug.Log("Slurp me");
-        GameObject snappingObject = autoassemble_model[index].Value;
-        GameObject locationObject = autoassemble_target[index].Value;
-        Debug.Log(snappingObject.name);
-        Debug.Log(locationObject.name);
         snappingObject.GetComponent<Metadata>().setBuilt(true);
-        if (moveThrough)
-        {
-            snappingObject.GetComponent<MeshCollider>().convex = false;
-        }
         snappingObject.GetComponent<MeshCollider>().convex = false;
         // This didn't work.
         //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
-        snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        //   snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        snappingObject.transform.rotation = locationObject.transform.rotation;
+        snappingObject.transform.position = Vector3.Slerp(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime);
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
@@ -230,23 +246,97 @@ public class SceneSetter : MonoBehaviour {
                 autoassemble = false;
             }
         }
+    } */
+
+    public void SlurpToGhost()
+    {
+        this.SlurpToGhost(index_autoassemble);
+    }
+
+    public void SlurpToGhost(int index)
+    {
+        if (!autoassemble)
+        {
+            return;
+        }
+/*
+        bool done = false;
+         while (!done) {
+              done = true;
+              foreach (KeyValuePair<string, GameObject> thing in gameObjectDictionary) {
+                  if (!thing.Value.GetComponent<Metadata>().getBuilt()) {
+                      done = false;
+                      SlerpTogether(thing.Value);
+                  }
+              }
+         } */
+         
+        Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
+        Debug.Log("Slurp me");
+        GameObject snappingObject = autoassemble_model[index].Value;
+        GameObject locationObject = autoassemble_target[index].Value;
+        Debug.Log(snappingObject.name);
+        Debug.Log(locationObject.name);
+  //      snappingObject.GetComponent<Metadata>().setBuilt(true);
+        if (moveThrough)
+        {
+            snappingObject.GetComponent<MeshCollider>().convex = false;
+        }
+        snappingObject.GetComponent<MeshCollider>().convex = false;
+        // This didn't work.
+        //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
+        //   snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        snappingObject.transform.rotation = locationObject.transform.rotation;
+        snappingObject.transform.position = Vector3.Slerp(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime);
+        UnHighlightGhost(snappingObject);
+        snappingObject.GetComponent<Renderer>().material.color = setInPlace;
+        snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
+        Debug.Log(snappingObject.transform.position);
+        ColorNext();
+        snappingObject.GetComponent<MeshCollider>().convex = false;
+        if (snappingObject.transform.position == locationObject.transform.position)
+        {
+            Debug.Log(index_autoassemble);
+            Debug.Log(gameObjectDictionary.Count);
+            Debug.Log(ghostObjectDictionary.Count);
+            if (index_autoassemble < (gameObjectDictionary.Count - 1))
+            {
+                index_autoassemble++;
+            }
+            else
+            {
+                Debug.Log("Done?");
+                autoassemble = false;
+            }
+        } 
     }
 
     public void UnHighlightGhost(GameObject obj)
     {
-
+        GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
+        Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
+        ghost.GetComponent<Renderer>().material.color = Color.clear;
+        foreach (KeyValuePair<string, Color> col in defaultMaterialDictionary)
+        {
+            Debug.Log("Default Material Dictionary: " + col.Key + " || " + col.Value);
+        }
+        Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
+        obj.GetComponent<Renderer>().material.color = defaultMaterialDictionary[obj.name];
+        obj.GetComponentInChildren<Renderer>().material.color = defaultMaterialDictionary[obj.name];
     }
 
     public void UnsnapToGhost(GameObject snappingObject, GameObject locationObject)
     {
         snappingObject.GetComponent<Metadata>().setBuilt(false);
         //snappingObject.transform.position = locationObject.transform.position;
-        UnHighlightGhost(snappingObject);
+        //UnHighlightGhost(snappingObject);
+        locationObject.SetActive(true);
         snappingObject.GetComponent<Renderer>().material.color = nextToPickUp;
         snappingObject.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
         ColorNext();
         autoassemble = false;
         index_autoassemble = 0;
+
     }
 
     public void SetAllBuilt(SortedDictionary<string, GameObject> dict, bool boolean)
@@ -266,9 +356,9 @@ public class SceneSetter : MonoBehaviour {
     public GameObject FindGhost(GameObject obj)
     {
         string ghostName = obj.name + " ghost";
-        Debug.Log(ghostName);
+        Debug.Log("Find Ghost: " + ghostName);
         GameObject ghost = ghostObjectDictionary[ghostName];
-        Debug.Log(ghost.name);
+        Debug.Log("FindGhost Part 2: " + ghost.name);
         return ghost;
     }
 
