@@ -12,6 +12,7 @@ TagManager:
   - FloatingButton
   - AutoAssemble
   - GUICanvas
+  - PartInfo
   layers:
   - Default
   - TransparentFX

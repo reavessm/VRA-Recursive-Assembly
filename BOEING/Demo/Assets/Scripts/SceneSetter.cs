@@ -65,6 +65,7 @@ public class SceneSetter : MonoBehaviour {
         ColorNext(); // initialize colors
     }
 
+
     public void ColorNext()
     {
         if (!doneInit)
@@ -188,6 +189,45 @@ public class SceneSetter : MonoBehaviour {
         ColorNext();
     }
 
+/*    public void SlerpTogether(GameObject thing)
+    {
+        GameObject snappingObject = thing;
+        GameObject locationObject = ghostObjectDictionary[thing.name + " ghost"];
+        SlerpTogether(snappingObject, locationObject);
+    }
+
+    public void SlerpTogether(GameObject snappingObject, GameObject locationObject)
+    {
+        snappingObject.GetComponent<Metadata>().setBuilt(true);
+        snappingObject.GetComponent<MeshCollider>().convex = false;
+        // This didn't work.
+        //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
+        //   snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
+        snappingObject.transform.rotation = locationObject.transform.rotation;
+        snappingObject.transform.position = Vector3.Slerp(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime);
+        UnHighlightGhost(snappingObject);
+        snappingObject.GetComponent<Renderer>().material.color = setInPlace;
+        snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
+        Debug.Log(snappingObject.transform.position);
+        ColorNext();
+        snappingObject.GetComponent<MeshCollider>().convex = false;
+        if (snappingObject.transform.position == locationObject.transform.position)
+        {
+            Debug.Log(index_autoassemble);
+            Debug.Log(gameObjectDictionary.Count);
+            Debug.Log(ghostObjectDictionary.Count);
+            if (index_autoassemble < (gameObjectDictionary.Count - 1))
+            {
+                index_autoassemble++;
+            }
+            else
+            {
+                Debug.Log("Done?");
+                autoassemble = false;
+            }
+        }
+    } */
+
     public void SlurpToGhost()
     {
         this.SlurpToGhost(index_autoassemble);
@@ -199,13 +239,25 @@ public class SceneSetter : MonoBehaviour {
         {
             return;
         }
+/*
+        bool done = false;
+         while (!done) {
+              done = true;
+              foreach (KeyValuePair<string, GameObject> thing in gameObjectDictionary) {
+                  if (!thing.Value.GetComponent<Metadata>().getBuilt()) {
+                      done = false;
+                      SlerpTogether(thing.Value);
+                  }
+              }
+         } */
+         
         Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
         Debug.Log("Slurp me");
         GameObject snappingObject = autoassemble_model[index].Value;
         GameObject locationObject = autoassemble_target[index].Value;
         Debug.Log(snappingObject.name);
         Debug.Log(locationObject.name);
-        snappingObject.GetComponent<Metadata>().setBuilt(true);
+  //      snappingObject.GetComponent<Metadata>().setBuilt(true);
         if (moveThrough)
         {
             snappingObject.GetComponent<MeshCollider>().convex = false;
@@ -236,7 +288,7 @@ public class SceneSetter : MonoBehaviour {
                 Debug.Log("Done?");
                 autoassemble = false;
             }
-        }
+        } 
     }
 
     public void UnHighlightGhost(GameObject obj)

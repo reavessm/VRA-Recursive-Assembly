@@ -62,17 +62,24 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void CustomInit() {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        
-        foreach (Transform element in GUICanvas.transform) {
-            if (element.gameObject.name == "Object Info") {
-                textbox = element.GetComponent<Text>();
+        textbox = GUICanvas.transform.Find("Tool Space").transform.Find("Object Info").GetComponent<Text>();
+      /*  foreach (Transform element in GUICanvas.transform) {
+            Debug.Log("Next GUI Transform: " + element.name);
+            if (element.gameObject.name == "Tool Space") {
+                foreach
+                textbox = element.gameObject.GetChild("Object Info").GetComponent<Text>();
+                Debug.Log(textbox.text);
             }
-        }
-        GUICanvas.gameObject.SetActive(false); // Hides UI initially
+        } */
+        
+       // textbox = GameObject.FindGameObjectWithTag("PartInfo").GetComponent<Text>();
+        // GUICanvas.gameObject.SetActive(false); // Hides UI initially
+        GUICanvas.gameObject.SetActive(true);
         guiDistance = 0.2f; // can change this if needed
 
         Debug.Log("Scene Ready!");
     }
+
 
     public void OnTriggerEnter(Collider other)
     {
@@ -157,6 +164,7 @@ public class ControllerGrabObject : MonoBehaviour
            //sceneDirector.UnHighlightGhost(objectInHand);
         }
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
+        Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
         Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
 
     }
@@ -214,8 +222,17 @@ public class ControllerGrabObject : MonoBehaviour
             }
         }
 
-	objectInHand = null;
-    textbox.text = defaultObjInfo;
+	    objectInHand = null;
+
+        if (textbox == null)
+        {
+            Debug.Log("textbox is null");
+        } else
+        {
+            textbox.text = defaultObjInfo;
+            Debug.Log(defaultObjInfo);
+        }
+       
 
     }
 }
