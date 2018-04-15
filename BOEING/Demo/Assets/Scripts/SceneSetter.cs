@@ -29,10 +29,23 @@ public class SceneSetter : MonoBehaviour {
     public bool brokenMode = false;
     //static Canvas GUICanvas;
 
+    private static bool autoAssembleOnStart = false;
+
     // Use this for initialization
     void Start() {
         Debug.Log("This is Start()");
         //CustomInit();
+        if (autoAssembleOnStart)
+        {
+            Debug.Log("autoAssembleOnStart is true");
+            StartCoroutine(Wait(5));
+            this.AutoAssemble();
+        }
+    }
+
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
     }
 
     private void Awake()
@@ -139,6 +152,12 @@ public class SceneSetter : MonoBehaviour {
         SceneManager.LoadScene("Demo", LoadSceneMode.Single);
     }
 
+    public void ResetAssemble()
+    {
+        autoAssembleOnStart = true;
+        this.Restart();
+    }
+
     public void AutoAssemble()
     {
         rebuildGODB();
@@ -157,6 +176,7 @@ public class SceneSetter : MonoBehaviour {
             autoassemble_target[count++] = element;
         }
         autoassemble = true;
+        autoAssembleOnStart = false;
     }
 
     public void HighlightGhost(GameObject obj)

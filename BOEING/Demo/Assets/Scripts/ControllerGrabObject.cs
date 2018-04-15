@@ -122,7 +122,8 @@ public class ControllerGrabObject : MonoBehaviour
                 }
                 else if (collidingObject.tag == "AutoAssemble")
                 {
-                    sceneDirector.AutoAssemble();
+                    sceneDirector.ResetAssemble();
+                //    sceneDirector.AutoAssemble();
                 }
                 else if (collidingObject.tag == "Pickupable")
                 {

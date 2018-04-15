@@ -106,7 +106,8 @@ public class UINew : MonoBehaviour
 				if (collidingObject.tag == "AutoAssemble")
 				{
 					Debug.Log("auto");
-                    sceneDirector.AutoAssemble();
+                    sceneDirector.ResetAssemble();
+                    //sceneDirector.AutoAssemble();
 				}
 			}
 		}
