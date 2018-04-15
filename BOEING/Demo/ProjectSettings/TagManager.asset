@@ -13,6 +13,10 @@ TagManager:
   - AutoAssemble
   - GUICanvas
   - PartInfo
+  - FxTemporaire
+  - projectile
+  - TeleportIgnore
+  - ResetAssemble
   layers:
   - Default
   - TransparentFX

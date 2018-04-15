@@ -116,6 +116,7 @@ public class ControllerGrabObject : MonoBehaviour
         if (Controller.GetHairTriggerDown())
         {
             try {
+                /*(
                 if (collidingObject.tag == "Restart")
                 {
                     sceneDirector.Restart();
@@ -125,7 +126,7 @@ public class ControllerGrabObject : MonoBehaviour
                     sceneDirector.ResetAssemble();
                 //    sceneDirector.AutoAssemble();
                 }
-                else if (collidingObject.tag == "Pickupable")
+                else*/ if (collidingObject.tag == "Pickupable")
                 {
                     GrabObject();
                 }

@@ -98,17 +98,18 @@ public class UINew : MonoBehaviour
 			UI.SetActive(false);
 			if (collidingObject)
 			{
-				if (collidingObject.tag == "Restart")
-				{
-					Debug.Log("restart");
-					sceneDirector.Restart();
-				}
-				if (collidingObject.tag == "AutoAssemble")
-				{
-					Debug.Log("auto");
-                    sceneDirector.ResetAssemble();
-                    //sceneDirector.AutoAssemble();
-				}
+                switch (collidingObject.tag)
+                {
+                    case "Restart":
+                        sceneDirector.Restart();
+                        break;
+                    case "AutoAssemble":
+                        sceneDirector.AutoAssemble();
+                        break;
+                    case "ResetAssemble":
+                        sceneDirector.ResetAssemble();
+                        break;
+                }
 			}
 		}
 		sceneDirector.SlurpToGhost();
