@@ -34,19 +34,14 @@ public class SceneSetter : MonoBehaviour {
     // Use this for initialization
     void Start() {
         Debug.Log("This is Start()");
-        //CustomInit();
+        CustomInit();
         if (autoAssembleOnStart)
         {
             Debug.Log("autoAssembleOnStart is true");
-            StartCoroutine(Wait(5));
             this.AutoAssemble();
         }
     }
 
-    IEnumerator Wait(float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-    }
 
     private void Awake()
     {
@@ -277,7 +272,7 @@ public class SceneSetter : MonoBehaviour {
         GameObject locationObject = autoassemble_target[index].Value;
         Debug.Log(snappingObject.name);
         Debug.Log(locationObject.name);
-  //      snappingObject.GetComponent<Metadata>().setBuilt(true);
+        snappingObject.GetComponent<Metadata>().setBuilt(true);
         if (moveThrough)
         {
             snappingObject.GetComponent<MeshCollider>().convex = false;

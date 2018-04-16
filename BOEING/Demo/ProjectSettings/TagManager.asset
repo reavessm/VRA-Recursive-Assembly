@@ -17,6 +17,7 @@ TagManager:
   - projectile
   - TeleportIgnore
   - ResetAssemble
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - NoTeleport
   - 
   - 
   - 
