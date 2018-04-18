@@ -198,7 +198,8 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
         Debug.Log(snappingObject.transform.position);
-        Destroy(snappingObject.GetComponent<Rigidbody>());
+        //Destroy(snappingObject.GetComponent<Rigidbody>());
+        snappingObject.tag = "Untagged";
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.GetComponent<Metadata>().setBuilt(true);
         ColorNext();
@@ -278,6 +279,8 @@ public class SceneSetter : MonoBehaviour {
             snappingObject.GetComponent<MeshCollider>().convex = false;
         }
         snappingObject.GetComponent<MeshCollider>().convex = false;
+        snappingObject.tag = "Untagged";
+        snappingObject.GetComponent<Rigidbody>().isKinematic = true;
         // This didn't work.
         //snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, 10 * Time.deltaTime), Quaternion.LookRotation(Vector3.RotateTowards(snappingObject.transform.rotation * Vector3.one, locationObject.transform.rotation * Vector3.one, 10 * Time.deltaTime, 0.0f)));
         //   snappingObject.transform.SetPositionAndRotation(Vector3.MoveTowards(snappingObject.transform.position, locationObject.transform.position, speedScale * Time.deltaTime), locationObject.transform.rotation);
