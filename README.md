@@ -17,11 +17,10 @@ The purpose of our project was not to create a full blown application, but inste
 __Note__: _The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality._
 
 ## Demo Video
-<video height="240" width="320">
-  <source src="https://github.com/SCCapstone/Beautiful-Open-Ended-Interior-Graphics/blob/master/BOEING/Demo/Videos/BoeingDemoRC1.mp4" type="video/mp4">
-</video>
+​<iframe width="960" height="540" src="https://www.youtube.com/embed/mzO2AXXAszc" frameborder="0" allow="encrypted-media" allowfullscreen>
+</iframe>
 
-<a href="">Demo Video (Need to add the youtube link)</a>
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">View On YouTube</a>
 
 ## How to Use
 
