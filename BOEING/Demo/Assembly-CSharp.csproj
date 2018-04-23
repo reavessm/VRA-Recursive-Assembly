@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\ButtonPusher.cs" />
      <Compile Include="Assets\Scripts\ControllerGrabObject.cs" />
      <Compile Include="Assets\Scripts\Deploy.cs" />
+     <Compile Include="Assets\Scripts\Globals.cs" />
      <Compile Include="Assets\Scripts\LaserPointer.cs" />
      <Compile Include="Assets\Scripts\Metadata.cs" />
      <Compile Include="Assets\Scripts\PDFCitation.cs" />
