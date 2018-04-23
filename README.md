@@ -18,7 +18,7 @@ __Note__: _The release build already has an asset preloaded. As our client wants
 
 ## Demo Video
 <video height="240" width="320">
-  <source src="https://github.com/SCCapstone/Beautiful-Open-Ended-Interior-Graphics/blob/master/BOEING/Demo/Videos/BoeingDemoRC1.mp4" type="video/mp4">
+  <source src="" type="video/mp4">
 </video>
 
 <a href="">Demo Video (Need to add the youtube link)</a>
