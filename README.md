@@ -1,25 +1,54 @@
-# Beautiful Open-Ended INterior Graphics
+# Beautiful Open-Ended Interior Graphics
 
-## Testing
+<a href="">About Us (Does Not Work Yet)</a>
 
-### Summary
+## About Our App
 
-We have conducted a unit test in our Snowman Demo.  This test script test to make sure that any object that we say is pickupable, is actually pickupable.  To do this, the object must meet two requirements:
-  1. The object must have a 'RigidBody'.  This is a Unity requirement for movable objects. To [read Unity's 'RigidBody' Documentation](https://docs.unity3d.com/ScriptReference/Rigidbody.html), please click the link.
-  2. The object must also have a tag that reads 'Pickupable'.  This is a requirement made by our team in order to make the other scripts play nicely.
-  
-[Our testing code](https://github.com/SCCapstone/Beautiful-Open-Ended-Interior-Graphics/blob/master/Snowman/Snowman%20Demo/Assets/Scripts/Editor/PickUpTest.cs) can be accessed by following this link.
+The purpose of our project was not to create a full blown application, but instead to develop scripts for our client. The scripts are to aid in the training of assembly personel on how to put together assemblies without having access to the actual part from the company's suppliers. The functionality that we have deleloped so far consists of the following:
+  1. Drag and drop asset importing into Unity
+  2. A Unity extension to help with the ordering of parts as well as the addition of metadata to individual parts of an assembly
+  3. A "ghost" of the asset to be assebled so the user can see where the parts should go
+  4. Highlighting of the next ordered part and it's location on the ghost when it is picked up
+  5. Snapping a part to its final location when within a user specified distance from its ghost
+  6. The ability to reset the scene
+  7. Automatic assembly of the parts based off the order specified
+  8. A display to show part information when holding an item
 
-### Running Tests
+__NOTE__: The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality.
 
-To run our test, you can follow these steps:
-  1. Clone the latest repo.
-  1. Open the 'Snowman Demo' project in Unity.
-  1. Click on the 'Window' tab, and then the 'Test Runner' button.  This will open Unity's built in unit tester using the 'NUnit' testing framework.
-  1. Under the 'Edit Mode' tab, you should see the 'Snowman Demo' field as well as the 'Assembly-CSharp-Editor.dll' field underneath.  Keep twirling down the triangles on the left until you see 'GameObjectCanBePickedUp'.  Double-Click it to run the test.  This make take a little bit of time, depending on your computer's hardware.  After it is finished, you should see green check marks by the tests that passed.
-  
-You can also run the test by running the following command in your terminal/command prompt
+## How to Use
 
-```cmd
-Unity.exe -runTests -projectPath <PATH_TO_YOUR_PROJECT> -testResults <PATH_TO_SAVE>\results.xml -testPlatform editmode
-```
+### Controls
+The main controls are as follows:
+
+* Trigger: Used to pick up objects. Releasing the trigger will drop the object from the users hand. If the object is close enough to its final location, the object will snap in place.
+
+* Grip: Brings up Interactable UI. Each of the 4 blocks have their function written above them. Releasing the grip while the controller is inside the blocks will activate them.
+
+* Touchpad: Clicking the touchpad and aiming at a teleportable surface (i.e. the floor) will spawn a reticle at that location. Releasing the touchpad will teleport the user to that location.
+
+### Using the Package Release
+
+As stated above, the release only displays the functionality and does not allow for the importing of assets. Upon running the executable, the user is placed within the VR environment with the preloaded asset. The user can then freely navigate around the area with teleportation and body movement given sufficient room space.
+
+The user can then proceed assemble the parts manually or choose to autoassemble the parts. The parts will snap into place when released in a close proximity to the final location of the part that is indicated by the blue highlighted ghost. At any point while holding a part, the user may look at the display that is in the room to view the information attached to that part.
+
+Upon finishing an assembly, the user can then choose to either reset the scene, reset and then autobuild, or exit. These options are accessed by holding down the grip buttons and then moving the controller into the desired option and releasing the grip. The exit functionality quits the entire application.
+
+### Importing and Building
+
+In order to use the Unity extension included, the .zip file must be downloaded, unpacked and open up the project folder in the Unity editor.
+
+At this point, add the desired .fbx object to the `/assets/` folder of the Unity project. Then move the desired assembly into the game environment end ensure it is within the play area. Click on the assembly and navigate to the `Window` and then `Annotate Object Metadata`.
+
+In the new window, set the entire assembly as root. Either generate the assembly order through automatic generation which orders them based on their order in the list or manually create the order by adding `order: x;` to each tag where x is a number specifying the order it should be assembled in.
+
+__Note:__ _Multiple parts may share the same order number, this allows them to be assembled interchangably and the next part will now highlight until all parts of that order level have been placed._
+
+Any other metadata desired to be attached to the part (e.g. length, width, height, material, reference information) can be added by providing a another meta data entry such as `length: 52;`. This information will be displayed on the in game screen when the part is held.
+
+Once satisfied with the tags and ordering, the simulation can be started by pressing the play button in the Unity editor. From this point onward, the process is the same as if the the executable was run.
+
+The Annotate Object Metadata windows also allows for all of the tags to easily be cleared by clicking on `Clear All Tags`. If an individual part is selected, it can be determined if the part is next in the build sequence by clicking `Check If This Item Is Next`.
+
+__Note:__ _Individual parts of an assembly can be modified in this window as well by selecting on the object while the window is still up or by opening the window while the part is currently selected_
