@@ -8,13 +8,20 @@ The purpose of our project was not to create a full blown application, but inste
   1. Drag and drop asset importing into Unity
   2. A Unity extension to help with the ordering of parts as well as the addition of metadata to individual parts of an assembly
   3. A "ghost" of the asset to be assebled so the user can see where the parts should go
-  4. Highlighting of the next ordered part and it's location on the ghost when it is picked up
+  4. Highlighting of the next ordered part and its location on the ghost when it is picked up
   5. Snapping a part to its final location when within a user specified distance from its ghost
   6. The ability to reset the scene
   7. Automatic assembly of the parts based off the order specified
   8. A display to show part information when holding an item
 
-__NOTE__: The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality.
+__Note__: _The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality._
+
+## Demo Video
+<video height="240" width="320">
+  <source src="https://github.com/SCCapstone/Beautiful-Open-Ended-Interior-Graphics/blob/master/BOEING/Demo/Videos/BoeingDemoRC1.mp4" type="video/mp4">
+</video>
+
+<a href="">Demo Video (Need to add the youtube link)</a>
 
 ## How to Use
 
