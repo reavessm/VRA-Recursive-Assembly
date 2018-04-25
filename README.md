@@ -1,6 +1,4 @@
-# Beautiful Open-Ended INterior Graphics
-
-## About Our App
+# About Our App
 
 The purpose of our project was not to create a full blown application, but instead to develop scripts for our client. The scripts are to aid in the training of assembly personel on how to put together assemblies without having access to the actual part from the company's suppliers. The functionality that we have deleloped so far consists of the following:
   1. Drag and drop asset importing into Unity
