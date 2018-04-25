@@ -14,6 +14,8 @@ public class Deploy : MonoBehaviour {
 	private Transform parts_pile;
 	private Transform ghost;
     private Bounds bounds;
+	private float timeleft = 5.0f;
+	private bool timer = true;
 
     private Vector3 center = Vector3.zero;
 
@@ -39,9 +41,9 @@ public class Deploy : MonoBehaviour {
             element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 			element.gameObject.GetComponent<Rigidbody>().mass = 100;
             //element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
-            element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            element.gameObject.GetComponent<Rigidbody>().isKinematic = false;
 			element.gameObject.GetComponent<MeshCollider>().convex = true;
-			element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+			//element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
             center += element.gameObject.GetComponent<Renderer>().bounds.center;
 		}
         center /= parts_pile.transform.childCount; // center is average center of parts pile
@@ -57,6 +59,20 @@ public class Deploy : MonoBehaviour {
         Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
         Vector3 templocation = center + parts_pile.transform.position;
         table.transform.localPosition = new Vector3(-templocation.x, -tableHeight/2f, templocation.z);
+
+		foreach (Transform part in table.transform) {
+			part.gameObject.AddComponent<Rigidbody>();
+			part.gameObject.GetComponent<Rigidbody>().mass = 100000;
+			part.gameObject.GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
+			part.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+			part.gameObject.AddComponent<BoxCollider>();
+			part.gameObject.GetComponent<BoxCollider>().enabled = true;
+		}
+
+		foreach (Transform element in parts_pile.transform) {
+			element.gameObject.GetComponent<Rigidbody>().useGravity = true;
+		}
+
         //ghost = Instantiate(temp, new Vector3(0,0,0), Quaternion.identity);
         ghost = Instantiate(temp, null, true);		
 		ghost.gameObject.transform.position = (OriginalLocation + PartsOffset + GhostOffset);
@@ -85,6 +101,16 @@ public class Deploy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		Debug.Log(timeleft);
+		if (timer) {
+			timeleft -= Time.deltaTime;
+		}
+		if (timeleft <= 0) {
+			timer = false;
+			foreach (Transform element in parts_pile.transform) {
+				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+			}
+		}
 	}
 }
