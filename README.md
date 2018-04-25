@@ -1,4 +1,4 @@
-# Beautiful Open-Ended Interior Graphics
+# Beautiful Open-Ended INterior Graphics
 
 ## About Our App
 
@@ -13,8 +13,6 @@ The purpose of our project was not to create a full blown application, but inste
   8. A display to show part information when holding an item
 
 __Note__: _The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality._
-
-## Demo Video
 
 
 ## How to Use
