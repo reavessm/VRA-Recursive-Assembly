@@ -1,33 +1,6 @@
----
-title: About the App
-permalink: /AboutApp/
----
-
-[About Us](/Beautiful-Open-Ended-Interior-Graphics/AboutUs/ "About Us")
-
-# About Our App
-## Purpose
-The purpose of our project was not to create a full blown application, but instead to develop scripts for our client. The scripts are to aid in the training of assembly personel on how to put together assemblies without having access to the actual part from the company's suppliers. The functionality that we have deleloped so far consists of the following:
-  1. Drag and drop asset importing into Unity
-  2. A Unity extension to help with the ordering of parts as well as the addition of metadata to individual parts of an assembly
-  3. A "ghost" of the asset to be assebled so the user can see where the parts should go
-  4. Highlighting of the next ordered part and its location on the ghost when it is picked up
-  5. Snapping a part to its final location when within a user specified distance from its ghost
-  6. The ability to reset the scene
-  7. Automatic assembly of the parts based off the order specified
-  8. A display to show part information when holding an item
-
-__Note__: _The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality._
-
-## Demo Video
-
-{% include youtubePlayer.html id="cPOwxgW4fTU" %}
-
-[View on YouTube](https://www.youtube.com/watch?v=cPOwxgW4fTU "View on YouTube")
-
 ## How to Use
-### Controls
 
+### Controls
 The main controls are as follows:
 
 * Trigger: Used to pick up objects. Releasing the trigger will drop the object from the users hand. If the object is close enough to its final location, the object will snap in place.
@@ -39,20 +12,16 @@ The main controls are as follows:
 ### Using the Package Release
 
 As stated above, the release only displays the functionality and does not allow for the importing of assets. Upon running the executable, the user is placed within the VR environment with the preloaded asset. The user can then freely navigate around the area with teleportation and body movement given sufficient room space.
-![AssemblyAndGhost](/Screenshots/AssemblyAndGhost.png){:class="img-responsive"}
 
 The user can then proceed assemble the parts manually or choose to autoassemble the parts. The parts will snap into place when released in a close proximity to the final location of the part that is indicated by the blue highlighted ghost. At any point while holding a part, the user may look at the display that is in the room to view the information attached to that part.
-![PartDescription](/Screenshots/PartDescription.png){:class="img-responsive"}
 
 Upon finishing an assembly, the user can then choose to either reset the scene, reset and then autobuild, or exit. These options are accessed by holding down the grip buttons and then moving the controller into the desired option and releasing the grip. The exit functionality quits the entire application.
-![GripMenu](/Screenshots/GripMenu.png){:class="img-responsive"}
 
 ### Importing and Building
 
 In order to use the Unity extension included, the .zip file must be downloaded, unpacked and open up the project folder in the Unity editor.
 
 At this point, add the desired .fbx object to the `/assets/` folder of the Unity project. Then move the desired assembly into the game environment end ensure it is within the play area. Click on the assembly and navigate to the `Window` and then `Annotate Object Metadata`.
-![AnnotateObjectMetadata](/Screenshots/AnnotateObjectMetadata.png){:class="img-responsive"}
 
 In the new window, set the entire assembly as root. Either generate the assembly order through automatic generation which orders them based on their order in the list or manually create the order by adding `order: x;` to each tag where x is a number specifying the order it should be assembled in.
 
