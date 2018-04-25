@@ -1,5 +1,6 @@
 # About Our App
 
+## Purpose
 The purpose of our project was not to create a full blown application, but instead to develop scripts for our client. The scripts are to aid in the training of assembly personel on how to put together assemblies without having access to the actual part from the company's suppliers. The functionality that we have deleloped so far consists of the following:
   1. Drag and drop asset importing into Unity
   2. A Unity extension to help with the ordering of parts as well as the addition of metadata to individual parts of an assembly
@@ -12,9 +13,7 @@ The purpose of our project was not to create a full blown application, but inste
 
 __Note__: _The release build already has an asset preloaded. As our client wants scripts to add to their existing platform, there is not a good way to capture the entire goal of our project as a simple release. Cloning our repository and running Unity in Editor mode will allow full functionality._
 
-
 ## How to Use
-
 ### Controls
 The main controls are as follows:
 
@@ -25,7 +24,6 @@ The main controls are as follows:
 * Touchpad: Clicking the touchpad and aiming at a teleportable surface (i.e. the floor) will spawn a reticle at that location. Releasing the touchpad will teleport the user to that location.
 
 ### Using the Package Release
-
 As stated above, the release only displays the functionality and does not allow for the importing of assets. Upon running the executable, the user is placed within the VR environment with the preloaded asset. The user can then freely navigate around the area with teleportation and body movement given sufficient room space.
 
 The user can then proceed assemble the parts manually or choose to autoassemble the parts. The parts will snap into place when released in a close proximity to the final location of the part that is indicated by the blue highlighted ghost. At any point while holding a part, the user may look at the display that is in the room to view the information attached to that part.
@@ -33,7 +31,6 @@ The user can then proceed assemble the parts manually or choose to autoassemble 
 Upon finishing an assembly, the user can then choose to either reset the scene, reset and then autobuild, or exit. These options are accessed by holding down the grip buttons and then moving the controller into the desired option and releasing the grip. The exit functionality quits the entire application.
 
 ### Importing and Building
-
 In order to use the Unity extension included, the .zip file must be downloaded, unpacked and open up the project folder in the Unity editor.
 
 At this point, add the desired .fbx object to the `/assets/` folder of the Unity project. Then move the desired assembly into the game environment end ensure it is within the play area. Click on the assembly and navigate to the `Window` and then `Annotate Object Metadata`.
