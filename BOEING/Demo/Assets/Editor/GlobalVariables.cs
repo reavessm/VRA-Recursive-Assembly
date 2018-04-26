@@ -8,11 +8,18 @@ using UnityEditor.IMGUI.Controls;
 public class GlobalVariables : EditorWindow {
 
   public static float ghostOffset_ = 10f;
+  public static float partsOffset_ = 10f;
 
 	[MenuItem ("Window/Set Global Variables")]
-	public static void ShowWindow() {
+  static void Init() 
+  {
+    // Get existing open window or if none, make a new one
+    GlobalVariables variables = (GlobalVariables)EditorWindow.GetWindow(typeof(GlobalVariables));
+    variables.Show();
+  }
+/*	public static void ShowWindow() {
 		EditorWindow.GetWindow(typeof(AnnotationWindow), true, "Set Global Variables");
-	}
+	} */
 
 	/// <summary>
 	/// OnGUI is called for rendering and handling GUI events.
@@ -20,9 +27,13 @@ public class GlobalVariables : EditorWindow {
 	/// </summary>
 	void OnGUI()
 	{
-		GUILayout.Label("Base Settings", EditorStyles.boldLable);
+    // Labels
+    // Like h1 in html/markdown
+		GUILayout.Label("Base Settings", EditorStyles.boldLabel);
 
-    ghostOffset_ = EditorGUILayout.Slider("Slider", ghostOffset_, 0, 20);
+    // Actual data
+    partsOffset_ = EditorGUILayout.Slider("Parts Offset", partsOffset_, 0, 20);
+    ghostOffset_ = EditorGUILayout.Slider("Ghost Offset", ghostOffset_, 0, 20);
 	}
 
 }
