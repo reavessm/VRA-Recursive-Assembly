@@ -91,6 +91,7 @@ public class UINew : MonoBehaviour
             UI.SetActive(true);
             UI.transform.position = trackedObj.transform.position;
             UI.transform.rotation = Quaternion.Euler(0f, trackedObj.transform.rotation.eulerAngles.y, 0f);
+            sceneDirector.setAutoAssemble(false);
             //UI.transform.Rotate(new Vector3(0f, trackedObj.transform.rotation.y, 0f));		
         }
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
@@ -117,6 +118,7 @@ public class UINew : MonoBehaviour
             }
             UI.SetActive(false);
         }
+        sceneDirector.setAutoAssemble(true);
         sceneDirector.SlurpToGhost();
 
         // Rotate UI Blocks

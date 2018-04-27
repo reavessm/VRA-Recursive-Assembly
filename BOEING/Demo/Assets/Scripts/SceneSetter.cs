@@ -42,6 +42,10 @@ public class SceneSetter : MonoBehaviour {
         }
     }
 
+    public void setAutoAssemble(bool val)
+    {
+        this.autoassemble = val;
+    }
 
     private void Awake()
     {
