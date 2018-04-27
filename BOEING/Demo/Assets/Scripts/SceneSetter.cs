@@ -198,7 +198,7 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
         Debug.Log(snappingObject.transform.position);
-        //Destroy(snappingObject.GetComponent<Rigidbody>());
+        snappingObject.GetComponent<Rigidbody>().isKinematic = true;
         snappingObject.tag = "Untagged";
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.GetComponent<Metadata>().setBuilt(true);
