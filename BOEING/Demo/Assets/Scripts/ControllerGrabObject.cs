@@ -151,16 +151,17 @@ public class ControllerGrabObject : MonoBehaviour
             //sceneDirector.UnHighlightGhost(objectInHand);
         }
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
-        Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
-        Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
+        textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
+        //Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
+        //Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
 
     }
 
     private FixedJoint AddFixedJoint()
     {
         FixedJoint fx = gameObject.AddComponent<FixedJoint>();
-        fx.breakForce = 20000;
-        fx.breakTorque = 20000;
+        fx.breakForce = Mathf.Infinity;
+        fx.breakTorque = Mathf.Infinity;
         return fx;
     }
 
@@ -168,18 +169,18 @@ public class ControllerGrabObject : MonoBehaviour
     {
         if (!sceneDirector.brokenMode)
         {
-            objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            objectInHand.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sceneDirector.ColorNext();
             objectRigidbody.isKinematic = true;
-            objectInHand = null;
+            //objectInHand = null;
             if (textbox == null)
             {
-                Debug.Log("textbox is null");
+                //Debug.Log("textbox is null");
             }
             else
             {
                 textbox.text = defaultObjInfo;
-                Debug.Log(defaultObjInfo);
+                //Debug.Log(defaultObjInfo);
             }
         }
     }
@@ -190,17 +191,17 @@ public class ControllerGrabObject : MonoBehaviour
         {
             try
             {
-                Debug.Log("Entering Release Try/Catch");
+                //Debug.Log("Entering Release Try/Catch");
                 GetComponent<FixedJoint>().connectedBody = null;
                 Destroy(GetComponent<FixedJoint>());
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true;
-                Debug.Log("Starting Ghost Key Retrieval");
+                //Debug.Log("Starting Ghost Key Retrieval");
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
-                Debug.Log("Got Past SceneSetter");
+                //Debug.Log("Got Past SceneSetter");
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
-                Debug.Log(realDistance);
+                //Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 if (realDistance < snapDistance)
                 {
@@ -210,12 +211,12 @@ public class ControllerGrabObject : MonoBehaviour
                 {
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
-                Debug.Log("Ending Release");
+                //Debug.Log("Ending Release");
                 sceneDirector.ColorNext();
             }
             catch (KeyNotFoundException e)
             {
-                Debug.Log("Object In Hand Not Configured -- Release: " + e.Message);
+                //Debug.Log("Object In Hand Not Configured -- Release: " + e.Message);
             }
         }
 

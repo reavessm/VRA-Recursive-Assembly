@@ -51,13 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\NonConvexMeshCollider\NonConvexMeshCollider.cs" />
      <Compile Include="Assets\Scripts\ButtonPusher.cs" />
      <Compile Include="Assets\Scripts\ControllerGrabObject.cs" />
      <Compile Include="Assets\Scripts\Deploy.cs" />
      <Compile Include="Assets\Scripts\Globals.cs" />
      <Compile Include="Assets\Scripts\LaserPointer.cs" />
      <Compile Include="Assets\Scripts\Metadata.cs" />
+     <Compile Include="Assets\Scripts\PartStopper.cs" />
      <Compile Include="Assets\Scripts\PDFCitation.cs" />
      <Compile Include="Assets\Scripts\Reloader.cs" />
      <Compile Include="Assets\Scripts\SceneSetter.cs" />
@@ -431,7 +431,6 @@
      <None Include="Assets\VRTK\Scripts\Internal\Shaders\VRTK_OutlineBasic.shader" />
      <None Include="Assets\VRTK\Scripts\Internal\Shaders\AdaptiveQualityDebugVisualization.shader" />
      <None Include="Assets\Materials\GlowShader.shader" />
-     <None Include="Assets\NonConvexMeshCollider\ReadMe.txt" />
      <None Include="Assets\Materials\Jiggly Bubble Free\readme_Jiggly_Bubble_Free.txt" />
      <None Include="Assets\Resources\demo.xml" />
      <None Include="Assets\Materials\Jiggly Bubble Free\Shaders\Particle Alpha Blended Cubemap.shader" />

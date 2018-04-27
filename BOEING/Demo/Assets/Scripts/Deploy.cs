@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Deploy : MonoBehaviour {
 	public Vector3 PartsOffset;
@@ -16,101 +17,114 @@ public class Deploy : MonoBehaviour {
     private Bounds bounds;
 	private float timeleft = 5.0f;
 	private bool timer = true;
+	public bool gravityMode = false;
+	public bool separation = false;
 
     private Vector3 center = Vector3.zero;
 
 	// Use this for initialization
 	void Start () {
-        DeployPrefab = gameObject.transform;
-        OriginalLocation = DeployPrefab.position;
-        tableLocation = table.transform.position;
-        Transform temp = DeployPrefab;
-		Destroy(temp.GetComponent<Deploy>());
-		//parts_pile = Instantiate(temp, new Vector3(0, 0, 0), Quaternion.identity);
-		parts_pile = Instantiate(temp, null, true);
-        parts_pile.gameObject.transform.position = (OriginalLocation + PartsOffset);
-        parts_pile.gameObject.transform.position += new Vector3(0, tableHeight, 0);
-        parts_pile.name = temp.name + "_parts";
-		foreach (Transform element in parts_pile.transform) {
-			element.name = element.name;
-			element.gameObject.tag = "Pickupable";
-			element.gameObject.AddComponent<Rigidbody>();
-			if (element.gameObject.GetComponent<MeshCollider>() == null) {
-				element.gameObject.AddComponent<MeshCollider>();
+		try {
+			DeployPrefab = gameObject.transform;
+			OriginalLocation = DeployPrefab.position;
+			tableLocation = table.transform.position;
+			Transform temp = DeployPrefab;
+			Destroy(temp.GetComponent<Deploy>());
+			//parts_pile = Instantiate(temp, new Vector3(0, 0, 0), Quaternion.identity);
+			parts_pile = Instantiate(temp, null, true);
+			parts_pile.gameObject.transform.position = (OriginalLocation + PartsOffset);
+			parts_pile.gameObject.transform.position += new Vector3(0, tableHeight, 0);
+			parts_pile.name = temp.name + "_parts";
+			foreach (Transform element in parts_pile.transform) {
+				element.name = element.name;
+				element.gameObject.tag = "Pickupable";
+				element.gameObject.AddComponent<Rigidbody>();
+				if (element.gameObject.GetComponent<MeshCollider>() == null) {
+					element.gameObject.AddComponent<MeshCollider>();
+				}
+				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				element.gameObject.GetComponent<Rigidbody>().mass = 100;
+				//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
+				element.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+				element.gameObject.GetComponent<MeshCollider>().convex = true;
+				element.gameObject.AddComponent<PartStopper>();
+				center += element.gameObject.GetComponent<Renderer>().bounds.center;
 			}
-            element.gameObject.GetComponent<Rigidbody>().useGravity = false;
-			element.gameObject.GetComponent<Rigidbody>().mass = 100;
-            //element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
-            element.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-			element.gameObject.GetComponent<MeshCollider>().convex = true;
-			//element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-            center += element.gameObject.GetComponent<Renderer>().bounds.center;
-		}
-        center /= parts_pile.transform.childCount; // center is average center of parts pile
-        bounds = new Bounds(center, Vector3.zero);
+			center /= parts_pile.transform.childCount; // center is average center of parts pile
+			bounds = new Bounds(center, Vector3.zero);
 
-        foreach (Transform element in parts_pile.transform)
-        {
-            bounds.Encapsulate(element.gameObject.GetComponent<Renderer>().bounds);
-        }
-
-        table.transform.localScale = new Vector3(bounds.size.x,tableHeight,bounds.size.z);
-        Debug.Log("Center: " + center + " Parts Pos " + parts_pile.transform.position);
-        Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
-        Vector3 templocation = center + parts_pile.transform.position;
-        table.transform.localPosition = new Vector3(-templocation.x, -tableHeight/2f, templocation.z);
-
-		foreach (Transform part in table.transform) {
-			part.gameObject.AddComponent<Rigidbody>();
-			part.gameObject.GetComponent<Rigidbody>().mass = 100000;
-			part.gameObject.GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
-			part.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-			part.gameObject.AddComponent<BoxCollider>();
-			part.gameObject.GetComponent<BoxCollider>().enabled = true;
-		}
-
-		foreach (Transform element in parts_pile.transform) {
-			element.gameObject.GetComponent<Rigidbody>().useGravity = true;
-		}
-
-        //ghost = Instantiate(temp, new Vector3(0,0,0), Quaternion.identity);
-        ghost = Instantiate(temp, null, true);		
-		ghost.gameObject.transform.position = (OriginalLocation + PartsOffset + GhostOffset);
-		ghost.name = temp.name + "_ghost";
-		foreach (Transform element in ghost.transform) {
-			element.name = element.name + " ghost";
-			element.gameObject.tag = "Ghost";
-			element.gameObject.AddComponent<Rigidbody>();
-			if (element.gameObject.GetComponent<MeshCollider>() == null) {
-				element.gameObject.AddComponent<MeshCollider>();
+			foreach (Transform element in parts_pile.transform)
+			{
+				bounds.Encapsulate(element.gameObject.GetComponent<Renderer>().bounds);
 			}
-			element.gameObject.GetComponent<Rigidbody>().useGravity = false;
-			element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-			//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
-			element.gameObject.GetComponent<Renderer>().material = Resources.Load("Ghost") as Material;
-			Destroy(element.gameObject.GetComponent<MeshCollider>());
-			element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-		}
-		Destroy(DeployPrefab.gameObject);
 
-        foreach (Transform element in parts_pile.transform)
-        {
-            element.gameObject.GetComponent<Rigidbody>().useGravity = true;
-        }
+			table.transform.localScale = new Vector3(bounds.size.x,tableHeight,bounds.size.z);
+			//Debug.Log("Center: " + center + " Parts Pos " + parts_pile.transform.position);
+			//Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
+			Vector3 templocation = center + parts_pile.transform.position;
+			table.transform.localPosition = new Vector3(-templocation.x, -tableHeight/2f, templocation.z);
+
+			foreach (Transform part in table.transform) {
+				part.gameObject.AddComponent<Rigidbody>();
+				part.gameObject.GetComponent<Rigidbody>().mass = 1000;
+				part.gameObject.GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
+				part.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+				part.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+				part.gameObject.AddComponent<BoxCollider>();
+				part.gameObject.GetComponent<BoxCollider>().enabled = true;
+			}
+
+			if (gravityMode) {
+				foreach (Transform element in parts_pile.transform) {
+					Debug.Log("Gravity Mode On!");
+					element.gameObject.GetComponent<Rigidbody>().useGravity = true;
+					element.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F));
+					element.gameObject.GetComponent<Rigidbody>().drag = 50;
+				}
+			}
+			else {
+				foreach (Transform element in parts_pile.transform) {
+					Debug.Log("Gravity Mode Off!");
+					element.gameObject.GetComponent<Rigidbody>().useGravity = false;
+					element.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+					element.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
+					if (!separation) {
+						element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+						element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+					}
+					element.gameObject.GetComponent<Rigidbody>().drag = 30;
+				}
+			}
+
+
+			//ghost = Instantiate(temp, new Vector3(0,0,0), Quaternion.identity);
+			ghost = Instantiate(temp, null, true);		
+			ghost.gameObject.transform.position = (OriginalLocation + PartsOffset + GhostOffset);
+			ghost.name = temp.name + "_ghost";
+			foreach (Transform element in ghost.transform) {
+				element.name = element.name + " ghost";
+				element.gameObject.tag = "Ghost";
+				element.gameObject.AddComponent<Rigidbody>();
+				if (element.gameObject.GetComponent<MeshCollider>() == null) {
+					element.gameObject.AddComponent<MeshCollider>();
+				}
+				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
+				element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+				//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
+				element.gameObject.GetComponent<Renderer>().material = Resources.Load("Ghost") as Material;
+				Destroy(element.gameObject.GetComponent<MeshCollider>());
+				element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+			}
+			Destroy(DeployPrefab.gameObject);
+		}
+		catch (MissingComponentException e) {
+			Debug.LogError("The Deploy script is attached to invalid model: . Please use an appropriate model and try again. The error is as follows:\n" + e.Message);
+			UnityEditor.EditorApplication.isPlaying = false;
+			Application.Quit();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log(timeleft);
-		if (timer) {
-			timeleft -= Time.deltaTime;
-		}
-		if (timeleft <= 0) {
-			timer = false;
-			foreach (Transform element in parts_pile.transform) {
-				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
-				element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-			}
-		}
 	}
 }

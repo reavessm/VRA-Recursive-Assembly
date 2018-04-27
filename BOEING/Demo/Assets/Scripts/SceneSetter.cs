@@ -33,11 +33,11 @@ public class SceneSetter : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        Debug.Log("This is Start()");
+        //Debug.Log("This is Start()");
         CustomInit();
         if (autoAssembleOnStart)
         {
-            Debug.Log("autoAssembleOnStart is true");
+            //Debug.Log("autoAssembleOnStart is true");
             this.AutoAssemble();
         }
     }
@@ -49,7 +49,7 @@ public class SceneSetter : MonoBehaviour {
 
     void OnEnable()
     {
-        Debug.Log("OnEnable called");
+        //Debug.Log("OnEnable called");
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -60,7 +60,7 @@ public class SceneSetter : MonoBehaviour {
 
     public void CustomInit()
     {
-        Debug.Log("Starting CustomInit()");
+        //Debug.Log("Starting CustomInit()");
         autoassemble = false;
         index_autoassemble = 0;
         gameObjectDictionary = new SortedDictionary<string, GameObject>();
@@ -97,8 +97,12 @@ public class SceneSetter : MonoBehaviour {
             }
             catch (NullReferenceException e)
             {
-                obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
-                obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+                try {
+                    obj.Value.GetComponent<Renderer>().material.color = nextToPickUp;
+                    obj.Value.GetComponentInChildren<Renderer>().material.color = nextToPickUp;
+                }
+                catch {
+                }
             }
         }
     }
@@ -110,19 +114,23 @@ public class SceneSetter : MonoBehaviour {
         {
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Pickupable"))
             {
-                Debug.Log(obj.name);
+                //Debug.Log(obj.name);
                 gameObjectDictionary.Add(obj.name, obj.gameObject);
             }
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Ghost"))
             {
-                Debug.Log(obj.name);
+                //Debug.Log(obj.name);
                 ghostObjectDictionary.Add(obj.name, obj.gameObject);
             }
             if (defaultMaterialDictionary.Count == 0)
             {
                 foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
                 {
-                    defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                    try {
+                        defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                    }
+                    catch {
+                    }
                 }
             }
             currentMaterialDictionary = defaultMaterialDictionary; 
@@ -156,13 +164,13 @@ public class SceneSetter : MonoBehaviour {
     public void AutoAssemble()
     {
         rebuildGODB();
-        Debug.Log("AutoAssemble Trigger: " + index_autoassemble + " " + autoassemble);
+        //Debug.Log("AutoAssemble Trigger: " + index_autoassemble + " " + autoassemble);
         autoassemble_model = new KeyValuePair<string, GameObject>[gameObjectDictionary.Count];
         autoassemble_target = new KeyValuePair<string, GameObject>[ghostObjectDictionary.Count];
         int count = 0;
         foreach (KeyValuePair<string, GameObject> element in gameObjectDictionary)
         {
-            Debug.Log(element);
+            //Debug.Log(element);
             autoassemble_model[count++] = element;
         }
         count = 0;
@@ -177,7 +185,7 @@ public class SceneSetter : MonoBehaviour {
     public void HighlightGhost(GameObject obj)
     {
         GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
-        Debug.Log("Highlight " + obj.name + " with " + ghost.name);
+        //Debug.Log("Highlight " + obj.name + " with " + ghost.name);
         ghost.GetComponent<Renderer>().material.color = ghostColorHi;
         ghost.GetComponentInChildren<Renderer>().material.color = ghostColorHi;
     }
@@ -193,11 +201,11 @@ public class SceneSetter : MonoBehaviour {
         snappingObject.GetComponent<MeshCollider>().convex = false;
         snappingObject.transform.SetPositionAndRotation(locationObject.transform.position,
             locationObject.transform.rotation);
-        Debug.Log(snappingObject.ToString());
+        //Debug.Log(snappingObject.ToString());
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
-        Debug.Log(snappingObject.transform.position);
+        //Debug.Log(snappingObject.transform.position);
         snappingObject.GetComponent<Rigidbody>().isKinematic = true;
         snappingObject.tag = "Untagged";
         snappingObject.GetComponent<MeshCollider>().convex = false;
@@ -267,12 +275,12 @@ public class SceneSetter : MonoBehaviour {
               }
          } */
          
-        Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
-        Debug.Log("Slurp me");
+        //Debug.Log("SlurpToGhost Trigger: " + index + " " + autoassemble + " " + autoassemble_model.Length);
+        //Debug.Log("Slurp me");
         GameObject snappingObject = autoassemble_model[index].Value;
         GameObject locationObject = autoassemble_target[index].Value;
-        Debug.Log(snappingObject.name);
-        Debug.Log(locationObject.name);
+        //Debug.Log(snappingObject.name);
+        //Debug.Log(locationObject.name);
         snappingObject.GetComponent<Metadata>().setBuilt(true);
         if (moveThrough)
         {
@@ -289,21 +297,21 @@ public class SceneSetter : MonoBehaviour {
         UnHighlightGhost(snappingObject);
         snappingObject.GetComponent<Renderer>().material.color = setInPlace;
         snappingObject.GetComponentInChildren<Renderer>().material.color = setInPlace;
-        Debug.Log(snappingObject.transform.position);
+        //Debug.Log(snappingObject.transform.position);
         ColorNext();
         snappingObject.GetComponent<MeshCollider>().convex = false;
         if (snappingObject.transform.position == locationObject.transform.position)
         {
-            Debug.Log(index_autoassemble);
-            Debug.Log(gameObjectDictionary.Count);
-            Debug.Log(ghostObjectDictionary.Count);
+            //Debug.Log(index_autoassemble);
+            //Debug.Log(gameObjectDictionary.Count);
+            //Debug.Log(ghostObjectDictionary.Count);
             if (index_autoassemble < (gameObjectDictionary.Count - 1))
             {
                 index_autoassemble++;
             }
             else
             {
-                Debug.Log("Done?");
+                //Debug.Log("Done?");
                 autoassemble = false;
             }
         } 
@@ -312,13 +320,13 @@ public class SceneSetter : MonoBehaviour {
     public void UnHighlightGhost(GameObject obj)
     {
         GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
-        Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
+        //Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
         ghost.GetComponent<Renderer>().material.color = Color.clear;
         foreach (KeyValuePair<string, Color> col in defaultMaterialDictionary)
         {
-            Debug.Log("Default Material Dictionary: " + col.Key + " || " + col.Value);
+            //Debug.Log("Default Material Dictionary: " + col.Key + " || " + col.Value);
         }
-        Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
+        //Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
         obj.GetComponent<Renderer>().material.color = defaultMaterialDictionary[obj.name];
         obj.GetComponentInChildren<Renderer>().material.color = defaultMaterialDictionary[obj.name];
     }
@@ -354,9 +362,9 @@ public class SceneSetter : MonoBehaviour {
     public GameObject FindGhost(GameObject obj)
     {
         string ghostName = obj.name + " ghost";
-        Debug.Log("Find Ghost: " + ghostName);
+        //Debug.Log("Find Ghost: " + ghostName);
         GameObject ghost = ghostObjectDictionary[ghostName];
-        Debug.Log("FindGhost Part 2: " + ghost.name);
+        //Debug.Log("FindGhost Part 2: " + ghost.name);
         return ghost;
     }
 
