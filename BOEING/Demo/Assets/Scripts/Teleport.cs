@@ -27,6 +27,8 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
+    private GlobalVariables variables;
+
     public Transform cameraRigTransform;
     public Transform headTransform; // The camera rig's head
     public Vector3 teleportReticleOffset; // Offset from the floor for the reticle to avoid z-fighting
@@ -54,6 +56,8 @@ public class Teleport : MonoBehaviour
     void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
+        variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
+        teleportMask = variables.GetTeleportMask();
     }
 
     //new
