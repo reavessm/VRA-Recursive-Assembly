@@ -45,40 +45,48 @@ public class ControllerGrabObject : MonoBehaviour
     private Text textbox;
     public String defaultObjInfo = "Pick up an object to see it's info here.";
 
-
+    // Get Vive Controllers
     private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
 
+    // Runs before 'Start'
     void Awake()
     {
+	// Get Global Variables
         variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
         ghostMaterial = variables.GetGhostMaterial();
         snapDistance = variables.GetSnappingDistance();
         sceneDirector = variables.GetSceneSetter();
         defaultObjInfo = variables.GetDefaultInfo();
         GUICanvas = variables.GetGUICanvas();
-        if (sceneDirector == null)
+        
+	// Ensure we have a Scene Setter
+	if (sceneDirector == null)
         {
             sceneDirector = new SceneSetter();
         }
+
+	// Prepare to do some work
         sceneDirector.CustomInit();
         CustomInit();
     }
 
     private void CustomInit()
     {
-        DontDestroyOnLoad(GUICanvas);
-        trackedObj = GetComponent<SteamVR_TrackedObject>();
-        textbox = GUICanvas.transform.Find("Tool Space").transform.Find("Object Info").GetComponent<Text>();
-        GUICanvas.gameObject.SetActive(true);
-        guiDistance = 0.2f; // can change this if needed
+	// Miscellaneous initializations
+        DontDestroyOnLoad(GUICanvas); // Keep Canvas on Reload
+        trackedObj = GetComponent<SteamVR_TrackedObject>(); // Reference Controllers
+        textbox = GUICanvas.transform.Find("Tool Space").transform.Find("Object Info").GetComponent<Text>(); // Find the textbox to display part info
+        GUICanvas.gameObject.SetActive(true); // Make sure part info canvas is visible
+        //guiDistance = 0.2f; // can change this if needed // not needed???
 
-        Debug.Log("Scene Ready!");
+        Debug.Log("Scene Ready!"); // what's one more debug log?
     }
 
 
+    // These next scripts are how Unity and VRTK handle registering when the controller is moved into an object, and when the trigger is pressed
     public void OnTriggerEnter(Collider other)
     {
         SetCollidingObject(other);
@@ -109,30 +117,37 @@ public class ControllerGrabObject : MonoBehaviour
         collidingObject = col.gameObject;
     }
 
+    // Runs once per frame
     void Update()
     {
+	// If you press the trigger
         if (Controller.GetHairTriggerDown())
         {
             try
             {
+		// Check if that object is allowed to be picked up
                 if (collidingObject.tag == "Pickupable")
                 {
                     GrabObject();
                 }
             }
+	    // What to do if you don't have anything close enough to be picked up
             catch (NullReferenceException e)
             {
                 Debug.Log("Object In Hand Not Configured -- Pickup");
             }
         }
 
+	// If you release trigger
         if (Controller.GetHairTriggerUp())
         {
+	    // If you have something in your hand
             if (objectInHand)
             {
                 ReleaseObject();
             }
         }
+	// Snap/slerp the object in your hand to where it needs to go
         sceneDirector.SlurpToGhost();
     }
 
@@ -140,30 +155,39 @@ public class ControllerGrabObject : MonoBehaviour
     // Ex if 1, 2, 3, 4 have been built, make sure you can't remove 1, 2, 3.
     private void GrabObject()
     {
+	// Unity and VRTK methods for attaching an object to the controller
         objectInHand = collidingObject;
         objectRigidbody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         collidingObject = null;
         var joint = AddFixedJoint();
-        objectRigidbody.isKinematic = false; // was false
+        objectRigidbody.isKinematic = false; // Object in hand doesn't obey physics
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
         objectInHand.GetComponent<Rigidbody>().useGravity = false;
+
+	// Check to see if the object is next in order and not built
         if (objectInHand.GetComponent<Metadata>().isNextInOrder() && !objectInHand.GetComponent<Metadata>().getBuilt())
         {
             sceneDirector.HighlightGhost(objectInHand);
             //objectInHand.GetComponent<Metadata>().setBuilt(true);
         }
+
+	// Delete?
         if (objectInHand.GetComponent<Metadata>().getBuilt())
         {
             //sceneDirector.UnHighlightGhost(objectInHand);
         }
+
+	// Change text in parts info canvas to show metadata
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
-        textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
+        //textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint(); // why is this done twice??
         //Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
         //Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
 
     }
 
+    // Unity and VRTK methods to specify how hard to attach part to controller
+    // We chose infinity but feel free to change it if you so desire
     private FixedJoint AddFixedJoint()
     {
         FixedJoint fx = gameObject.AddComponent<FixedJoint>();
@@ -172,14 +196,18 @@ public class ControllerGrabObject : MonoBehaviour
         return fx;
     }
 
+    // Stop Objects from flying away if they break out of your hand
     void OnJointBreak(float breakForce)
     {
+	// Broken mode allows them to fly away for funsies
+	// Configurable in 'GlobalVariables'
         if (!sceneDirector.brokenMode)
         {
             objectInHand.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sceneDirector.ColorNext();
             objectRigidbody.isKinematic = true;
             //objectInHand = null;
+	    /*
             if (textbox == null)
             {
                 //Debug.Log("textbox is null");
@@ -188,30 +216,46 @@ public class ControllerGrabObject : MonoBehaviour
             {
                 textbox.text = defaultObjInfo;
                 //Debug.Log(defaultObjInfo);
-            }
+            }*/
+	    
+	    // Change text back to default if you are not holding an object
+	    if (textbox != null) {
+		textbox.text = defaultObjInfo;
+	    }
         }
     }
 
+    // Specify what happens when you let go of an object
     private void ReleaseObject()
     {
+	// Only has FixedJoint when the part is attached to controller
         if (GetComponent<FixedJoint>())
         {
             try
             {
                 //Debug.Log("Entering Release Try/Catch");
+		// Delete FixedJoint
+		// Doubles as a way to make sure you can't release a released object
                 GetComponent<FixedJoint>().connectedBody = null;
+		// Probably redundant, but we wan tot make sure  its released
                 Destroy(GetComponent<FixedJoint>());
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
-                objectRigidbody.isKinematic = true;
+                objectRigidbody.isKinematic = true; // Give it back it's physics
                 //Debug.Log("Starting Ghost Key Retrieval");
+		// FindGhost returns the 'ghost' object corresponding to the object in hand
+		// The 'ghost' is the final destination
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
                 //Debug.Log("Got Past SceneSetter");
+		// Find distance between part and destination
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
                 //Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                if (realDistance < snapDistance)
+                
+		// If object is close enough to snap
+		if (realDistance < snapDistance)
                 {
+		    // Snap it to place
                     sceneDirector.SnapToGhost(objectInHand, ghostObject);
                 }
                 else
@@ -219,6 +263,7 @@ public class ControllerGrabObject : MonoBehaviour
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
                 //Debug.Log("Ending Release");
+		// Color the next item in order to be red
                 sceneDirector.ColorNext();
             }
             catch (KeyNotFoundException e)
@@ -227,8 +272,10 @@ public class ControllerGrabObject : MonoBehaviour
             }
         }
 
+	// This is where we actually release the object
         objectInHand = null;
 
+/*
         if (textbox == null)
         {
             Debug.Log("textbox is null");
@@ -237,8 +284,10 @@ public class ControllerGrabObject : MonoBehaviour
         {
             textbox.text = defaultObjInfo;
             Debug.Log(defaultObjInfo);
-        }
-
-
+        } */
+	// Revert the textbox to default text after releasing
+	if (textbox != null) {
+	    textbox.text = defaultObjInfo;
+	}
     }
 }
