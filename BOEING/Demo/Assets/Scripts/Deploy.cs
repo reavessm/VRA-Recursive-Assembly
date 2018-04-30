@@ -4,10 +4,11 @@ using UnityEngine;
 using System;
 
 public class Deploy : MonoBehaviour {
-	public Vector3 PartsOffset;
-	public Vector3 GhostOffset;
-    public GameObject table;
-    public float tableHeight = 0.25f;
+	private GlobalVariables variables;
+	private Vector3 PartsOffset;
+	private Vector3 GhostOffset;
+    private GameObject table;
+    private float tableHeight = 0.25f;
 
     private Vector3 OriginalLocation;
     private Vector3 tableLocation;
@@ -21,6 +22,16 @@ public class Deploy : MonoBehaviour {
 	public bool separation = false;
 
     private Vector3 center = Vector3.zero;
+
+	void Awake(){
+		variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
+		GhostOffset = variables.GetGhostOffset();
+		PartsOffset = variables.GetPartsOffset();
+		table = variables.GetTable();
+		tableHeight = variables.GetTableHeight();
+		gravityMode = variables.GetGravityMode();
+		separation = variables.GetSeperation();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -61,8 +72,7 @@ public class Deploy : MonoBehaviour {
 			table.transform.localScale = new Vector3(bounds.size.x,tableHeight,bounds.size.z);
 			//Debug.Log("Center: " + center + " Parts Pos " + parts_pile.transform.position);
 			//Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
-			Vector3 templocation = center + parts_pile.transform.position;
-			table.transform.localPosition = new Vector3(-templocation.x, -tableHeight/2f, templocation.z);
+			table.transform.localPosition = new Vector3(center.x, -tableHeight/2f, center.z);
 
 			foreach (Transform part in table.transform) {
 				part.gameObject.AddComponent<Rigidbody>();

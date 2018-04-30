@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class UINew : MonoBehaviour
 {
-
-    public GameObject UIPrefab;
+    private GlobalVariables variables;
+    private GameObject UIPrefab;
 
     private SteamVR_TrackedObject trackedObj;
     private GameObject UI;
@@ -24,6 +24,8 @@ public class UINew : MonoBehaviour
 
     void Awake()
     {
+        variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
+        UIPrefab = variables.GetUIBlocks();
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         if (sceneDirector == null)
         {

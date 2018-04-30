@@ -29,10 +29,11 @@ using UnityEngine.UI;
 
 public class ControllerGrabObject : MonoBehaviour
 {
-    public Material ghostMaterial;
-    public float snapDistance;
-    public Canvas GUICanvas;
-    public SceneSetter sceneDirector;
+    private GlobalVariables variables;
+    private Material ghostMaterial;
+    private float snapDistance;
+    private Canvas GUICanvas;
+    private SceneSetter sceneDirector;
     private SteamVR_TrackedObject trackedObj;
 
     private GameObject collidingObject;
@@ -52,6 +53,12 @@ public class ControllerGrabObject : MonoBehaviour
 
     void Awake()
     {
+        variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
+        ghostMaterial = variables.GetGhostMaterial();
+        snapDistance = variables.GetSnappingDistance();
+        sceneDirector = variables.GetSceneSetter();
+        defaultObjInfo = variables.GetDefaultInfo();
+        GUICanvas = variables.GetGUICanvas();
         if (sceneDirector == null)
         {
             sceneDirector = new SceneSetter();

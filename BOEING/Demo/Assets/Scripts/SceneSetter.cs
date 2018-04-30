@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneSetter : MonoBehaviour {
 
+    private GlobalVariables variables;
     private SortedDictionary<string, GameObject> gameObjectDictionary;
     private SortedDictionary<string, GameObject> ghostObjectDictionary;
     private SortedDictionary<string, Color> defaultMaterialDictionary;
@@ -23,9 +24,10 @@ public class SceneSetter : MonoBehaviour {
     private Color nextToPickUp = new Color32(255, 0, 0, 0);
     private Color setInPlace = new Color32(0, 255, 0, 0);
     private bool doneInit = false;
+    private bool doneColor = false;
 
-    public bool moveThrough = false;
-    public int speedScale = 10;
+    private bool moveThrough = false;
+    private int speedScale = 10;
     public bool brokenMode = false;
     //static Canvas GUICanvas;
 
@@ -45,6 +47,14 @@ public class SceneSetter : MonoBehaviour {
 
     private void Awake()
     {
+        variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
+        speedScale = variables.GetAutoAssSpeed();
+        brokenMode = variables.GetBrokenMode();
+        moveThrough = variables.GetMoveThrough();
+        ghostColor = variables.GetGhostColor();
+        ghostColorHi = variables.GetGhostColorHi();
+        nextToPickUp = variables.GetNextToPickUpColor();
+        setInPlace = variables.GetSetInPlaceColor();
     }
 
     void OnEnable()
@@ -55,7 +65,7 @@ public class SceneSetter : MonoBehaviour {
 
     private void OnSceneLoaded(Scene aScene, LoadSceneMode aMode)
     {
-        ColorNext();
+        //ColorNext();
     }
 
     public void CustomInit()
@@ -80,6 +90,7 @@ public class SceneSetter : MonoBehaviour {
         {
             return;
         }
+        doneColor = true;
         //rebuildGODB();
         foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
         {
@@ -104,6 +115,9 @@ public class SceneSetter : MonoBehaviour {
                 catch {
                 }
             }
+            catch (KeyNotFoundException e) {
+
+            }
         }
     }
 
@@ -127,7 +141,12 @@ public class SceneSetter : MonoBehaviour {
                 foreach (KeyValuePair<string, GameObject> obj in gameObjectDictionary)
                 {
                     try {
-                        defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                        if (!doneColor) {
+                            defaultMaterialDictionary.Add(obj.Value.name, obj.Value.GetComponent<Renderer>().material.color);
+                        }
+                        else {
+                            defaultMaterialDictionary.Add(obj.Value.name, variables.GetStandardMaterial().color);
+                        }
                     }
                     catch {
                     }
@@ -320,15 +339,20 @@ public class SceneSetter : MonoBehaviour {
     public void UnHighlightGhost(GameObject obj)
     {
         GameObject ghost = ghostObjectDictionary[obj.name + " ghost"];
-        //Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
-        ghost.GetComponent<Renderer>().material.color = Color.clear;
-        foreach (KeyValuePair<string, Color> col in defaultMaterialDictionary)
-        {
-            //Debug.Log("Default Material Dictionary: " + col.Key + " || " + col.Value);
+        try {  
+            //Debug.Log("UnHighlight " + obj.name + " with " + ghost.name);
+            ghost.GetComponent<Renderer>().material.color = Color.clear;
+            //Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
+            obj.GetComponent<Renderer>().material.color = variables.GetStandardMaterial().color;
+            obj.GetComponentInChildren<Renderer>().material.color = variables.GetStandardMaterial().color;
         }
-        //Debug.Log("Default Material: " + defaultMaterialDictionary[obj.name].ToString());
-        obj.GetComponent<Renderer>().material.color = defaultMaterialDictionary[obj.name];
-        obj.GetComponentInChildren<Renderer>().material.color = defaultMaterialDictionary[obj.name];
+        catch (KeyNotFoundException e) {
+            obj.GetComponent<Renderer>().material.color = variables.GetStandardMaterial().color;
+            obj.GetComponentInChildren<Renderer>().material.color = variables.GetStandardMaterial().color;
+        }
+        catch (NullReferenceException e) {
+            
+        }
     }
 
     public void UnsnapToGhost(GameObject snappingObject, GameObject locationObject)
