@@ -112,6 +112,7 @@ public class Deploy : MonoBehaviour {
 				// Set 'gravityMode' to false in 'GlobalVariables' to disable
 				foreach (Transform element in parts_pile.transform) 
 				{
+					Debug.Log("Gravity Mode On!");
 					element.gameObject.GetComponent<Rigidbody>().useGravity = true;
 					element.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F));
 					element.gameObject.GetComponent<Rigidbody>().drag = 50;
@@ -124,6 +125,7 @@ public class Deploy : MonoBehaviour {
 			{ 
 				foreach (Transform element in parts_pile.transform) 
 				{
+					Debug.Log("Gravity Mode Off!");
 					element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 					element.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
 					element.gameObject.GetComponent<Rigidbody>().freezeRotation = true;

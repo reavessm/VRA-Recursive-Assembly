@@ -41,6 +41,7 @@ public class Metadata : MonoBehaviour {
 			}
 		}
 		catch (Exception e) {
+			Debug.Log(e.Message);
 		}
 	}
 

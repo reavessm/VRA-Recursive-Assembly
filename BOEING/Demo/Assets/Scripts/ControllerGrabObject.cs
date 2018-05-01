@@ -81,6 +81,8 @@ public class ControllerGrabObject : MonoBehaviour
         textbox = GUICanvas.transform.Find("Tool Space").transform.Find("Object Info").GetComponent<Text>(); // Find the textbox to display part info
         GUICanvas.gameObject.SetActive(true); // Make sure part info canvas is visible
         //guiDistance = 0.2f; // can change this if needed // not needed???
+
+        Debug.Log("Scene Ready!"); // what's one more debug log?
     }
 
 
@@ -230,8 +232,8 @@ public class ControllerGrabObject : MonoBehaviour
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 
-				// If object is close enough to snap
-				if (realDistance < snapDistance)
+		// If object is close enough to snap
+		if (realDistance < snapDistance)
                 {
 		            // Snap it to place
                     sceneDirector.SnapToGhost(objectInHand, ghostObject);
@@ -240,6 +242,7 @@ public class ControllerGrabObject : MonoBehaviour
                 {
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
+                //Debug.Log("Ending Release");
 		        // Color the next item in order to be red
                 sceneDirector.ColorNext();
             }
