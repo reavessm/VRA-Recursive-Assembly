@@ -180,10 +180,6 @@ public class ControllerGrabObject : MonoBehaviour
 
 	// Change text in parts info canvas to show metadata
         textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint();
-        //textbox.text = objectInHand.GetComponent<Metadata>().PrettyPrint(); // why is this done twice??
-        //Debug.Log(objectInHand.GetComponent<Metadata>().PrettyPrint());
-        //Debug.Log("Is object built? " + objectInHand.GetComponent<Metadata>().getBuilt());
-
     }
 
     // Unity and VRTK methods to specify how hard to attach part to controller
@@ -206,22 +202,11 @@ public class ControllerGrabObject : MonoBehaviour
             objectInHand.GetComponent<Rigidbody>().velocity = Vector3.zero;
             sceneDirector.ColorNext();
             objectRigidbody.isKinematic = true;
-            //objectInHand = null;
-	    /*
-            if (textbox == null)
-            {
-                //Debug.Log("textbox is null");
-            }
-            else
-            {
-                textbox.text = defaultObjInfo;
-                //Debug.Log(defaultObjInfo);
-            }*/
 	    
-	    // Change text back to default if you are not holding an object
-	    if (textbox != null) {
-		textbox.text = defaultObjInfo;
-	    }
+	       // Change text back to default if you are not holding an object
+	       if (textbox != null) {
+		       textbox.text = defaultObjInfo;
+	       }
         }
     }
 
@@ -233,29 +218,25 @@ public class ControllerGrabObject : MonoBehaviour
         {
             try
             {
-                //Debug.Log("Entering Release Try/Catch");
-		// Delete FixedJoint
-		// Doubles as a way to make sure you can't release a released object
+		        // Delete FixedJoint
+		        // Doubles as a way to make sure you can't release a released object
                 GetComponent<FixedJoint>().connectedBody = null;
-		// Probably redundant, but we wan tot make sure  its released
+		        // Probably redundant, but we wan tot make sure  its released
                 Destroy(GetComponent<FixedJoint>());
 
                 objectRigidbody = objectInHand.GetComponent<Rigidbody>();
                 objectRigidbody.isKinematic = true; // Give it back it's physics
-                //Debug.Log("Starting Ghost Key Retrieval");
-		// FindGhost returns the 'ghost' object corresponding to the object in hand
-		// The 'ghost' is the final destination
+        		// FindGhost returns the 'ghost' object corresponding to the object in hand
+		        // The 'ghost' is the final destination
                 GameObject ghostObject = sceneDirector.FindGhost(objectInHand);
-                //Debug.Log("Got Past SceneSetter");
-		// Find distance between part and destination
+		        // Find distance between part and destination
                 float realDistance = Vector3.Distance(objectInHand.transform.position, ghostObject.transform.position);
-                //Debug.Log(realDistance);
                 objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                 
 		// If object is close enough to snap
 		if (realDistance < snapDistance)
                 {
-		    // Snap it to place
+		            // Snap it to place
                     sceneDirector.SnapToGhost(objectInHand, ghostObject);
                 }
                 else
@@ -263,7 +244,7 @@ public class ControllerGrabObject : MonoBehaviour
                     sceneDirector.UnsnapToGhost(objectInHand, ghostObject);
                 }
                 //Debug.Log("Ending Release");
-		// Color the next item in order to be red
+		        // Color the next item in order to be red
                 sceneDirector.ColorNext();
             }
             catch (KeyNotFoundException e)
@@ -272,22 +253,12 @@ public class ControllerGrabObject : MonoBehaviour
             }
         }
 
-	// This is where we actually release the object
+	    // This is where we actually release the object
         objectInHand = null;
 
-/*
-        if (textbox == null)
-        {
-            Debug.Log("textbox is null");
-        }
-        else
-        {
-            textbox.text = defaultObjInfo;
-            Debug.Log(defaultObjInfo);
-        } */
-	// Revert the textbox to default text after releasing
-	if (textbox != null) {
-	    textbox.text = defaultObjInfo;
-	}
+	    // Revert the textbox to default text after releasing
+	    if (textbox != null) {
+	        textbox.text = defaultObjInfo;
+	    }
     }
 }
