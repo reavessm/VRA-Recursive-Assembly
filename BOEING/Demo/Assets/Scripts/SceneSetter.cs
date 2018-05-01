@@ -75,8 +75,11 @@ public class SceneSetter : MonoBehaviour {
         ColorNext(); // initialize colors
     }
 
+<<<<<<< HEAD
     // Initialize the colors for the model and ghost
     // Adds functionality to change 
+=======
+>>>>>>> a753a4486bb0320e0b94444fb3a8312ebac5266c
     public void ColorNext()
     {
         if (!doneInit)
