@@ -156,7 +156,6 @@ public class Deploy : MonoBehaviour {
 				}
 				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 				element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-				//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
 				element.gameObject.GetComponent<Renderer>().material = Resources.Load("Ghost") as Material;
 				Destroy(element.gameObject.GetComponent<MeshCollider>());
 				element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
