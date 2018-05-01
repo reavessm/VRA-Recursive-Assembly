@@ -28,25 +28,21 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     private GlobalVariables variables;
+    private GameObject laser; // A reference to the spawned laser
+    private Transform laserTransform; // The transform component of the laser for ease of use
+    private GameObject reticle; // A reference to an instance of the reticle
+    private Transform teleportReticleTransform; // Stores a reference to the teleport reticle transform for ease of use
+    private SteamVR_TrackedObject trackedObj;
+    private Vector3 hitPoint; // Point where the raycast hits
+    private bool shouldTeleport; // True if there's a valid teleport target
 
     public Transform cameraRigTransform;
     public Transform headTransform; // The camera rig's head
     public Vector3 teleportReticleOffset; // Offset from the floor for the reticle to avoid z-fighting
     public LayerMask teleportMask; // Mask to filter out areas where teleports are allowed
 	public int range;
-
-    private SteamVR_TrackedObject trackedObj;
-
     public GameObject laserPrefab; // The laser prefab
-    private GameObject laser; // A reference to the spawned laser
-    private Transform laserTransform; // The transform component of the laser for ease of use
-
     public GameObject teleportReticlePrefab; // Stores a reference to the teleport reticle prefab.
-    private GameObject reticle; // A reference to an instance of the reticle
-    private Transform teleportReticleTransform; // Stores a reference to the teleport reticle transform for ease of use
-
-    private Vector3 hitPoint; // Point where the raycast hits
-    private bool shouldTeleport; // True if there's a valid teleport target
 
     private SteamVR_Controller.Device Controller
     {
@@ -60,7 +56,8 @@ public class Teleport : MonoBehaviour
         teleportMask = variables.GetTeleportMask();
     }
 
-    //new
+    // Called after Awake()
+    // Initializes necessary variable for teleport functionality
     void Start()
     {
         laser = Instantiate(laserPrefab);
@@ -69,6 +66,8 @@ public class Teleport : MonoBehaviour
         teleportReticleTransform = reticle.transform;
     }
 
+    // Called every frame
+    // Capture collider for raycast and update values
     void Update()
     {
         // Is the touchpad held down?
@@ -80,18 +79,20 @@ public class Teleport : MonoBehaviour
             if (Physics.Raycast(trackedObj.transform.position, transform.forward, out hit, 100, teleportMask) && hit.collider != null)
             {
                 hitPoint = hit.point;
-                //ShowLaser(hit);
 
                 //Show teleport reticle
                 if ((hitPoint.x < trackedObj.transform.position.x + range) 
 					&& (hitPoint.x > trackedObj.transform.position.x - range) 
 					&& (hitPoint.z < trackedObj.transform.position.z + range) 
 					&& (hitPoint.z > trackedObj.transform.position.z - range) 
-                    && (hit.collider.tag.Equals("CanTeleport"))) { 
+                    && (hit.collider.tag.Equals("CanTeleport"))) 
+                { 
                     reticle.SetActive(true);
                     teleportReticleTransform.position = hitPoint + teleportReticleOffset;
 					shouldTeleport = true;
-                } else {
+                } 
+                else 
+                {
 					laser.SetActive(false);
                     reticle.SetActive(false);
                     shouldTeleport = false;
@@ -99,9 +100,9 @@ public class Teleport : MonoBehaviour
 
             }
         }
-        else// Touchpad not held down, hide laser & teleport reticle
+        // Touchpad not held down, hide laser & teleport reticle
+        else
         {
-            //laser.SetActive(false);
             reticle.SetActive(false);
         }
 
@@ -112,28 +113,20 @@ public class Teleport : MonoBehaviour
         }
     }
 
-	/*
-	private void ShowLaser(RaycastHit hit)
-    {
-        //laser.SetActive(true); //Show the laser
-        laserTransform.position = Vector3.Lerp(trackedObj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
-        laserTransform.LookAt(hitPoint); // Rotate laser facing the hit point
-        laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y,
-			hit.distance); // Scale laser so it fits exactly between the controller & the hit point
-    }
-	*/
-
+    // Set necessary flags to reflect state of teleport
     private void DoTeleport()
     {
-        shouldTeleport = false; // Teleport in progress, no need to do it again until the next touchpad release
-        reticle.SetActive(false); // Hide reticle
-        Vector3 difference = cameraRigTransform.position - headTransform.position; // Calculate the difference between the center of the virtual room & the player's head
-        difference.y = 0; // Don't change the final position's y position, it should always be equal to that of the hit point
+        // Teleport in progress, no need to do it again until the next touchpad release
+        shouldTeleport = false;
+        // Hide reticle
+        reticle.SetActive(false); 
+        // Calculate the difference between the center of the virtual room & the player's head
+        Vector3 difference = cameraRigTransform.position - headTransform.position; 
+        // Don't change the final position's y position, it should always be equal to that of the hit point
+        difference.y = 0; 
 
-        cameraRigTransform.position = hitPoint + difference; // Change the camera rig position to where the the teleport reticle was. Also add the difference so the new virtual room position is relative to the player position, allowing the player's new position to be exactly where they pointed. (see illustration)
+        // Change the camera rig position to where the the teleport reticle was. 
+        // Also add the difference so the new virtual room position is relative to the player position, allowing the player's new position to be exactly where they pointed. (see illustration)
+        cameraRigTransform.position = hitPoint + difference; 
     }
 }
-
-
-
-//don't reference this file until we get it figured out -ian

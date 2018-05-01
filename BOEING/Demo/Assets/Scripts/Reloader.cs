@@ -15,11 +15,13 @@ public class Reloader : MonoBehaviour {
 		
 	}
     
+    // Restart the scene 
     public void Reloadify()
     {
         sceneDirector.Restart();
     }
 
+    // Restart then autoassemble scene
     public void ReloadifyAndAutoassemble()
     {
         Invoke("sceneDirector.AutoAssemble()", 5);
