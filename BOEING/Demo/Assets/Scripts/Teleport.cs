@@ -54,6 +54,7 @@ public class Teleport : MonoBehaviour
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
         teleportMask = variables.GetTeleportMask();
+        range = variables.GetTeleportRange();
     }
 
     // Called after Awake()

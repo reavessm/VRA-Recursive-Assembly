@@ -18,6 +18,7 @@ public class GlobalVariables : MonoBehaviour {
   public Material standardMaterial_;
   public int snappingDistance_ = 15;
   public int autoAssembleSpeed_ = 10;
+  public int teleportRange_ = 10;
   public bool gravityMode = false;
   public bool seperation = true;
   public bool brokenMode_;
@@ -76,6 +77,10 @@ public class GlobalVariables : MonoBehaviour {
   // Gets the auto assembly speed for the Scene Setter script
   public int GetAutoAssSpeed(){
     return autoAssembleSpeed_;
+  }
+  // Gets the teleport range for the Teleport script
+  public int GetTeleportRange(){
+    return teleportRange_;
   }
   // Gets if gravity is turned on for the Deploy script
   public bool GetGravityMode(){
