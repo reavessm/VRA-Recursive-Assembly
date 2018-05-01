@@ -75,6 +75,12 @@ public class SceneSetter : MonoBehaviour {
         ColorNext(); // initialize colors
     }
 
+    // Is required but is not used
+    private void OnSceneLoaded(Scene aScene, LoadSceneMode aMode)
+    {
+        //ColorNext();
+    }
+
     // Initialize the colors for the model and ghost
     // Adds functionality to change 
     public void ColorNext()
