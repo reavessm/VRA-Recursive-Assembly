@@ -9,24 +9,24 @@ public class Metadata : MonoBehaviour {
 	public Boolean built = false;
 	private SortedDictionary<string, string> kvtags;
 
-	/// <summary>
-	/// Called when the script is loaded or a value is changed in the
-	/// inspector (Called in the editor only).
-	/// </summary>
+	// Called when the script is loaded or a value is changed in the
+	// inspector (Called in the editor only).
 	void OnValidate() {
 		updateTags();
 	}
 
-	/// <summary>
-	/// Start is called on the frame when a script is enabled just before
-	/// any of the Update methods is called the first time.
-	/// </summary>
+	// Start is called on the frame when a script is enabled just before
+	// any of the Update methods is called the first time.
 	void Start()
 	{
 		updateTags();
 		built = false;
 	}
+  
+  // Update is called once per frame
+	void Update () {}
 
+	// Updates the KV tags that have been changed, called in OnValidate
 	private void updateTags() {
 		kvtags = new SortedDictionary<string, string>();
 		try {
@@ -41,10 +41,10 @@ public class Metadata : MonoBehaviour {
 			}
 		}
 		catch (Exception e) {
-			//Debug.Log(e.Message);
 		}
 	}
 
+  // Appends the new tags to the end of the current tags
 	public void appendTags(string tag_append) {
 		foreach (string outer in tag_append.Split(';')) {
 			if (kvtagstring.Length != 0) {
@@ -59,18 +59,23 @@ public class Metadata : MonoBehaviour {
 		updateTags();
 	}
 
+  // Gets the object currently set as the root object
 	public GameObject getRootObject() {
 		return rootObject;
 	}
 
+  // Sets the root object
 	public void setRootObject(GameObject newRootObject) {
 		rootObject = newRootObject;
 	}
 
+  // Sets an object to be built. Called after an object has been snapped into
+	// place
 	public void setBuilt(bool new_truth) {
 		built = new_truth;
 	}
 
+    // Gets if an object has been built yet
 	public Boolean getBuilt() {
 		return built;
 	}
@@ -95,14 +100,12 @@ public class Metadata : MonoBehaviour {
 
 		// Check to see if the root object *has* metadata. If not, the program has been misconfigured.
 		if (rootObject.GetComponent<Metadata>() == null) {
-			Debug.Log("The root object has an improper Metadata initialization, please create Metadata Skeleton and set the root object.", rootObject);
 			return false;
 		}
 
 		// We need to find the starting order number, to handle the multiple assembly case.
 		int startorder;
 		if (rootObject.GetComponent<Metadata>().getOrder() == -1) {
-			Debug.Log("The root object does not have an order. If this is not intentional, check the root object kvtagstring.", rootObject);
 			startorder = 0;
 		}
 		else {
@@ -130,20 +133,24 @@ public class Metadata : MonoBehaviour {
 		return true;
 	}
 
+  // Sets the KV Tags
 	public void setTags(string raw_tag) {
 		kvtagstring = raw_tag;
 		updateTags();
 	}
 
+  // Gets the KV tags, returning the sorted dictionary of keys
 	public SortedDictionary<string, string> getTags() {
 		return kvtags;
 	}
 
+  // Clears all the KV tags in the sorted dictionary
 	public void clearKVTags() {
 		kvtagstring = "";
 		kvtags = new SortedDictionary<string, string>();
 	}
 
+  // Makes the text much more humanly readable
   public string PrettyPrint() {
 		string temp = "";
 
@@ -159,6 +166,7 @@ public class Metadata : MonoBehaviour {
 		return temp;
 	}
 
+  // Creates a human readable version of the kv tags
 	public override string ToString() {
 		string temp = "";
 		foreach (KeyValuePair<string, string> entry in kvtags) {
@@ -167,11 +175,13 @@ public class Metadata : MonoBehaviour {
 		return temp;
 	}
 
+  // Removes the specified KV tag based on its key
 	public void clearKVTag(string key) {
 		kvtags.Remove(key);
 		kvtagstring = ToString();
 	}
 
+  // Gets the value of a KV tag based on its key
 	public string getValueAtTag(string key) {
 		string value = "";
 		if (kvtags.ContainsKey(key)) {
@@ -180,6 +190,7 @@ public class Metadata : MonoBehaviour {
 		return value;
 	}
 
+  // Gets the assembly order of the object
 	public Int32 getOrder() {
 		updateTags();
 		Int32 temp = -1;
@@ -187,10 +198,5 @@ public class Metadata : MonoBehaviour {
 			Int32.TryParse(kvtags["order"], out temp);
 		}
 		return temp;
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 }

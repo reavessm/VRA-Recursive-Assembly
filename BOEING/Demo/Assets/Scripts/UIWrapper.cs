@@ -8,8 +8,10 @@ using UnityEngine.EventSystems;
 public class UIWrapper : MonoBehaviour {
 
 	public Canvas GUICanvas;
-	private bool uiIsUp; // This changes whenever the UI is pulled up
-	private float guiDistance; // how far to place the gui infront of the player
+	// This changes whenever the UI is pulled up
+	private bool uiIsUp;
+	// how far to place the gui infront of the player
+	private float guiDistance;
 	private SteamVR_TrackedObject trackedObj;
     private GameObject laser;
 	public GameObject laserPrefab;
@@ -21,35 +23,28 @@ public class UIWrapper : MonoBehaviour {
 	// for keeping track of individual hands
 	int handIndex;
 	int guiIndex;
-	//SteamVR_Controller.Device rightHandController;
-	//SteamVR_Controller.Device leftHandController;
 
-	
-	private Transform laserTransform; // The transform component of the laser for ease of use
-	private Vector3 hitPoint; // Point where the raycast hits
-
-
+    // The transform component of the laser for ease of use
+	private Transform laserTransform;
+	// Point where the raycast hits
+	private Vector3 hitPoint;
 
 	private SteamVR_Controller.Device Controller
 	{
 		get { return SteamVR_Controller.Input((int)trackedObj.index); }
 	}
 
+    // Ran when the script starts
 	void Awake () {
 		trackedObj = GetComponent<SteamVR_TrackedObject>();
-		//laser = ScriptableObject.CreateInstance<LaserPointer>();
         GUICanvas.gameObject.SetActive(false); // Hides UI initially
 		guiDistance = 2f; // can change this if needed
 		uiIsUp = false; // This changes whenever the UI is pulled up
-        // to keep track of individual hands
-        handIndex = (int)trackedObj.index;
+        handIndex = (int)trackedObj.index; // to keep track of individual hands
         guiIndex = 0;
-        /*foreach (GameObject obj in GameObject.FindGameObjectsWithTag("FloatingButton"))
-        {
-            buttonList.Add(obj.name, obj.GetComponent<Button>());
-        }*/
 	}
 
+    // Ran after Awake()
 	private void Start()
 	{
 		laser = Instantiate(laserPrefab);
@@ -58,9 +53,9 @@ public class UIWrapper : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		// If the grip buttons are pressed down and the UI is not now, display
 		if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
 		{
-			//Debug.Log(gameObject.name + " Grip Press");
 			if (!uiIsUp)
 			{
 				ShowUI();
@@ -105,23 +100,17 @@ public class UIWrapper : MonoBehaviour {
             }
 			
 		}
-
-
-
+        // When the grip buttons are released, hid the UI
 		if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
 		{
-			//Debug.Log(gameObject.name + " Grip Release");
 			HideUI();
-			//laser.hitPoint
 			laser.SetActive(false);
 		}
-
 		uiIsUp = GUICanvas.gameObject.activeSelf;
-
-        
-
     }
 
+    // Was an attempt to make a raycast selected menu
+	// Deprecated
 	void RaycastWorldUI() {
 		Debug.Log("Enter Raycast World UI");
 		PointerEventData pointerData = new PointerEventData(EventSystem.current);
@@ -143,10 +132,10 @@ public class UIWrapper : MonoBehaviour {
 		}
 	}
 
+    // Displays the UI boxes
 	private void ShowUI()
 	{
-		//Debug.Log("Showing UI stuff");
-		//GUICanvas.gameObject.SetActive(true);
+		// Sets the UI to be up and transforms the objects so that it is oriented towards the user
 		uiIsUp = true;
 		GUICanvas.gameObject.transform.position = Camera.main.transform.position + Camera.main.transform.forward * guiDistance; // Transform to be in front of player, i hope...
 		GUICanvas.gameObject.transform.position = new Vector3(GUICanvas.gameObject.transform.position.x, 1.5f, GUICanvas.gameObject.transform.position.z);
@@ -157,22 +146,25 @@ public class UIWrapper : MonoBehaviour {
         Controller.TriggerHapticPulse(1000); // buzz buzz
 	}
 
+    // Hides the UI interface
 	private void HideUI()
 	{
-    if (guiIndex == handIndex) {
-		  //Debug.Log("Hiding UI stuff");
-		  GUICanvas.gameObject.SetActive(false);
-		  uiIsUp = false;
-      guiIndex = 0;
-      Controller.TriggerHapticPulse(500); // buzz
-    }
+		// If the hand that released the grip button is the one that pressed it, hide it
+    	if (guiIndex == handIndex) {
+			GUICanvas.gameObject.SetActive(false);
+			uiIsUp = false;
+      		guiIndex = 0;
+      		Controller.TriggerHapticPulse(500); // buzz
+    	}
 	}
 
+	// Resets the scene
     private void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+	// Shows the laser and moves it based on where its pointed
 	private void ShowLaser(RaycastHit hit)
 	{
 		laser.SetActive(true); //Show the laser

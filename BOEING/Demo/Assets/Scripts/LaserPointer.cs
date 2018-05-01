@@ -43,14 +43,15 @@ public class LaserPointer : ScriptableObject
 		get { return SteamVR_Controller.Input((int)trackedObj.index); }
 	}
 
-	//new
+	// Called before onAwake()
+	// Initialize laser
 	void Start()
 	{
         laser = Instantiate(laserPrefab);
         laserTransform = laser.transform;
 	}
 
-
+	// Set up raycaster for teleport functionality 
 	public void TurnOn(bool active, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
        
@@ -81,6 +82,7 @@ public class LaserPointer : ScriptableObject
 		}
 	}
 
+	// When trackpad is pressed show the laser and update its position
 	private void ShowLaser(RaycastHit hit, SteamVR_TrackedObject obj, GameObject laserPrefab)
 	{
        
@@ -88,23 +90,31 @@ public class LaserPointer : ScriptableObject
         if (laser == null)
        
         laserTransform = laser.transform;
-		laser.SetActive(true); //Show the laser
-		laserTransform.position = Vector3.Lerp(obj.transform.position, hitPoint, .5f); // Move laser to the middle between the controller and the position the raycast hit
-		laserTransform.LookAt(hitPoint); // Rotate laser facing the hit point
-		laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance); // Scale laser so it fits exactly between the controller & the hit point
-	}
-	public LaserPointer()
-	{
-		
+		//Show the laser
+		laser.SetActive(true);
+		// Move laser to the middle between the controller and the position the raycast hit
+		laserTransform.position = Vector3.Lerp(obj.transform.position, hitPoint, .5f);
+		// Rotate laser facing the hit point
+		laserTransform.LookAt(hitPoint); 
+		// Scale laser so it fits exactly between the controller & the hit point
+		laserTransform.localScale = new Vector3(laserTransform.localScale.x, laserTransform.localScale.y, hit.distance);
 	}
 
+	// Getter for LaserPointer.cs object
     public LaserPointer GetLaserPointer()
     {
         return this;
     }
 
+    // Getter for laser raycaster
     public GameObject GetLaser()
     {
         return this.laser;
     }
+
+    // Required but unused method
+	public LaserPointer()
+	{
+		
+	}
 }

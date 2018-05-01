@@ -2,282 +2,147 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEditor;
-using UnityEditor.IMGUI.Controls;
 
-public class GlobalVariables : MonoBehaviour {//EditorWindow {
+public class GlobalVariables : MonoBehaviour {
 
+  // All the variables that can be set throughout our scripts
   public Vector3 ghostOffset_;
   public Vector3 partsOffset_;
-  public UnityEngine.Object table_;
-  public float tableHeight_ = 0.25f;
-  public int snappingDistance_ = 15;
-  public int autoAssembleSpeed_ = 10;
-  public UnityEngine.Object head_;
-  public UnityEngine.Object leftController_;
-  public UnityEngine.Object rightController_;
-  public UnityEngine.Object UI_;
-  public Material ghost_;
-  public Canvas GUICanvas_;
-  public SceneSetter sceneDirector_;
-  public string DefaultInfo_ = "Pick up an object to see it's info here.";
-  public LayerMask teleportMask_;
-  public UnityEngine.Object laserPrefab_;
-  public bool brokenMode_;
-  public bool moveThrough_;
   public Color ghostColor_ = new Color32(0x00, 0xF2, 0xAC, 0x5D);
   public Color ghostColorHi_ = new Color32(0x00, 0x00, 0xAC, 0xA0);
   public Color nextToPickUp_ = new Color32(255, 0, 0, 0);
   public Color setInPlace_ = new Color32(0, 255, 0, 0);
+  public Material ghost_;
+  public Material standardMaterial_;
+  public int snappingDistance_ = 15;
+  public int autoAssembleSpeed_ = 10;
+  public int teleportRange_ = 10;
   public bool gravityMode = false;
   public bool seperation = true;
-  public Material standardMaterial_;
+  public bool brokenMode_;
+  public bool moveThrough_;
+  public UnityEngine.Object head_;
+  public UnityEngine.Object leftController_;
+  public UnityEngine.Object rightController_;
+  public UnityEngine.Object UI_;
+  public UnityEngine.Object laserPrefab_;
+  public UnityEngine.Object table_;
+  public float tableHeight_ = 0.25f;
+  public SceneSetter sceneDirector_;
+  public LayerMask teleportMask_;
+  public Canvas GUICanvas_;
+  public string DefaultInfo_ = "Pick up an object to see it's info here.";
 
-  void Awake() {
-     // Update Deploy Script
- /*     Deploy.instance.SetPartsOffset(partsOffset_);
-      Deploy.instance.SetGhostOffset(ghostOffset_);
-      Deploy.instance.SetTheTable((GameObject)table_);
-      Deploy.instance.SetTableHeight(tableHeight_);
+  // Following are the getters for each of the global variables
 
-      // Update Controller Grab Script
-      ControllerGrabObject.instance.SetGhostMaterial(ghost_);
-      ControllerGrabObject.instance.SetSnapDistance(snappingDistance_);
-      ControllerGrabObject.instance.SetSceneDirecotr(sceneDirector_);
-      ControllerGrabObject.instance.SetGUICanvs(GUICanvas_);
-      ControllerGrabObject.instance.SetObjectInfo(DefaultInfo_);
-
-      // Update SceneScetter Script
-      SceneSetter.instance.SetMoveThrough(moveThrough_);
-      SceneSetter.instance.SetSpeedScale(autoAssSpeed_);
-      SceneSetter.instance.SetBrokenMode(brokenMode_);
-      SceneSetter.instance.SetGhostColor(ghostColor_);
-      SceneSetter.instance.SetGhostColorHi(ghostColorHi_);
-      SceneSetter.instance.SetSetInPlaceColor(setInPlace_);
-
-      // Update UINew Script
-      UINew.instance.SetUIPrefab((GameObject)UI_);*/
-  }
-
-  public bool GetGravityMode(){
-    return gravityMode;
-  }
-  public bool GetSeperation(){
-    return seperation;
-  }
-  public GameObject GetHead(){
-    return (GameObject)head_;
-  }
-  public GameObject GetLeftController(){
-    return (GameObject)leftController_;
-  }
-  public GameObject GetRightController(){
-    return (GameObject)rightController_;
-  }  
-  public LayerMask GetTeleportMask(){
-    return teleportMask_;
-  }
-  public GameObject GetLaserPrefab(){
-    return (GameObject)laserPrefab_;
-  }
-
-// Deploy Script
+  // Gets the ghost offset for the Deploy script
   public Vector3 GetGhostOffset() {
     return ghostOffset_;
   }
+  // Gets the parts offset for the Deploy script
   public Vector3 GetPartsOffset(){
     return partsOffset_;
   }
-  public GameObject GetTable() {
-    return (GameObject)table_;
-  }
-  public float GetTableHeight(){
-    return tableHeight_;
-  }
-
-// Controller Grab
-  public Material GetGhostMaterial(){
-    return ghost_;
-  }
-  public int GetSnappingDistance() {
-    return snappingDistance_;
-  }
-  public SceneSetter GetSceneSetter(){
-    return sceneDirector_;
-  }
-  public String GetDefaultInfo(){
-    return DefaultInfo_;
-  }
-    public Canvas GetGUICanvas(){
-    return GUICanvas_;
-  }
-
-// Scene Setter
-  public int GetAutoAssSpeed(){
-    return autoAssembleSpeed_;
-  }
-  public bool GetBrokenMode(){
-    return brokenMode_;
-  }
-  public bool GetMoveThrough(){
-    return moveThrough_;
-  }
+  // Gets the color of the ghost object for the Scene Setter script
   public Color GetGhostColor(){
     return ghostColor_;
   }
+  // Gets the highlighted ghost color for the Scene Setter script
   public Color GetGhostColorHi(){
     return ghostColorHi_;
   }
+  // Gets the color for the next object to be picked up for the Scene Setter script
   public Color GetNextToPickUpColor(){
     return nextToPickUp_;
   }
+  // Gets the color for objects that are set in place for the Scene Setter script
   public Color GetSetInPlaceColor(){
     return setInPlace_;
   }
-
+  // Gets the ghost material for the Controller Grab Object script
+  public Material GetGhostMaterial(){
+    return ghost_;
+  }
+  // Gets the standard material for the assembly for the Scene Setter script
+  // Do not break, this is vital
   public Material GetStandardMaterial() {
     return standardMaterial_;
   }
-// UINew
+  // Gets the snapping distance for the Controller Grab Object script
+  public int GetSnappingDistance() {
+    return snappingDistance_;
+  }
+  // Gets the auto assembly speed for the Scene Setter script
+  public int GetAutoAssSpeed(){
+    return autoAssembleSpeed_;
+  }
+  // Gets the teleport range for the Teleport script
+  public int GetTeleportRange(){
+    return teleportRange_;
+  }
+  // Gets if gravity is turned on for the Deploy script
+  public bool GetGravityMode(){
+    return gravityMode;
+  }
+  // Gets if seperation mode is set for Deploy script
+  public bool GetSeperation(){
+    return seperation;
+  }
+  // Gets if broken mode is enabled for the Scene Setter script
+  public bool GetBrokenMode(){
+    return brokenMode_;
+  }
+  // Gets if parts are able to move through each other for the Scene Setter script
+  public bool GetMoveThrough(){
+    return moveThrough_;
+  }
+  // Gets the headset
+  // Deprecated
+  public GameObject GetHead(){
+    return (GameObject)head_;
+  }
+  // Gets the left controller
+  // Deprecated
+  public GameObject GetLeftController(){
+    return (GameObject)leftController_;
+  }
+  // Gets the right controller
+  // Deprecated
+  public GameObject GetRightController(){
+    return (GameObject)rightController_;
+  }
+  // Gets the UI Blocks to be displayed when the user presses the grip buttons 
+  // for the UI New script
   public GameObject GetUIBlocks(){
     return (GameObject)UI_;
   }
-  
-
-
-
-	/*[MenuItem ("Window/Set Global Variables")]
-  [MenuItem ("Example/Popup")] 
-   void Init()
-  {
-    // Get existing open window or if none, make a new one
-    GlobalVariables variables = (GlobalVariables)EditorWindow.GetWindow(typeof(GlobalVariables));
-    variables.minSize = new Vector2(600,600);
-    variables.Show();
-
-  } */
-  
-/*	public  void ShowWindow() {
-		EditorWindow.GetWindow(typeof(AnnotationWindow), true, "Set Global Variables");
-	} */
-
-	/// <summary>
-	/// OnGUI is called for rendering and handling GUI events.
-	/// This function can be called multiple times per frame (one call per event).
-	/// </summary>
-/*	void OnGUI()
-	{
-    // Labels
-    // Like h1 in html/markdown
-		GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-
-    // Actual data
-
-    partsOffset_ = EditorGUILayout.Vector3Field("Parts Offset: ", partsOffset_);
-    ghostOffset_ = EditorGUILayout.Vector3Field("Ghost Offset: ", ghostOffset_);
-
-    EditorGUILayout.Space();
-
-    EditorGUILayout.LabelField("Default text for parts with no info");
-    DefaultInfo_ = EditorGUILayout.TextField("Default Text: ", DefaultInfo_);
-
-    EditorGUILayout.Space();
-
-    snappingDistance_ = (int)EditorGUILayout.Slider("Snapping Distance: ", (float)snappingDistance_, 5, 40);
-    autoAssSpeed_ = (int)EditorGUILayout.Slider("AutoAssembly Speed: ", (float)autoAssSpeed_, 1, 50);
-    tableHeight_ = EditorGUILayout.Slider("Table Height: ", tableHeight_, .001f, .5f);
-
-    EditorGUILayout.Space();
-
-    EditorGUILayout.LabelField("HTC Vive Headset");
-    head_ = EditorGUILayout.ObjectField(head_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("HTC Vive Left Controller");
-    leftController_ = EditorGUILayout.ObjectField(leftController_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("HTC Vive Right Controller");
-    rightController_ = EditorGUILayout.ObjectField(rightController_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("UI Blocks Prefab");
-    UI_ = EditorGUILayout.ObjectField(UI_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("Laser Prefab");
-    laserPrefab_ = EditorGUILayout.ObjectField(laserPrefab_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("Table Prefab");
-    table_ = EditorGUILayout.ObjectField(table_, typeof(GameObject), true);
-
-    EditorGUILayout.LabelField("Ghost Material");
-    ghost_ = (Material)EditorGUILayout.ObjectField(ghost_, typeof(Material), true);
-
-    EditorGUILayout.LabelField("GUI Canvas for Parts Info");
-    GUICanvas_ = (Canvas)EditorGUILayout.ObjectField(GUICanvas_, typeof(Canvas), true);
-
-    EditorGUILayout.LabelField("Scene Setter");
-    sceneDirector_ = (SceneSetter)EditorGUILayout.ObjectField(sceneDirector_, typeof(SceneSetter), true);
-    //teleportMask_ = EditorGUILayout.ObjectField(teleportMask_, typeof(LayerMask), true);
-
-    EditorGUILayout.Space();
-
-    ghostColor_ = EditorGUILayout.ColorField("Ghost Color: ", ghostColor_);
-
-    EditorGUILayout.Space();
-
-    ghostColorHi_ = EditorGUILayout.ColorField("Highlighted Ghost Color: ", ghostColorHi_);
-
-    EditorGUILayout.Space();
-
-
-    nextToPickUp_ = EditorGUILayout.ColorField("Highlight Next To Pick Up: ", nextToPickUp_);
-
-    EditorGUILayout.Space();
-
-
-    setInPlace_ = EditorGUILayout.ColorField("Snapped Color: ", setInPlace_);
-
-    EditorGUILayout.Space();
-
-    EditorGUILayout.LabelField("Allow objects to move through each other");
-    moveThrough_ = EditorGUILayout.Toggle("Move Through: ", moveThrough_);
-
-    EditorGUILayout.LabelField("Allow objects to break out of your hand (Not Recommended)");
-    brokenMode_ = EditorGUILayout.Toggle("Broken Mode", brokenMode_);
-
-    EditorGUILayout.Space();
-
-    string text = "Click Update to update!";
-    EditorGUILayout.LabelField(text);
-
-    if(GUILayout.Button("Update")){
-      if (GUICanvas_ == null) {
-        // show popup
-        text = "GUICanvas Can't be null";
-      }
-      // Update Deploy Script
-      Deploy.instance.SetPartsOffset(partsOffset_);
-      Deploy.instance.SetGhostOffset(ghostOffset_);
-      Deploy.instance.SetTheTable((GameObject)table_);
-      Deploy.instance.SetTableHeight(tableHeight_);
-
-      // Update Controller Grab Script
-      ControllerGrabObject.instance.SetGhostMaterial(ghost_);
-      ControllerGrabObject.instance.SetSnapDistance(snappingDistance_);
-      ControllerGrabObject.instance.SetSceneDirecotr(sceneDirector_);
-      ControllerGrabObject.instance.SetGUICanvs(GUICanvas_);
-      ControllerGrabObject.instance.SetObjectInfo(DefaultInfo_);
-
-      // Update SceneScetter Script
-      SceneSetter.instance.SetMoveThrough(moveThrough_);
-      SceneSetter.instance.SetSpeedScale(autoAssSpeed_);
-      SceneSetter.instance.SetBrokenMode(brokenMode_);
-      SceneSetter.instance.SetGhostColor(ghostColor_);
-      SceneSetter.instance.SetGhostColorHi(ghostColorHi_);
-      SceneSetter.instance.SetSetInPlaceColor(setInPlace_);
-
-      // Update UINew Script
-      UINew.instance.SetUIPrefab((GameObject)UI_);
-    } 
-
-	}*/
-
+  // Gets the laser prefav
+  // Has been deprecated
+  public GameObject GetLaserPrefab(){
+    return (GameObject)laserPrefab_;
+  }
+  // Gets the table object for the Deploy script
+  public GameObject GetTable() {
+    return (GameObject)table_;
+  }
+  // Gets the table height for the Deploy script
+  public float GetTableHeight(){
+    return tableHeight_;
+  }
+  // Gets the scene setter for the Controller Grab Object script
+  public SceneSetter GetSceneSetter(){
+    return sceneDirector_;
+  }
+  // Gets the teleport mask for Teleport script
+  public LayerMask GetTeleportMask(){
+    return teleportMask_;
+  }
+  // Gets the GUI canvas for the Controller Grab Object script
+    public Canvas GetGUICanvas(){
+    return GUICanvas_;
+  }
+  // Gets the default GUI info for the Controller Grab Object script
+  public String GetDefaultInfo(){
+    return DefaultInfo_;
+  }
 }
