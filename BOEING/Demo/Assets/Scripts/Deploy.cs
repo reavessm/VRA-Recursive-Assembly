@@ -7,9 +7,8 @@ public class Deploy : MonoBehaviour {
 	private GlobalVariables variables;
 	private Vector3 PartsOffset;
 	private Vector3 GhostOffset;
-    	private GameObject table;
+    private GameObject table;
 	private float tableHeight = 0.25f;
-
 	private Vector3 OriginalLocation;
 	private Vector3 tableLocation;
 	private Transform DeployPrefab;
@@ -18,14 +17,15 @@ public class Deploy : MonoBehaviour {
 	private Bounds bounds;
 	private float timeleft = 5.0f;
 	private bool timer = true;
+	private Vector3 center = Vector3.zero;
+
 	public bool gravityMode = false;
 	public bool separation = false;
 
-	private Vector3 center = Vector3.zero;
 
 	// Runs before 'Start'
 	// Used to pull variables from 'GlobalVariables'
-	void Awake(){
+	void Awake() {
 		variables = GameObject.Find("GlobalVariables").GetComponent<GlobalVariables>();
 		GhostOffset = variables.GetGhostOffset();
 		PartsOffset = variables.GetPartsOffset();
@@ -52,20 +52,22 @@ public class Deploy : MonoBehaviour {
 			parts_pile.gameObject.transform.position += new Vector3(0, tableHeight, 0);
 			// Append name to make distiguish from parts and ghostie bois
 			parts_pile.name = temp.name + "_parts";
+			
 			// Foreach part in total assembly, assign Unity
-			//   components to make them behave
-			foreach (Transform element in parts_pile.transform) {
+			// components to make them behave
+			foreach (Transform element in parts_pile.transform) 
+			{
 				element.name = element.name; // Delete?
 				// Can only pick things up with certain tag
 				element.gameObject.tag = "Pickupable";
 				element.gameObject.AddComponent<Rigidbody>();
 				// Force a Mesh Collider
-				if (element.gameObject.GetComponent<MeshCollider>() == null) {
+				if (element.gameObject.GetComponent<MeshCollider>() == null) 
+				{
 					element.gameObject.AddComponent<MeshCollider>();
 				}
 				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 				element.gameObject.GetComponent<Rigidbody>().mass = 100;
-				//element.gameObject.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic; 
 				element.gameObject.GetComponent<Rigidbody>().isKinematic = false;
 				element.gameObject.GetComponent<MeshCollider>().convex = true;
 				element.gameObject.AddComponent<PartStopper>();
@@ -74,9 +76,10 @@ public class Deploy : MonoBehaviour {
 			}
 			// Divide aggregate center by number of parts in assembly to find average center
 			center /= parts_pile.transform.childCount; // center is average center of parts pile
-			// Determin bounds for sizing of table
+			// Determine bounds for sizing of table
 			bounds = new Bounds(center, Vector3.zero);
 
+			// Each part in parts_pile has bounds automatically changed by Unity
 			foreach (Transform element in parts_pile.transform)
 			{
 				// Unity's 'Encapsulate' function will enlarge 'bounds' to cover parts
@@ -86,14 +89,14 @@ public class Deploy : MonoBehaviour {
 			// Essentially project parts onto floor (x and z coordinates) for table length and width
 			// Table Height is determined by 'GlobalVariables'
 			table.transform.localScale = new Vector3(bounds.size.x,tableHeight,bounds.size.z);
-			//Debug.Log("Center: " + center + " Parts Pos " + parts_pile.transform.position);
-			//Debug.Log("Adding: " + (center.x + parts_pile.transform.position.x));
-			//Place table under parts using the generated center
+
+			// Place table under parts using the generated center
 			table.transform.localPosition = new Vector3(center.x, -tableHeight/2f, center.z);
 
 			// Foreach part in table, assign Unity
-			//   components to make them behave
-			foreach (Transform part in table.transform) {
+			// components to make them behave
+			foreach (Transform part in table.transform) 
+			{
 				part.gameObject.AddComponent<Rigidbody>();
 				part.gameObject.GetComponent<Rigidbody>().mass = 1000;
 				part.gameObject.GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
@@ -104,8 +107,11 @@ public class Deploy : MonoBehaviour {
 			}
 
 			// Assign Gravity to each part of assembly
-			if (gravityMode) { // Set 'gravityMode' to false in 'GlobalVariables' to disable
-				foreach (Transform element in parts_pile.transform) {
+			if (gravityMode) 
+			{ 
+				// Set 'gravityMode' to false in 'GlobalVariables' to disable
+				foreach (Transform element in parts_pile.transform) 
+				{
 					Debug.Log("Gravity Mode On!");
 					element.gameObject.GetComponent<Rigidbody>().useGravity = true;
 					element.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F), UnityEngine.Random.Range(-10F, 10F));
@@ -115,13 +121,16 @@ public class Deploy : MonoBehaviour {
 			// If 'gravityMode' is false, enter 'SeparationMode'
 			// This will allow parts to be suspended in space, slightly separated
 			// This is the default because it makes build
-			else { 
-				foreach (Transform element in parts_pile.transform) {
+			else 
+			{ 
+				foreach (Transform element in parts_pile.transform) 
+				{
 					Debug.Log("Gravity Mode Off!");
 					element.gameObject.GetComponent<Rigidbody>().useGravity = false;
 					element.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
 					element.gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-					if (!separation) {
+					if (!separation) 
+					{
 						element.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 						// Allow it to use physics
 						element.gameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -130,19 +139,19 @@ public class Deploy : MonoBehaviour {
 				}
 			}
 
-
-			//ghost = Instantiate(temp, new Vector3(0,0,0), Quaternion.identity);
 			// Basically repeat the previous steps but for the final location, or 'ghost'
 			ghost = Instantiate(temp, null, true);		
 			// Same location as parts plus the 'GhostOffset'
 			// Configurable in 'GlobalVariables'
 			ghost.gameObject.transform.position = (OriginalLocation + PartsOffset + GhostOffset);
 			ghost.name = temp.name + "_ghost";
-			foreach (Transform element in ghost.transform) {
+			foreach (Transform element in ghost.transform) 
+			{
 				element.name = element.name + " ghost";
 				element.gameObject.tag = "Ghost";
 				element.gameObject.AddComponent<Rigidbody>();
-				if (element.gameObject.GetComponent<MeshCollider>() == null) {
+				if (element.gameObject.GetComponent<MeshCollider>() == null) 
+				{
 					element.gameObject.AddComponent<MeshCollider>();
 				}
 				element.gameObject.GetComponent<Rigidbody>().useGravity = false;
